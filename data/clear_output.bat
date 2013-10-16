@@ -1,0 +1,2 @@
+del output*
+pause
