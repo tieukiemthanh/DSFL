@@ -1,0 +1,17 @@
+Concolic and Symblic Execution:
+Tarantula technique
+1:	0.500
+2:	1.000
+3:	1.000
+4:	0.000
+Ochiai technique
+1:	0.845
+2:	1.000
+3:	1.000
+4:	0.000
+Jaccard technique
+1:	0.714
+2:	1.000
+3:	1.000
+4:	0.000
+***********************

@@ -1,0 +1,13 @@
+Compare time:
+***********************
+
+Compare percent:
+***********************
+Concolic and Symblic Execution:
+Tarantula min = 0.00
+Ochiai min = 0.00
+Jaccard min = 0.00
+Tarantula max = 0.00
+Ochiai max = 0.00
+Jaccard max = 0.00
+***********************
