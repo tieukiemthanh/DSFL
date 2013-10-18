@@ -484,6 +484,8 @@ public class Main {
 
 	public static void main(String[] args) {		
 		try {
+			//float a = Float.parseFloat(1.0f);
+			//System.out.println(a);
 			// file ket qua
 			writer = new PrintWriter("result.txt", "UTF-8");
 			
@@ -506,12 +508,14 @@ public class Main {
 			// lay tat ca cac path
 			//dung cho viec tao testcase
 			//day la qua trinh phan tich tinh
+			
 			List<String> paths = getAllPaths(labelTree);
 			for(String path : paths) {
 				//day la nhung duong thuc thi co ban
 				//ung dung mon testing
 				writerAllPaths.println(path);
 			}
+			
 			/*
 			for (String path : paths) {
 				System.out.println(path);
@@ -564,6 +568,7 @@ public class Main {
 			//day la qua trinh dynamic analyst nen khong dung tat ca cac paths 
 			//lay test case tu tao
 			//trinhgiang-16/10/2013
+			
 			for (int i = 5; i < 6; i++) {
 				readTestCases(i, labelTree, solutionTree);
 				writer.println("***********************");
