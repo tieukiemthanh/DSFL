@@ -1,6 +1,6 @@
 Program(
 	FuncDecl(
-		abs
+		max
 		ParaList(
 			Para(
 				a
@@ -9,7 +9,16 @@ Program(
 					EmptyTypeList()
 				)
 			)
-			EmptyParaList()
+			ParaList(
+				Para(
+					b
+					TypeList(
+						Float
+						EmptyTypeList()
+					)
+				)
+				EmptyParaList()
+			)
 		)
 		TypeList(
 			Float
@@ -23,21 +32,23 @@ Program(
 							a
 						)
 						>
-						IntLiteral(
-							0
+						VarExpr(
+							b
+						)
+					)
+					CompStmt(
+						StmtList(
+							RetStmt(
+								VarExpr(
+									a
+								)
+							)
+							EmptyStmtList()
 						)
 					)
 					RetStmt(
 						VarExpr(
-							a
-						)
-					)
-					RetStmt(
-						UnaryExpr(
-							-
-							VarExpr(
-								a
-							)
+							b
 						)
 					)
 				)

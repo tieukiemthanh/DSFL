@@ -1,7 +1,9 @@
-float abs(float a)
+float max(float a, float b)
 {
-	if(a > 0)
+	if(a > b)
+	{
 		return a;
+	}
     else
-		return -a;
+		return b;
 }

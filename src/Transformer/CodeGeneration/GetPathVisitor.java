@@ -58,7 +58,11 @@ public class GetPathVisitor extends DoNothingVisitor {
 		//trinhgiang-18/10/2013
 		//them xu ly voi kieu float
 		Var v = null;
-		if(ast.t instanceof FloatTypeAST)
+		//kieu array
+		if(ast.t instanceof ArrayTypeAST) {
+			v = new Var(ast.id.getText(), "array", value);
+		}
+		else if(ast.t instanceof FloatTypeAST)
 			v = new Var(ast.id.getText(), "float", value);
 		else 
 			v = new Var(ast.id.getText(), "integer", value);
@@ -106,12 +110,10 @@ public class GetPathVisitor extends DoNothingVisitor {
 		}
 		//trinhgiang-18/10/2013
 		//them xu ly kieu float 
-		else if(value.contains("."))
-		{
+		else if(value.contains(".")) {
 			v = new Var(ast.id.getText(), "float", value);
 		}
-		else 
-		{
+		else {
 			v = new Var(ast.id.getText(), "integer", value);
 		}
 		
@@ -187,7 +189,8 @@ public class GetPathVisitor extends DoNothingVisitor {
 		
 		if (b) {
 			path += ast.s1.visit(this, o);
-		} else {
+		} 
+		else {
 			path += ast.s2.visit(this, o);
 		}
 				
@@ -220,13 +223,15 @@ public class GetPathVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		Var v = varTable.getVar(ast.name.getText());
 		if(v.getType().equals("float")){
-			return Float.parseFloat(v.getValue() + "f");
+			return Float.parseFloat(v.getValue());
 		}
 		else if (v.getType().equals("integer")) {
 			return Integer.parseInt(v.getValue());
-		} else if (v.getType().equals("boolean")) {
+		} 
+		else if (v.getType().equals("boolean")) {
 			return Boolean.parseBoolean(v.getValue());
-		} else if (v.getType().equals("array")) {
+		} 
+		else if (v.getType().equals("array")) {
 			return v.getValue();
 		}
 		
@@ -260,7 +265,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 	public Object visitFloatLiteralAST(FloatLiteralAST ast, Object o)
 			throws CompilationException {
 		//return float value
-		return Float.parseFloat(ast.literal.getText() + "f");
+		return Float.parseFloat(ast.literal.getText());
 	}
 	
 	// UnaryExprAST	
@@ -270,11 +275,11 @@ public class GetPathVisitor extends DoNothingVisitor {
 		
 		if (ast.opType == UnaryExprAST.UNARY_MINUS) {
 			if(e instanceof Float)
-				//return -(Float) e;
-				return new Float(e.toString() + "f");
+				return - (Float) e;
 			else
 				return - (Integer) e;
-		} else {
+		} 
+		else {
 			return ! (Boolean) e;
 		}
 	}
@@ -289,8 +294,10 @@ public class GetPathVisitor extends DoNothingVisitor {
 				
 				Object e2 = ast.e2.visit(this, null);
 				v.setValue(e2.toString());
-			} else {
+			} 
+			else {
 				String name = ((EleExprAST) ast.e1).name.getText();
+				//index of array element
 				int i = (Integer) ((ExprListAST) ((EleExprAST) ast.e1).e).e.visit(this, null);
 				Var v = varTable.getVar(name);
 				
@@ -299,58 +306,186 @@ public class GetPathVisitor extends DoNothingVisitor {
 			}
 			
 			return null;
-		} else {
-			Object e1 = ast.e1.visit(this, null);
+		} 
+		else {
+			//airthm operator
 			Object e2 = ast.e2.visit(this, null);
-			//trinhgiang-18/10/2013
-			//them xu ly voi kieu float
+			Object e1 = ast.e1.visit(this, null);
+		
+			// e1 + e2
 			if (ast.opType == BinExprAST.PLUS) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return (Float) e1 + (Float) e2;
-				else 
-					return (Integer) e1 + (Integer) e2;
-			} else if (ast.opType == BinExprAST.MINUS) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Integer(v1+v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1+v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1+v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Float(v1+v2);
+				}
+			} 
+			// e1 - e2
+			else if (ast.opType == BinExprAST.MINUS) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return (Float) e1 - (Float) e2;
-				else 
-					return (Integer) e1 - (Integer) e2;
-			} else if (ast.opType == BinExprAST.STAR) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Integer(v1-v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1-v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1-v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Float(v1-v2);
+				}
+			} 
+			// e1 * e2
+			else if (ast.opType == BinExprAST.STAR) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return (Float) e1 * (Float) e2;
-				else 
-					return (Integer) e1 * (Integer) e2;
-			} else if (ast.opType == BinExprAST.DIV) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Integer(v1*v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1*v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1*v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Float(v1*v2);
+				}
+			} 
+			// e1 / e2
+			else if (ast.opType == BinExprAST.DIV) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return (Float) e1 / (Float) e2;
-				else 
-					return (Integer) e1 / (Integer) e2;
-			} else if (ast.opType == BinExprAST.MOD) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Integer(v1/v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1/v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Float(v1/v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Float(v1/v2);
+				}
+			} 
+			// e1 MOD e2
+			else if (ast.opType == BinExprAST.MOD) 
 			{
 				//toan tu nay chi thao tac voi so nguyen
-				return (Integer) e1 % (Integer) e2;
-			} else if (ast.opType == BinExprAST.LOGICAL_AND) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Integer(v1%v2);
+				}
+			} 
+			// e1 && e2
+			else if (ast.opType == BinExprAST.LOGICAL_AND) 
 			{
-				return (Boolean) e1 && (Boolean) e2;
-			} else if (ast.opType == BinExprAST.LOGICAL_OR) 
+				if (e1 instanceof Boolean && e2 instanceof Boolean) {
+					boolean v1 = ((Boolean) e1).booleanValue();
+					boolean v2 = ((Boolean) e2).booleanValue();
+					return new Boolean(v1&&v2);
+				}
+			} 
+			// e1 || e2
+			else if (ast.opType == BinExprAST.LOGICAL_OR) 
 			{
-				return (Boolean) e1 || (Boolean) e2;
-			} else if (ast.opType == BinExprAST.LESS_OR_EQUAL) 
+				if (e1 instanceof Boolean && e2 instanceof Boolean) {
+					boolean v1 = ((Boolean) e1).booleanValue();
+					boolean v2 = ((Boolean) e2).booleanValue();
+					return new Boolean(v1||v2);
+				}
+			} 
+			// e1 <= e2
+			else if (ast.opType == BinExprAST.LESS_OR_EQUAL) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return new Boolean((Float) e1 <= (Float) e2);
-				else 
-					return new Boolean((Integer) e1 <= (Integer) e2);
-			} else if (ast.opType == BinExprAST.GREATER_OR_EQUAL) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1<=v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1<=v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1<=v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1<=v2);
+				}
+			} 
+			// e1 >= e2
+			else if (ast.opType == BinExprAST.GREATER_OR_EQUAL) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return new Boolean((Float) e1 >= (Float) e2);
-				else 
-					return new Boolean((Integer) e1 >= (Integer) e2);
-			} else if (ast.opType == BinExprAST.GREATER_THAN) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1>=v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1>=v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1>=v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1>=v2);
+				}
+			}
+			// e1 > e2  
+			else if (ast.opType == BinExprAST.GREATER_THAN) 
 			{
 				if (e1 instanceof Integer && e2 instanceof Integer) {
 					int v1 = ((Integer) e1).intValue();
@@ -361,34 +496,89 @@ public class GetPathVisitor extends DoNothingVisitor {
 					float v1 = ((Float) e1).floatValue();
 					float v2 = ((Float) e2).floatValue();
 					return new Boolean(v1>v2);
-				} else if (e1 instanceof Integer && e2 instanceof Float) {
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
 					int v1 = ((Integer) e1).intValue();
 					float v2 = ((Float) e2).floatValue();
 					return new Boolean(v1>v2);
-				} else {
-					//float v1 = ((Float) e1).floatValue();
-					float v1 = new Float(e1.toString() + "f");
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
 					int v2 = ((Integer) e2).intValue();
 					return new Boolean(v1>v2);
 				}
-			} else if (ast.opType == BinExprAST.LESS_THAN) 
+			}
+			// e1 < e2 
+			else if (ast.opType == BinExprAST.LESS_THAN) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return new Boolean((Float) e1 < (Float) e2);
-				else 
-					return new Boolean((Integer) e1 < (Integer) e2);
-			} else if (ast.opType == BinExprAST.EQUAL) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1<v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1<v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1<v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1<v2);
+				}
+			}
+			// e1 == e2 
+			else if (ast.opType == BinExprAST.EQUAL) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return new Boolean((Float) e1 == (Float) e2);
-				else 
-					return new Boolean((Integer) e1 == (Integer) e2);
-			} else if (ast.opType == BinExprAST.NOT_EQUAL) 
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1==v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1==v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1==v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1==v2);
+				}
+			} 
+			// e1 != e2
+			else if (ast.opType == BinExprAST.NOT_EQUAL) 
 			{
-				if(e1 instanceof Float || e2 instanceof Float)
-					return new Boolean((Float) e1 != (Float) e2);
-				else 
-					return new Boolean((Integer) e1 != (Integer) e2);
+				if (e1 instanceof Integer && e2 instanceof Integer) {
+					int v1 = ((Integer) e1).intValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1!=v2);
+				}
+				else if (e1 instanceof Float && e2 instanceof Float) {
+					float v1 = ((Float) e1).floatValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1!=v2);
+				} 
+				else if (e1 instanceof Integer && e2 instanceof Float) {
+					int v1 = ((Integer) e1).intValue();
+					float v2 = ((Float) e2).floatValue();
+					return new Boolean(v1!=v2);
+				} 
+				else {
+					float v1 = ((Float) e1).floatValue();
+					int v2 = ((Integer) e2).intValue();
+					return new Boolean(v1!=v2);
+				}
 			}
 			
 			return null;
