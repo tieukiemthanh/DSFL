@@ -11,10 +11,14 @@ import Transformer.ASTs.*;
 
 public class AddLabelVisitor extends DoNothingVisitor {
 
-	public int num = 1;
-    
-	public AddLabelVisitor(String outputFile, boolean debug) throws CompilationException {
+	int num = 1;
 	
+	public int getNum() {
+		return num;
+	}
+	
+	public AddLabelVisitor(String outputFile, boolean debug) throws CompilationException {
+		
 	}
 	
 	// ProgramAST
@@ -125,7 +129,8 @@ public class AddLabelVisitor extends DoNothingVisitor {
 	// RetStmtAST
 	public Object visitRetStmtAST(RetStmtAST ast, Object o)
 			throws CompilationException {
-		return new RetStmtAST(ast.e, num++);
+	    int label = num++; 
+		return new RetStmtAST(ast.e, label);
 	}
 	
 }

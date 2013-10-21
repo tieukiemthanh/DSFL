@@ -2,13 +2,16 @@ Concolic and Symblic Execution:
 Tarantula technique
 1:	0.500
 2:	0.000
-3:	0.667
+3:	0.000
+4:	0.667
 Ochiai technique
 1:	0.577
 2:	0.000
-3:	0.707
+3:	0.000
+4:	0.707
 Jaccard technique
 1:	0.333
 2:	0.000
-3:	0.500
+3:	0.000
+4:	0.500
 ***********************

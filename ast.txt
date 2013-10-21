@@ -36,14 +36,9 @@ Program(
 							b
 						)
 					)
-					CompStmt(
-						StmtList(
-							RetStmt(
-								VarExpr(
-									a
-								)
-							)
-							EmptyStmtList()
+					RetStmt(
+						VarExpr(
+							a
 						)
 					)
 					RetStmt(

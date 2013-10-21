@@ -24,12 +24,15 @@ public class Main {
 	//static int failLine = 6;
 	static int failLine = 2;
 	
+	static String standardSourceFile = "standard_output_student.txt";
+	static String mappingTableFile = "mapping_statement2line.txt";
+	
 	// bien dung de ghi ket qua phan tich ra file
 	static PrintWriter writer;
 	static PrintWriter writerFL;
 	static PrintWriter writerAllPaths;
 	static PrintWriter writerTestCases;
-
+	
 	// class cho biet % cau lenh can phan tich cho den
 	// khi gap cau lenh sai
 	// co 2 truong hop tot nhat (min) va xau nhat (max)
@@ -281,7 +284,7 @@ public class Main {
 			//lay so dong lenh trong chuong trinh
 			AddLabelVisitor walkerLabel = new AddLabelVisitor("", false);
 			AST temp = (AST) tree.visit(walkerLabel, false);
-			numLine = walkerLabel.num;
+			numLine = walkerLabel.getNum();
 			
 			Visitor walker = new AddLabelVisitor("", false);
 			return (AST) tree.visit(walker, false);
@@ -482,10 +485,19 @@ public class Main {
 		}
 	}
 
+	//trinhgiang-21/10/2013
+	//in content ra file
+	public static void writeToFile(String filename, String content) {
+		try{
+			FileWriter fstream = new FileWriter(filename);
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(content);
+			out.close();
+		}catch (Exception e){System.out.println("error in writeToFile "+filename);}
+	}
+	
 	public static void main(String[] args) {		
 		try {
-			//float a = Float.parseFloat(1.0f);
-			//System.out.println(a);
 			// file ket qua
 			writer = new PrintWriter("result.txt", "UTF-8");
 			
@@ -501,9 +513,34 @@ public class Main {
 			// tao cay AST cho chuong trinh can kiem tra
 			//co the lay numLine tu day
 			AST labelTree = getLabelTree(getTree(args[0]));
-
+			
+			//trinhgiang-21/10/2013
+			//Standardize source
+			Visitor walkerC = new PrettyOutputVisitor(standardSourceFile, false);
+			labelTree.visit(walkerC, "no_output_line");
+			
+			//in ra mapping table
+			Ast2MappingTableVisitor ast2Table = new Ast2MappingTableVisitor();
+			labelTree.visit(ast2Table, "");
+			MappingTable mapTable = ast2Table.getMappingTable();
+	
+			//trinhgiang-21/10/2013
+			//mapping table statement to line
+			int[] statement2line = new int[mapTable.getSize()+1];
+			//cau lenh bat dau tu 1
+			statement2line[0] = -1;
+			
+			for(int i = 1; i < mapTable.getSize()+1; i++)
+			{
+				statement2line[i] = mapTable.getStatementId(i-1);
+				//System.out.println(statement2line[i]);
+			}
+			//ghi mapping table ra file
+			//System.out.println(mapTable.toString());
+			writeToFile(mappingTableFile, mapTable.toString());
+			
 			//in ra so dong lenh trong chuong trinh
-			System.out.println(numLine);
+			//System.out.println(numLine);
 			
 			// lay tat ca cac path
 			//dung cho viec tao testcase
@@ -515,6 +552,12 @@ public class Main {
 				//ung dung mon testing
 				writerAllPaths.println(path);
 			}
+			
+			/*
+			String testcase = "3.0;2.0";
+			String path = (String) labelTree.visit(new GetPathVisitor("", false), testcase);
+			System.out.println(path);
+			*/
 			
 			/*
 			for (String path : paths) {

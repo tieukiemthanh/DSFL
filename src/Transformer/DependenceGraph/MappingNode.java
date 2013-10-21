@@ -15,4 +15,10 @@ public class MappingNode
 	public String toString() {
 		return StatementID + ": " + oneStmt.getClass();
 	}
+	
+	//trinhgiang-21/10/2013
+	public int getId()
+	{
+		return StatementID;
+	}
 }
