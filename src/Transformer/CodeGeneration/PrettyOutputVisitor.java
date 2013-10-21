@@ -217,6 +217,7 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 	// DeclarationStmtAST
 	public Object visitDeclarationStmtAST(DeclarationStmtAST ast, Object o)
 			throws CompilationException {
+		ast.line = line;
 		ast.dl.visit(this, o);
 		return null;
 	}

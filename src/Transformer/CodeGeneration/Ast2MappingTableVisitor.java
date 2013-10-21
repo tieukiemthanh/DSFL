@@ -39,6 +39,7 @@ public class Ast2MappingTableVisitor extends DoNothingVisitor {
 	// DeclarationStmtAST
 	public Object visitDeclarationStmtAST(DeclarationStmtAST ast, Object o)
 			throws CompilationException {
+		//System.out.println("Declaration stmt" + ast.line);
 		mapTable.addMappingNode(new MappingNode(ast.line, ast));
 		ast.dl.visit(this, o);
 		return null;
@@ -137,9 +138,9 @@ public class Ast2MappingTableVisitor extends DoNothingVisitor {
 	///////////////////////////////////////////////////////////////////////////////////
 	// chua xu ly cac cau lenh ben duoi
 	// BreakStmtAST
-	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
+	public Object visitBreakStmtAST(BreakStmtAST breakAst, Object o)
 			throws CompilationException {
-		println("BreakStmtAST: " + ast.line);
+		mapTable.addMappingNode(new MappingNode(breakAst.line, breakAst));
 		return null;
 	}		
 	// ContStmtAST

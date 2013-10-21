@@ -613,7 +613,9 @@ public class AstPrinterVisitor extends DoNothingVisitor {
 		print(indentString() + "WhileStmt(");
 		++indent;
 		wAst.e.visit(this, o);
+		//trinhgiang-22/10/2013
 		wAst.o.visit(this, o);
+		//wAst.s.visit(this, o);
 		--indent;
 		print(indentString() + ")");
 		return null;
