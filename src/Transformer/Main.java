@@ -591,13 +591,14 @@ public class Main {
 				writer.println("***********************");
 			}
 			*/
+			//trinhgiang-22/10/2013
 			//ham sinh test case tu giai thuat cua anh DucAnh
-			//test case lay tu host duoc luu trong file concolicSE.txt
-			//trinhgiang-16/10/2013
-			//List<String> testcaseConcolicSE = getTestCaseFromHost("student.c", "solution.c");
-			//PrintWriter writerConcolicSE = new PrintWriter("concolicSE.txt", "UTF-8");;
+			//test case lay tu file concolicSE.txt gui qua tu chuong trinh cua Mai
+			//List<String> testcaseConcolicSE = getTestCaseFromFile(concolicSE.txt);
 			//for(testcase : testcaseConcolicSE) {
 			//	writerConcolicSE.println(testcase);
+			//  String path = (String) labelTree.visit(new GetPathVisitor("", false), testcase);
+			//	System.out.println(path);
 			//}
 			
 			writer.println();
