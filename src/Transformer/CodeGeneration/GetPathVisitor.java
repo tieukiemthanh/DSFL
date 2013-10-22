@@ -135,12 +135,25 @@ public class GetPathVisitor extends DoNothingVisitor {
 	public Object visitStmtListAST(StmtListAST ast, Object o)
 			throws CompilationException {
 		// visitOneStmtAST
+		//trinhgiang-22/10/2013
 		String path1 = (String) ast.o.visit(this, o);
-				
-		// visitStmtListAST or visitEmptyStmtListAST
-		String path2 = (String) ast.s.visit(this, o);
-		
-		return path1 + path2;
+		if(path1.contains("!")) //break statement
+		{
+			return path1;
+		}
+	    else
+	    {
+			// visitStmtListAST or visitEmptyStmtListAST
+			String path2 = (String) ast.s.visit(this, o);
+			if(path2.contains("!"))
+			{
+				return "!" + path1 + path2.substring(1, path2.length()-1);
+			}
+			else
+			{
+				return path1 + path2;
+			}
+		}
 	}
 	
 	// EmptyStmtListAST
@@ -164,6 +177,17 @@ public class GetPathVisitor extends DoNothingVisitor {
 		String path = ast.label + ";";
 		
 		return path;
+	}
+	//trinhgiang-22/10/2013
+	// BreakStmtAST
+	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
+			throws CompilationException {
+		//ast.e.visit(this, o);
+		//System.out.println("get path break stmt");
+		//System.out.println(ast.label);
+		String path = ast.label + ";";
+		
+		return path; //them ! vao dau neu chua break statement
 	}
 	
 	// IfThenStmtAST
@@ -204,9 +228,18 @@ public class GetPathVisitor extends DoNothingVisitor {
 		String path = ast.label + ";";
 		
 		while (b) {
-			path += ast.o.visit(this, o);
-			b = (Boolean) ast.e.visit(this, null);
-			path += ast.label + ";";
+			String pathOneStmt = ast.o.visit(this, o).toString(); 
+			
+			//trinhgiang-22/10/2013
+			if(pathOneStmt.contains("!")) { //chua break stmt
+				b = false;
+				path += pathOneStmt.substring(1, pathOneStmt.length() - 1);
+			}
+			else {
+				b = (Boolean) ast.e.visit(this, null);
+				path += pathOneStmt;
+				path += ast.label + ";";
+			}
 		}
 				
 		return path;

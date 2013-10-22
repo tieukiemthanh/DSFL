@@ -187,11 +187,11 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitStmtListAST(StmtListAST ast, Object o)
 			throws CompilationException {
 		// visitOneStmtAST
-		ast.o.visit(this, o);
-				
-		// visitStmtListAST or visitEmptyStmtListAST
-		ast.s.visit(this, o);
-		
+		//if(!ast.o.isBreak) {
+			ast.o.visit(this, o);
+			// visitStmtListAST or visitEmptyStmtListAST
+		    ast.s.visit(this, o);
+		//}
 		return null;
 	}
 	
@@ -210,6 +210,14 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		
 		return null;
 	}
+	//trinhgiang-22/10/2013
+	// BreakStmtAST
+	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
+			throws CompilationException {
+		//ast.e.visit(this, o);
+		return null;
+	}
+
 	
 	// IfThenStmtAST
 	public Object visitIfThenStmtAST(IfThenStmtAST ast, Object o)
@@ -244,7 +252,14 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		
 		while (b) {
 			ast.o.visit(this, o);
-			b = (Boolean) ast.e.visit(this, null);
+			//trinhgiang-22/10/2013
+			//xu ly break statement
+			if(ast.o instanceof BreakStmtAST) {
+				b = false;
+			}
+			else {
+				b = (Boolean) ast.e.visit(this, null);
+			}
 		}
 				
 		return null;

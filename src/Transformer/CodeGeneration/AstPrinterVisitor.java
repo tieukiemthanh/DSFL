@@ -609,8 +609,10 @@ public class AstPrinterVisitor extends DoNothingVisitor {
 	// WhileStmtAST
 	public Object visitWhileStmtAST(WhileStmtAST ast, Object o)
 			throws CompilationException {
+	    //System.out.println("In ra while stmt");
 		WhileStmtAST wAst = (WhileStmtAST) ast;
 		print(indentString() + "WhileStmt(");
+		//System.out.println(indentString() + "WhileStmt(");
 		++indent;
 		wAst.e.visit(this, o);
 		//trinhgiang-22/10/2013

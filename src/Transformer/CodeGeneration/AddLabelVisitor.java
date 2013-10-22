@@ -122,9 +122,7 @@ public class AddLabelVisitor extends DoNothingVisitor {
 	public Object visitWhileStmtAST(WhileStmtAST ast, Object o)
 			throws CompilationException {
 		int label = num++;
-		//trinhgiang-22/10/2013
 		OneStmtAST s = (OneStmtAST) ast.o.visit(this, o);
-		//StmtListAST s = (StmtListAST) ast.o.visit(this, o);
 		return new WhileStmtAST(ast.e, s, label);
 	}
 	
@@ -133,6 +131,15 @@ public class AddLabelVisitor extends DoNothingVisitor {
 			throws CompilationException {
 	    int label = num++; 
 		return new RetStmtAST(ast.e, label);
+	}
+	
+	//trinhgiang-22/10/2013
+	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
+			throws CompilationException {
+		//System.out.println("Da add label cho break stmt"); 
+		int label = num++;
+	    //StmtListAST s = (StmtListAST) ast.s.visit(this, o);
+		return new BreakStmtAST(ast.t, label);
 	}
 	
 	//trinhgiang-22/10/2013

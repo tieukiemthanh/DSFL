@@ -31,7 +31,7 @@ public class Main {
 	static PrintWriter writer;
 	static PrintWriter writerFL;
 	static PrintWriter writerAllPaths;
-	static PrintWriter writerTestCases;
+	static PrintWriter writerTestCasesAndPath;
 	
 	// class cho biet % cau lenh can phan tich cho den
 	// khi gap cau lenh sai
@@ -286,8 +286,9 @@ public class Main {
 			AST temp = (AST) tree.visit(walkerLabel, false);
 			numLine = walkerLabel.getNum();
 			
-			Visitor walker = new AddLabelVisitor("", false);
-			return (AST) tree.visit(walker, false);
+			//Visitor walker = new AddLabelVisitor("", false);
+			//return (AST) tree.visit(walker, false);
+			return temp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -390,9 +391,6 @@ public class Main {
 			String testcase = br.readLine();
 			
 			while (testcase != null) {
-				//in testcase ra file testcase.txt
-				writerTestCases.println(testcase);
-				
 				// khoi tao khi vao 1 bo test case moi
 				if (testcase.equals("Begin test cases.")) {
 					totalPass = totalFail = 0;
@@ -428,11 +426,16 @@ public class Main {
 					//duong thuc thi cua 1 testcase cu the
 					//se duoc dung trong dynamic slicing
 					String path = (String) labelTree.visit(walker1, testcase);
+					
 					//simulator ket qua cua sinh vien
 					String studentResult = (String) labelTree.visit(walker2, testcase);
 					//simulator ket qua cua solution
 					String solutionResult = (String) solutionTree.visit(walker2, testcase);
 
+					//in testcase va path thuc thi tuong ung ra file testcaseandpath.txt
+					writerTestCasesAndPath.println(testcase);
+					writerTestCasesAndPath.println(path);
+				
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
 						totalPass++; // tang tong so test case pass
@@ -453,6 +456,7 @@ public class Main {
 							}
 						}
 					}
+					
 				}
 				testcase = br.readLine();
 			}
@@ -508,7 +512,7 @@ public class Main {
 			writerAllPaths = new PrintWriter("allpaths.txt", "UTF-8");
 			
 			//file chua tap testcases da dung
-			writerTestCases = new PrintWriter("testcases.txt", "UTF-8");
+			writerTestCasesAndPath = new PrintWriter("testcasesandpath.txt", "UTF-8");
 			
 			// tao cay AST cho chuong trinh can kiem tra
 			//co the lay numLine tu day
@@ -545,14 +549,14 @@ public class Main {
 			// lay tat ca cac path
 			//dung cho viec tao testcase
 			//day la qua trinh phan tich tinh
-			
+			/*
 			List<String> paths = getAllPaths(labelTree);
 			for(String path : paths) {
 				//day la nhung duong thuc thi co ban
 				//ung dung mon testing
 				writerAllPaths.println(path);
 			}
-			
+			*/
 			/*
 			String testcase = "3.0;2.0";
 			String path = (String) labelTree.visit(new GetPathVisitor("", false), testcase);
@@ -622,7 +626,7 @@ public class Main {
 			writer.close();
 			writerFL.close();
 			writerAllPaths.close();
-			writerTestCases.close();
+			writerTestCasesAndPath.close();
 			
 			/*
 			for (int i = 1; i < 2; i++) {
