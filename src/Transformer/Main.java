@@ -23,6 +23,7 @@ public class Main {
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
 	static int failLine = 2;
+	static int[] statement2line;
 	
 	static String standardSourceFile = "standard_output_student.txt";
 	static String mappingTableFile = "mapping_statement2line.txt";
@@ -334,7 +335,7 @@ public class Main {
 				//trinhgiang-16/10/2013
 				case 5:
 					writer.println("Concolic and Symblic Execution:");
-					writerFL.println("Concolic and Symblic Execution:");
+					//writerFL.println("Concolic and Symblic Execution:");
 					return new BufferedReader(new FileReader("concolicSE.txt"));
 			}
 		} catch (Exception e) {
@@ -433,8 +434,15 @@ public class Main {
 					String solutionResult = (String) solutionTree.visit(walker2, testcase);
 
 					//in testcase va path thuc thi tuong ung ra file testcaseandpath.txt
-					writerTestCasesAndPath.println(testcase);
-					writerTestCasesAndPath.println(path);
+					//writerTestCasesAndPath.println(testcase);
+					//mapping statement to line code
+					String stmt2line = "";
+					String[] pathArray = path.split(";");
+					for(String pathUnit : pathArray)
+					{
+						stmt2line += statement2line[Integer.parseInt(pathUnit)] + ";";
+					} 
+					writerTestCasesAndPath.println(stmt2line);
 				
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
@@ -462,16 +470,17 @@ public class Main {
 			}
 	
 			//tam thoi in ket qua FL cua tarantula
-			writerFL.println("Tarantula technique");
+			//writerFL.println("Tarantula technique");
 			for(int j = 1; j < numLine; j++)
-				writerFL.printf("%d:	%.3f\n", j, tarantulaScores[j]);
+				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
+			/*
 			writerFL.println("Ochiai technique");
 			for(int j = 1; j < numLine; j++)
 				writerFL.printf("%d:	%.3f\n", j, ochiaiScores[j]);
 			writerFL.println("Jaccard technique");
 			for(int j = 1; j < numLine; j++)
 				writerFL.printf("%d:	%.3f\n", j, jaccardScores[j]);
-			
+			*/
 			// viet ket qua ra file
 			writer.printf("Tarantula min = %.2f\n", average(mintPercent));
 			writer.printf("Ochiai min = %.2f\n", average(minoPercent));
@@ -530,7 +539,7 @@ public class Main {
 	
 			//trinhgiang-21/10/2013
 			//mapping table statement to line
-			int[] statement2line = new int[mapTable.getSize()+1];
+			statement2line = new int[mapTable.getSize()+1];
 			//cau lenh bat dau tu 1
 			statement2line[0] = -1;
 			
@@ -620,7 +629,7 @@ public class Main {
 			for (int i = 5; i < 6; i++) {
 				readTestCases(i, labelTree, solutionTree);
 				writer.println("***********************");
-				writerFL.println("***********************");
+				//writerFL.println("***********************");
 			}
 			
 			writer.close();
