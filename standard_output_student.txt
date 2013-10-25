@@ -1,16 +1,11 @@
-float max(float a, float b)
+float absNumber(float i)
 {
-	if ((a > b))
+	if ((i > 45))
 	{
-		int i = 1;
-		while ((i < 3))
-		{
-			i = i + 1;
-		}
-		return a;
+		return i;
 	}
 	else
 	{
-		return a;
+		return -i;
 	}
 }
