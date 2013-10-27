@@ -65,6 +65,8 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	
 	List<String> listInput; //tham so truyen vao
 	
+	static boolean signalRet = false;
+	
 	public RunSimulatorVisitor(String outputFile, boolean debug) throws CompilationException {
 	
 	}
@@ -75,6 +77,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		ret = "";
 		varTable = new VarTable();
 		listInput = new ArrayList<String>();
+		signalRet = false;
 		
 		//Object o la testcase truyen vao
 		// day co dang a;b
@@ -187,11 +190,12 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitStmtListAST(StmtListAST ast, Object o)
 			throws CompilationException {
 		// visitOneStmtAST
-		//if(!ast.o.isBreak) {
-			ast.o.visit(this, o);
+		ast.o.visit(this, o);
+		if(!signalRet) //yet not return
+		{
 			// visitStmtListAST or visitEmptyStmtListAST
-		    ast.s.visit(this, o);
-		//}
+			ast.s.visit(this, o);
+		}
 		return null;
 	}
 	
@@ -270,6 +274,8 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		if (ret.equals("")) {
 			ret += ast.e.visit(this, o);
+			//sign return statement of function
+			signalRet = true;
 		}
 		
 		return null;

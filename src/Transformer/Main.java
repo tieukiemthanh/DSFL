@@ -257,9 +257,6 @@ public class Main {
 			CPPParser parser = new CPPParser(new CommonTokenStream(new CPPLexer(new ANTLRReaderStream(new BufferedReader(new FileReader(sourceFilename))))));
 			// create AST Tree from standard code
 			AST studentTree = parser.parse();
-			//in ra cay AST thong thuong
-			Visitor walkerPrint = new AstPrinterVisitor("ast.txt");
-			studentTree.visit(walkerPrint, false);
 			
 			//khac gi voi cay AST thong thuong
 			//co the xuat cay AST ra file
@@ -289,6 +286,10 @@ public class Main {
 			
 			//Visitor walker = new AddLabelVisitor("", false);
 			//return (AST) tree.visit(walker, false);
+			//in ra cay AST thong thuong
+			Visitor walkerPrint = new AstPrinterVisitor("ast.txt");
+			temp.visit(walkerPrint, false);
+			
 			return temp;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -427,6 +428,7 @@ public class Main {
 					//duong thuc thi cua 1 testcase cu the
 					//se duoc dung trong dynamic slicing
 					String path = (String) labelTree.visit(walker1, testcase);
+					System.out.println(path);
 					
 					//simulator ket qua cua sinh vien
 					String studentResult = (String) labelTree.visit(walker2, testcase);

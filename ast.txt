@@ -1,24 +1,15 @@
 Program(
 	FuncDecl(
-		max
+		absNumber
 		ParaList(
 			Para(
-				a
+				i
 				TypeList(
 					Float
 					EmptyTypeList()
 				)
 			)
-			ParaList(
-				Para(
-					b
-					TypeList(
-						Float
-						EmptyTypeList()
-					)
-				)
-				EmptyParaList()
-			)
+			EmptyParaList()
 		)
 		TypeList(
 			Float
@@ -26,28 +17,90 @@ Program(
 		)
 		CompStmt(
 			StmtList(
-				IfThenElseStmt(
-					BinExpr(
-						VarExpr(
-							a
+				DeclarationStmt(
+					VarDecl(
+						j
+						TypeList(
+							Int
+							EmptyTypeList()
 						)
-						>
-						VarExpr(
-							b
-						)
-					)
-					RetStmt(
-						VarExpr(
-							a
+						VarInitializer(
+							IntLiteral(
+								0
+							)
 						)
 					)
-					RetStmt(
+					EmptyDeclarationList()
+				)
+				StmtList(
+					SwitchStmt(
 						VarExpr(
-							b
+							j
+						)
+						CompStmt(
+							StmtList(
+								CaseStmt(
+									IntLiteral(
+										1
+									)
+									StmtList(
+										ExprStmt(
+											BinExpr(
+												VarExpr(
+													j
+												)
+												=
+												BinExpr(
+													VarExpr(
+														j
+													)
+													+
+													IntLiteral(
+														1
+													)
+												)
+											)
+										)
+										StmtList(
+											BreakStmt()
+											EmptyStmtList()
+										)
+									)
+								)
+								EmptyStmtList()
+							)
+						)
+					)
+					StmtList(
+						IfThenStmt(
+							BinExpr(
+								VarExpr(
+									i
+								)
+								>
+								IntLiteral(
+									45
+								)
+							)
+							RetStmt(
+								VarExpr(
+									i
+								)
+							)
+						)
+						StmtList(
+							RetStmt(
+								UnaryExpr(
+									-
+									VarExpr(
+										i
+									)
+								)
+							)
+							EmptyStmtList()
 						)
 					)
 				)
-				EmptyStmtList()
 			)
 		)
 	)

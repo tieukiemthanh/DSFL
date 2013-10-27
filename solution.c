@@ -1,7 +1,4 @@
-float max(float a, float b)
-{
-	if(a > b)
-		return a;
-    else
-		return b;
+float absNumber(float i) {
+	if(i > 0) return i;
+	else return -i;
 }

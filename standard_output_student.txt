@@ -1,11 +1,13 @@
 float absNumber(float i)
 {
+	int j = 0;
+	switch (j)
+	{
+		case 1: 
+			j = j + 1;
+			break;
+	}
 	if ((i > 45))
-	{
 		return i;
-	}
-	else
-	{
-		return -i;
-	}
+	return -i;
 }

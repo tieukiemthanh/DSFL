@@ -494,6 +494,13 @@ public class AstPrinterVisitor extends DoNothingVisitor {
 		return null;
 	}
 	
+	// BreakStmt
+	public Object visitBreakStmtAST(BreakStmtAST astBreak, Object o)
+			throws CompilationException {
+		print(indentString() + "BreakStmt()");
+		return null;	
+	}
+	
 	// DeclarationStmtAST
 	public Object visitDeclarationStmtAST(DeclarationStmtAST ast, Object o)
 			throws CompilationException {

@@ -135,43 +135,49 @@ public class Ast2MappingTableVisitor extends DoNothingVisitor {
 		return null;
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////
-	// chua xu ly cac cau lenh ben duoi
 	// BreakStmtAST
 	public Object visitBreakStmtAST(BreakStmtAST breakAst, Object o)
 			throws CompilationException {
 		mapTable.addMappingNode(new MappingNode(breakAst.line, breakAst));
 		return null;
 	}		
+	//trinhgiang-28/10/2013
 	// ContStmtAST
-	public Object visitContStmtAST(ContStmtAST ast, Object o)
+	// continue stmt
+	public Object visitContStmtAST(ContStmtAST continueAst, Object o)
 			throws CompilationException {
-		println("ContStmtAST: " + ast.line);
+		//println("ContStmtAST: " + ast.line);
+		mapTable.addMappingNode(new MappingNode(continueAst.line, continueAst));
 		return null;
 	}
+	//trinhgiang-28/10/2013
 	// SwitchStmtAST
 	public Object visitSwitchStmtAST(SwitchStmtAST sAst, Object o)
 			throws CompilationException {
-		println("SwitchStmtAST: " + sAst.line);
+		//println("SwitchStmtAST: " + sAst.line);
+		mapTable.addMappingNode(new MappingNode(sAst.line, sAst));
 		sAst.e.visit(this, o);
 		sAst.o.visit(this, o);
 		return null;
 	}	
+	//trinhgiang-28/10/2013
 	// CaseStmtAST
 	public Object visitCaseStmtAST(CaseStmtAST cAst, Object o)
 			throws CompilationException {
-		println("CaseStmtAST: " + cAst.line);
+		//println("CaseStmtAST: " + cAst.line);
+		mapTable.addMappingNode(new MappingNode(cAst.line, cAst));
 		cAst.e.visit(this, o);
 		cAst.s.visit(this, o);
 		return null;
-	}	
+	}
+	//trinhgiang-28/10/2013
 	// DefaultStmtAST
 	public Object visitDefaultStmtAST(DefaultStmtAST dAst, Object o)
 			throws CompilationException {
-		println("DefaultStmtAST: " + dAst.line);
+		//println("DefaultStmtAST: " + dAst.line);
+		mapTable.addMappingNode(new MappingNode(dAst.line, dAst));
 		dAst.s.visit(this, o);
 		return null;
 	}
-	//
-	///////////////////////////////////////////////////////////////////////////////////
+	
 }

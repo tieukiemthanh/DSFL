@@ -136,12 +136,15 @@ public class AddLabelVisitor extends DoNothingVisitor {
 	//trinhgiang-22/10/2013
 	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
 			throws CompilationException {
-		//System.out.println("Da add label cho break stmt"); 
 		int label = num++;
-	    //StmtListAST s = (StmtListAST) ast.s.visit(this, o);
 		return new BreakStmtAST(ast.t, label);
 	}
-	
+	//trinhgiang-22/10/2013
+	public Object visitSwitchStmtAST(ContStmtAST ast, Object o)
+			throws CompilationException {
+		int label = num++;
+		return new ContStmtAST(ast.t);
+	}
 	//trinhgiang-22/10/2013
 	//CaseStmtAST
 	public Object visitCaseStmtAST(CaseStmtAST ast, Object o)
@@ -149,5 +152,14 @@ public class AddLabelVisitor extends DoNothingVisitor {
 		int label = num++;
 	    StmtListAST s = (StmtListAST) ast.s.visit(this, o);
 		return new CaseStmtAST(ast.e, s, label);
+	}
+	
+	//trinhgiang-28/10/2013
+	//SwitchStmtAST
+	public Object visitSwitchStmtAST(SwitchStmtAST ast, Object o)
+			throws CompilationException {
+		int label = num++;
+		OneStmtAST s = (OneStmtAST) ast.o.visit(this, o);
+		return new SwitchStmtAST(ast.e, s, label);
 	}
 }
