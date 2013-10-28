@@ -516,6 +516,7 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 			throws CompilationException {
 	//public ExprAST e;
 	//public OneStmtAST o;
+		ast.line = line;
 		indentString();
 		em.printout("switch (");
 		ast.e.visit(this, null);
@@ -531,6 +532,7 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 			throws CompilationException {
 	//public ExprAST e;
 	//public StmtListAST s;
+		ast.line = line;
 		if (inLineCase)
 			outScope();
 		indentString();

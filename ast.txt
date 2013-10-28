@@ -41,7 +41,7 @@ Program(
 							StmtList(
 								CaseStmt(
 									IntLiteral(
-										1
+										0
 									)
 									StmtList(
 										ExprStmt(
@@ -63,7 +63,37 @@ Program(
 										)
 										StmtList(
 											BreakStmt()
-											EmptyStmtList()
+											StmtList(
+												CaseStmt(
+													IntLiteral(
+														1
+													)
+													StmtList(
+														ExprStmt(
+															BinExpr(
+																VarExpr(
+																	j
+																)
+																=
+																BinExpr(
+																	VarExpr(
+																		j
+																	)
+																	+
+																	IntLiteral(
+																		2
+																	)
+																)
+															)
+														)
+														StmtList(
+															BreakStmt()
+															EmptyStmtList()
+														)
+													)
+												)
+												EmptyStmtList()
+											)
 										)
 									)
 								)

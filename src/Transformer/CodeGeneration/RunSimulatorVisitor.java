@@ -67,6 +67,11 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	
 	static boolean signalRet = false;
 	
+	//break statement only apply on while statement, for statement, case statement
+	static int scopeBreak = 0;
+	//break statement apply on case statemnet
+	static int switchBreak = 0;
+	
 	public RunSimulatorVisitor(String outputFile, boolean debug) throws CompilationException {
 	
 	}
@@ -78,6 +83,8 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		varTable = new VarTable();
 		listInput = new ArrayList<String>();
 		signalRet = false;
+		scopeBreak = 0;
+		switchBreak = 0;
 		
 		//Object o la testcase truyen vao
 		// day co dang a;b
@@ -190,11 +197,28 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitStmtListAST(StmtListAST ast, Object o)
 			throws CompilationException {
 		// visitOneStmtAST
+		int tempScope = scopeBreak;
+		int tempSwitchScope = switchBreak;
 		ast.o.visit(this, o);
 		if(!signalRet) //yet not return
 		{
 			// visitStmtListAST or visitEmptyStmtListAST
-			ast.s.visit(this, o);
+			//break statement
+			if(o == null)
+				ast.s.visit(this, o);
+		    else if(o.toString().equals("while"))
+		    {
+				if(tempScope <= scopeBreak)
+					ast.s.visit(this, o);
+			}
+			else if(o.toString().equals("case") || o.toString().startsWith("switch"))
+			{
+				if(tempSwitchScope <= switchBreak)
+					ast.s.visit(this, o);
+			}
+			else {
+				ast.s.visit(this, o);
+			}
 		}
 		return null;
 	}
@@ -219,6 +243,11 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
 			throws CompilationException {
 		//ast.e.visit(this, o);
+		//thoat ra khoi vong while, for, case
+		if(o != null && o.toString().equals("while"))
+			scopeBreak--;
+		if(o != null && o.toString().equals("case"))
+			switchBreak--;
 		return null;
 	}
 
@@ -253,22 +282,43 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitWhileStmtAST(WhileStmtAST ast, Object o)
 			throws CompilationException {
 		boolean b = (Boolean) ast.e.visit(this, null);
-		
+		scopeBreak++;
+		int tempScope = scopeBreak;
 		while (b) {
-			ast.o.visit(this, o);
+			ast.o.visit(this, "while");
 			//trinhgiang-22/10/2013
 			//xu ly break statement
-			if(ast.o instanceof BreakStmtAST) {
+			if(tempScope <= scopeBreak)
+				b = (Boolean) ast.e.visit(this, null);
+			else {
 				b = false;
 			}
-			else {
-				b = (Boolean) ast.e.visit(this, null);
-			}
+			
 		}
-				
+		scopeBreak = tempScope - 1;	
 		return null;
 	}
-	
+	// trinhgiang-28/10/2013
+	// switch statement
+	public Object visitSwitchStmtAST(SwitchStmtAST sAst, Object o)
+			throws CompilationException {
+		String valueSwitch = sAst.e.visit(this, null).toString();
+		switchBreak++;
+		int tempSwitchBreak = switchBreak;
+		sAst.o.visit(this, "switch" + valueSwitch);
+		switchBreak = tempSwitchBreak - 1;
+		return null;
+	}
+	// trinhgiang-28/10/2013
+	public Object visitCaseStmtAST(CaseStmtAST cAst, Object o)
+			throws CompilationException {
+		String valueCase = cAst.e.visit(this, null).toString();
+		if(valueCase.trim().equals(o.toString().trim().substring(6)))
+		{   
+			cAst.s.visit(this, "case");
+		}		
+		return null;
+	}
 	// RetStmtAST
 	public Object visitRetStmtAST(RetStmtAST ast, Object o)
 			throws CompilationException {

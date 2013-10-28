@@ -1,10 +1,11 @@
 
 float absNumber(float i) {
 	int j = 0;
-	while( j < 2)
-	{
-		j = j + 1;
-		if(j > 0) break;
+	switch(j) {
+		case 0 : j = j + 1;
+			break;
+		case 1 : j = j + 2;
+			break;
 	}
 	if(i > 45) return i;
 	return -i;

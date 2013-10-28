@@ -16,6 +16,11 @@ public class GetPathVisitor extends DoNothingVisitor {
 	List<String> listInput = new ArrayList<String>();
 	
 	static boolean signalRet = false;
+	
+	//break statement apply on while statement
+	static int scopeBreak = 0;
+	//break statement apply on case statemnet
+	static int switchBreak = 0;
 
 	public GetPathVisitor(String outputFile, boolean debug) throws CompilationException {
 	
@@ -27,6 +32,8 @@ public class GetPathVisitor extends DoNothingVisitor {
 		varTable = new VarTable();
 		listInput = new ArrayList<String>();
 		signalRet = false;
+		scopeBreak = 0;
+		switchBreak = 0;
 
 		String[] arrayInput = ((String) o).split(";");
 		
@@ -139,10 +146,28 @@ public class GetPathVisitor extends DoNothingVisitor {
 	public Object visitStmtListAST(StmtListAST ast, Object o)
 			throws CompilationException {
 		// visitOneStmtAST
-		//trinhgiang-22/10/2013
+		// trinhgiang-22/10/2013
+		int tempScope = scopeBreak;
+		int tempSwitchScope = switchBreak;
+		
 		String path1 = (String) ast.o.visit(this, o);
 		//sign teminal statement
 		if(signalRet) return path1;
+		else {
+			// break statement
+			if(o != null && o.toString().equals("while") && tempScope > scopeBreak)
+		    {
+				System.out.println("aaaaaaaaBreakWhile");
+				return path1;
+			}
+			// case break statement
+			if(o != null && (o.toString().equals("case") || o.toString().startsWith("switch")) && tempSwitchScope > switchBreak)
+			{
+				//switchBreak = tempSwitchBreak;
+				System.out.println("aaaaaaaaBreakSwitch");
+				return path1;
+			}
+		}
 		
 		// visitStmtListAST or visitEmptyStmtListAST
 		String path2 = (String) ast.s.visit(this, o);
@@ -177,7 +202,11 @@ public class GetPathVisitor extends DoNothingVisitor {
 	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
 			throws CompilationException {
 		String path = ast.label + ";";
-		
+		//thoat ra khoi vong while, for, case
+		if(o != null && o.toString().equals("while"))
+			scopeBreak--;
+		if(o != null && o.toString().equals("case"))
+			switchBreak--;
 		return path;
 	}
 	
@@ -212,21 +241,52 @@ public class GetPathVisitor extends DoNothingVisitor {
 		return path;
 	}
 	
+	//trinhgiang-28/10/2013
 	// WhileStmtAST
 	public Object visitWhileStmtAST(WhileStmtAST ast, Object o)
 			throws CompilationException {
 		boolean b = (Boolean) ast.e.visit(this, null);
 		String path = ast.label + ";";
-		
+		scopeBreak++;
+		int tempScope = scopeBreak;
 		while (b) {
-			path += ast.o.visit(this, o);
-			b = (Boolean) ast.e.visit(this, null);
-			path += ast.label + ";";
+			path += ast.o.visit(this, "while");
+			if(scopeBreak >= tempScope) {
+				b = (Boolean) ast.e.visit(this, null);
+				path += ast.label + ";";
+			}
+			else
+			{
+				b = false;
+			}
 		}
-				
+		scopeBreak = tempScope - 1;
 		return path;
 	}
-	
+	//trinhgiang-28/10/2013
+	// switch statement
+	public Object visitSwitchStmtAST(SwitchStmtAST sAst, Object o)
+			throws CompilationException {
+		String path = sAst.label + ";";
+		String valueSwitch = sAst.e.visit(this, null).toString();
+		switchBreak++;
+		int tempSwitchBreak = switchBreak;
+		path += sAst.o.visit(this, "switch" + valueSwitch);
+		switchBreak = tempSwitchBreak - 1;
+		return path;
+	}
+	//trinhgiang-28/10/2013
+	// case statement
+	public Object visitCaseStmtAST(CaseStmtAST cAst, Object o)
+			throws CompilationException {
+		String path = cAst.label + ";";
+		String valueCase = cAst.e.visit(this, null).toString();
+		if(valueCase.trim().equals(o.toString().trim().substring(6)))
+		{   
+			path += cAst.s.visit(this, "case");
+		}		
+		return path;
+	}
 	// return statement
 	public Object visitRetStmtAST(RetStmtAST ast, Object o)
 			throws CompilationException {

@@ -444,7 +444,7 @@ public class Main {
 					{
 						stmt2line += statement2line[Integer.parseInt(pathUnit)] + ";";
 					} 
-					writerTestCasesAndPath.println(stmt2line);
+					writerTestCasesAndPath.println(studentResult + ":" + stmt2line);
 				
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
