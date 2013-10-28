@@ -211,7 +211,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 				if(tempScope <= scopeBreak)
 					ast.s.visit(this, o);
 			}
-			else if(o.toString().equals("case") || o.toString().startsWith("switch"))
+			else if(o.toString().equals("case") || o.toString().startsWith("switch") || o.toString().equals("default"))
 			{
 				if(tempSwitchScope <= switchBreak)
 					ast.s.visit(this, o);
@@ -299,7 +299,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		return null;
 	}
 	// trinhgiang-28/10/2013
-	// switch statement
+	// not complete
 	public Object visitSwitchStmtAST(SwitchStmtAST sAst, Object o)
 			throws CompilationException {
 		String valueSwitch = sAst.e.visit(this, null).toString();
@@ -317,6 +317,13 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		{   
 			cAst.s.visit(this, "case");
 		}		
+		return null;
+	}
+	// trinhgiang-29/10/2013
+	// DefaultStmtAST
+	public Object visitDefaultStmtAST(DefaultStmtAST dAst, Object o)
+			throws CompilationException {
+		dAst.s.visit(this, "default");		
 		return null;
 	}
 	// RetStmtAST

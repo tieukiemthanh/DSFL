@@ -88,7 +88,15 @@ public class GetPathVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		return ast.e.visit(this, o);
 	}
-	
+	// for initializer
+	public Object visitForInitAST(ForInitAST ast, Object o)
+			throws CompilationException {
+	    //if(ast.type == 1)
+			//ast.d.visit(this, null);
+		//else if(ast.type == 2)
+		ast.e.visit(this, null);
+		return null;
+	}
 	// FuncDeclAST
 	public Object visitFuncDeclAST(FuncDeclAST fAst, Object o)
 			throws CompilationException {
@@ -99,7 +107,6 @@ public class GetPathVisitor extends DoNothingVisitor {
 		
 		return path;
 	}
-
 	// ParaListAST
 	public Object visitParaListAST(ParaListAST ast, Object o)
 			throws CompilationException {
@@ -157,14 +164,14 @@ public class GetPathVisitor extends DoNothingVisitor {
 			// break statement
 			if(o != null && o.toString().equals("while") && tempScope > scopeBreak)
 		    {
-				System.out.println("aaaaaaaaBreakWhile");
+				System.out.println("BreakWhile");
 				return path1;
 			}
 			// case break statement
-			if(o != null && (o.toString().equals("case") || o.toString().startsWith("switch")) && tempSwitchScope > switchBreak)
+			if(o != null && (o.toString().equals("case") || o.toString().startsWith("switch") || o.toString().equals("default")) && tempSwitchScope > switchBreak)
 			{
 				//switchBreak = tempSwitchBreak;
-				System.out.println("aaaaaaaaBreakSwitch");
+				System.out.println("BreakSwitch");
 				return path1;
 			}
 		}
@@ -207,6 +214,8 @@ public class GetPathVisitor extends DoNothingVisitor {
 			scopeBreak--;
 		if(o != null && o.toString().equals("case"))
 			switchBreak--;
+		if(o != null && o.toString().equals("default"))
+			switchBreak--;
 		return path;
 	}
 	
@@ -241,7 +250,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 		return path;
 	}
 	
-	//trinhgiang-28/10/2013
+	// trinhgiang-28/10/2013
 	// WhileStmtAST
 	public Object visitWhileStmtAST(WhileStmtAST ast, Object o)
 			throws CompilationException {
@@ -263,8 +272,41 @@ public class GetPathVisitor extends DoNothingVisitor {
 		scopeBreak = tempScope - 1;
 		return path;
 	}
-	//trinhgiang-28/10/2013
+	// trinhgiang-29/10/2013
+	// ForStmtAST
+	public Object visitForStmtAST(ForStmtAST ast, Object o)
+			throws CompilationException {
+		ast.e1.visit(this, null);
+		boolean b = (Boolean) ast.e2.visit(this, null);
+		String path = ast.label + ";";
+		scopeBreak++;
+		int tempScope = scopeBreak;
+		while (b) {
+			path += ast.o.visit(this, "for");
+			if(scopeBreak >= tempScope) {
+				ast.e3.visit(this, null);
+				b = (Boolean) ast.e2.visit(this, null);
+				path += ast.label + ";";
+			}
+			else
+			{
+				b = false;
+			}
+		}
+		scopeBreak = tempScope - 1;
+		return path;
+	}
+	// trinhgiang-29/10/2013
+	// ExprListAST
+	public Object visitExprListAST(ExprListAST ast, Object o)
+			throws CompilationException {
+		ast.e.visit(this, null);
+		ast.l.visit(this, null);
+		return null;
+	}
+	// trinhgiang-28/10/2013
 	// switch statement
+	// not complete
 	public Object visitSwitchStmtAST(SwitchStmtAST sAst, Object o)
 			throws CompilationException {
 		String path = sAst.label + ";";
@@ -275,7 +317,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 		switchBreak = tempSwitchBreak - 1;
 		return path;
 	}
-	//trinhgiang-28/10/2013
+	// trinhgiang-28/10/2013
 	// case statement
 	public Object visitCaseStmtAST(CaseStmtAST cAst, Object o)
 			throws CompilationException {
@@ -287,6 +329,14 @@ public class GetPathVisitor extends DoNothingVisitor {
 		}		
 		return path;
 	}
+	// trinhgiang-29/10/2013
+	// DefaultStmtAST
+	public Object visitDefaultStmtAST(DefaultStmtAST dAst, Object o)
+			throws CompilationException {
+		String path = dAst.label + ";";
+		path += dAst.s.visit(this, "default");		
+		return path;
+	}
 	// return statement
 	public Object visitRetStmtAST(RetStmtAST ast, Object o)
 			throws CompilationException {
@@ -294,7 +344,6 @@ public class GetPathVisitor extends DoNothingVisitor {
 		signalRet = true;
 		return ast.label + ";";
 	}
-	
 	// VarExprAST
 	public Object visitVarExprAST(VarExprAST ast, Object o)
 			throws CompilationException {
@@ -322,26 +371,23 @@ public class GetPathVisitor extends DoNothingVisitor {
 		//xu ly sau
 		return Integer.parseInt(v.getArrayValue(i));
 	}
-	
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)
 			throws CompilationException {		
 		// return int value
 		return Integer.parseInt(ast.literal.getText());
 	}
-	
-	//BoolLiteralAST
+	// BoolLiteralAST
 	public Object visitBoolLiteralAST(BoolLiteralAST ast, Object o)
 			throws CompilationException {
 		// return bool value
 		return Boolean.parseBoolean(ast.literal.getText());
 	}
-	
-	//trinhgiang-18/10/2013
-	//FloatLiteralAST
+	// trinhgiang-18/10/2013
+	// FloatLiteralAST
 	public Object visitFloatLiteralAST(FloatLiteralAST ast, Object o)
 			throws CompilationException {
-		//return float value
+		// return float value
 		return Float.parseFloat(ast.literal.getText());
 	}
 	
@@ -360,7 +406,6 @@ public class GetPathVisitor extends DoNothingVisitor {
 			return ! (Boolean) e;
 		}
 	}
-	
 	// BinExprAST
 	public Object visitBinExprAST(BinExprAST ast, Object o)
 			throws CompilationException {

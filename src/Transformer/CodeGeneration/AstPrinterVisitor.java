@@ -500,7 +500,12 @@ public class AstPrinterVisitor extends DoNothingVisitor {
 		print(indentString() + "BreakStmt()");
 		return null;	
 	}
-	
+	// trinhgiang-29/10/2013
+	public Object visitContStmtAST(ForStmtAST ast, Object o)
+			throws CompilationException {
+		print(indentString() + "ContinueStmt()");
+		return null;	
+	}
 	// DeclarationStmtAST
 	public Object visitDeclarationStmtAST(DeclarationStmtAST ast, Object o)
 			throws CompilationException {
@@ -511,7 +516,6 @@ public class AstPrinterVisitor extends DoNothingVisitor {
 		print(indentString() + ")");
 		return null;
 	}
-	
 	// IfThenElseStmtAST
 	public Object visitIfThenElseStmtAST(IfThenElseStmtAST ast, Object o)
 			throws CompilationException {

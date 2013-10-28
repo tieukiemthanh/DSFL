@@ -125,41 +125,59 @@ public class AddLabelVisitor extends DoNothingVisitor {
 		OneStmtAST s = (OneStmtAST) ast.o.visit(this, o);
 		return new WhileStmtAST(ast.e, s, label);
 	}
-	
+	// trinhgiang-29/10/2013
+	// ForStmtAST
+	public Object visitForStmtAST(ForStmtAST ast, Object o)
+			throws CompilationException {
+		int label = num++;
+		//ForInitAST e1 = (ForInitAST) ast.e1.visit(this, o);
+		//ExprAST e2 = (ExprAST) ast.e2.visit(this, o);
+		//ExprListAST e3 = (ExprListAST) ast.e3.visit(this, o);
+		OneStmtAST s = (OneStmtAST) ast.o.visit(this, o);
+		return new ForStmtAST(ast.e1, ast.e2, ast.e3, s, label);
+	}
 	// RetStmtAST
 	public Object visitRetStmtAST(RetStmtAST ast, Object o)
 			throws CompilationException {
 	    int label = num++; 
 		return new RetStmtAST(ast.e, label);
 	}
-	
-	//trinhgiang-22/10/2013
+	// trinhgiang-22/10/2013
+	// BreakStmtAST
 	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
 			throws CompilationException {
 		int label = num++;
 		return new BreakStmtAST(ast.t, label);
 	}
-	//trinhgiang-22/10/2013
-	public Object visitSwitchStmtAST(ContStmtAST ast, Object o)
+	// trinhgiang-22/10/2013
+	// continue statement
+	public Object visitContStmtAST(ContStmtAST ast, Object o)
 			throws CompilationException {
 		int label = num++;
 		return new ContStmtAST(ast.t);
 	}
-	//trinhgiang-22/10/2013
-	//CaseStmtAST
+	// trinhgiang-22/10/2013
+	// CaseStmtAST
 	public Object visitCaseStmtAST(CaseStmtAST ast, Object o)
 			throws CompilationException {
 		int label = num++;
 	    StmtListAST s = (StmtListAST) ast.s.visit(this, o);
 		return new CaseStmtAST(ast.e, s, label);
-	}
-	
-	//trinhgiang-28/10/2013
-	//SwitchStmtAST
+	}	
+	// trinhgiang-28/10/2013
+	// SwitchStmtAST
 	public Object visitSwitchStmtAST(SwitchStmtAST ast, Object o)
 			throws CompilationException {
 		int label = num++;
 		OneStmtAST s = (OneStmtAST) ast.o.visit(this, o);
 		return new SwitchStmtAST(ast.e, s, label);
+	}
+	// trinhgiang-29/10/2013
+	// default statement in switch case
+	public Object visitDefaultStmtAST(DefaultStmtAST dAst, Object o)
+			throws CompilationException {
+		int label = num++;
+		StmtListAST s = (StmtListAST) dAst.s.visit(this, o);
+		return new DefaultStmtAST(s, label);
 	}
 }

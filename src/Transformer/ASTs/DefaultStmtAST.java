@@ -6,6 +6,12 @@ public class DefaultStmtAST extends OneStmtAST {
 		s=sl;
 		s.parent=this;
 	}
+	// trinhgiang-29/10/2013
+	public DefaultStmtAST(StmtListAST sl, int l){
+		s=sl;
+		s.parent=this;
+		label = l;
+	}
 	public Object visit(Visitor v, Object o) throws CompilationException{
 		return v.visitDefaultStmtAST(this,o);
 	}
