@@ -93,24 +93,38 @@ Program(
 							)
 							CompStmt(
 								StmtList(
-									ExprStmt(
+									IfThenStmt(
 										BinExpr(
 											VarExpr(
-												j
+												k
 											)
-											=
+											==
+											IntLiteral(
+												0
+											)
+										)
+										ContinueStmt()
+									)
+									StmtList(
+										ExprStmt(
 											BinExpr(
 												VarExpr(
-													j
+													i
 												)
-												+
-												IntLiteral(
-													1
+												=
+												BinExpr(
+													VarExpr(
+														i
+													)
+													+
+													IntLiteral(
+														1
+													)
 												)
 											)
 										)
+										EmptyStmtList()
 									)
-									EmptyStmtList()
 								)
 							)
 						)

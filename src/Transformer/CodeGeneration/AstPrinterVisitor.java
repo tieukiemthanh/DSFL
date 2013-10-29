@@ -501,7 +501,7 @@ public class AstPrinterVisitor extends DoNothingVisitor {
 		return null;	
 	}
 	// trinhgiang-29/10/2013
-	public Object visitContStmtAST(ForStmtAST ast, Object o)
+	public Object visitContStmtAST(ContStmtAST ast, Object o)
 			throws CompilationException {
 		print(indentString() + "ContinueStmt()");
 		return null;	

@@ -59,18 +59,20 @@ class VarTable {
 */
 public class RunSimulatorVisitor extends DoNothingVisitor {
 
-	String ret; //ket qua tra ve
+	String ret; // ket qua tra ve
 	
 	VarTable varTable; 
 	
-	List<String> listInput; //tham so truyen vao
+	List<String> listInput; // tham so truyen vao
 	
 	static boolean signalRet = false;
 	
-	//break statement only apply on while statement, for statement, case statement
+	// break statement only apply on while statement, for statement
 	static int scopeBreak = 0;
-	//break statement apply on case statemnet
+	// break statement apply on case statemnet
 	static int switchBreak = 0;
+	// continue statement apply on while, for statement
+	static int scopeContinue = 0;
 	
 	public RunSimulatorVisitor(String outputFile, boolean debug) throws CompilationException {
 	
@@ -85,6 +87,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		signalRet = false;
 		scopeBreak = 0;
 		switchBreak = 0;
+		scopeContinue = 0;
 		
 		//Object o la testcase truyen vao
 		// day co dang a;b
@@ -131,13 +134,21 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		
 		return null;
 	}
-	
 	// initializer
 	public Object visitVarInitializerAST(VarInitializerAST ast, Object o)
 			throws CompilationException {
 		return ast.e.visit(this, o);
 	}
-	
+	// trinhgiang-29/10/2013
+	// for initializer
+	public Object visitForInitAST(ForInitAST ast, Object o)
+			throws CompilationException {
+	    //if(ast.type == 1)
+			//ast.d.visit(this, null);
+		//else if(ast.type == 2)
+		ast.e.visit(this, null);
+		return null;
+	}
 	// FuncDeclAST
 	public Object visitFuncDeclAST(FuncDeclAST fAst, Object o)
 			throws CompilationException {
@@ -189,7 +200,6 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			throws CompilationException {		
 		// visitStmtListAST or visitEmptyStmtListAST
 		ast.s.visit(this, o);
-		
 		return null;
 	}
 	
@@ -199,6 +209,8 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		// visitOneStmtAST
 		int tempScope = scopeBreak;
 		int tempSwitchScope = switchBreak;
+		int tempContinue = scopeContinue;
+		
 		ast.o.visit(this, o);
 		if(!signalRet) //yet not return
 		{
@@ -206,11 +218,16 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			//break statement
 			if(o == null)
 				ast.s.visit(this, o);
-		    else if(o.toString().equals("while"))
+		    else if(o.toString().equals("while") || o.toString().equals("for"))
 		    {
-				if(tempScope <= scopeBreak)
+				//break statement
+				if(tempScope > scopeBreak || tempContinue > scopeContinue) {
+					// don't nothing
+				}
+				else if(tempScope <= scopeBreak)
 					ast.s.visit(this, o);
 			}
+			// case statement
 			else if(o.toString().equals("case") || o.toString().startsWith("switch") || o.toString().equals("default"))
 			{
 				if(tempSwitchScope <= switchBreak)
@@ -242,16 +259,32 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	// BreakStmtAST
 	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
 			throws CompilationException {
-		//ast.e.visit(this, o);
-		//thoat ra khoi vong while, for, case
+		// thoat ra khoi vong while, for, case
 		if(o != null && o.toString().equals("while"))
 			scopeBreak--;
-		if(o != null && o.toString().equals("case"))
+		else if(o != null && o.toString().equals("case"))
 			switchBreak--;
+		else if(o != null && o.toString().equals("default"))
+			switchBreak--;
+		else if(o != null && o.toString().equals("for"))
+			scopeBreak--;
 		return null;
 	}
-
-	
+    // trinhgiang-29/10/2013
+	// ContStmtAST
+	public Object visitContStmtAST(ContStmtAST ast, Object o)
+			throws CompilationException {
+		// thoat ra khoi vong while, fot
+		if(o != null && o.toString().equals("while"))
+	    {
+			scopeContinue--;
+		}
+		else if(o != null && o.toString().equals("for"))
+		{
+			scopeContinue--;
+		}
+		return null;
+	}
 	// IfThenStmtAST
 	public Object visitIfThenStmtAST(IfThenStmtAST ast, Object o)
 			throws CompilationException {		
@@ -283,19 +316,64 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		boolean b = (Boolean) ast.e.visit(this, null);
 		scopeBreak++;
+		scopeContinue++;
+		int tempContinue = scopeContinue;
 		int tempScope = scopeBreak;
 		while (b) {
 			ast.o.visit(this, "while");
-			//trinhgiang-22/10/2013
-			//xu ly break statement
-			if(tempScope <= scopeBreak)
+			// continue statement
+			if(scopeContinue < tempContinue)
+			{
+				b = (Boolean) ast.e.visit(this, null);
+			}
+			// break statement
+			else if(tempScope <= scopeBreak)
 				b = (Boolean) ast.e.visit(this, null);
 			else {
 				b = false;
 			}
-			
 		}
+		scopeContinue = tempContinue - 1;
 		scopeBreak = tempScope - 1;	
+		return null;
+	}
+	// trinhgiang-29/10/2013
+	// ForStmtAST
+	public Object visitForStmtAST(ForStmtAST ast, Object o)
+			throws CompilationException {
+		ast.e1.visit(this, null);
+		boolean b = (Boolean) ast.e2.visit(this, null);
+		scopeBreak++;
+		scopeContinue++;
+		int tempContinue = scopeContinue;
+		int tempScope = scopeBreak;
+		while (b) {
+			ast.o.visit(this, "for");
+			// continue statement
+			if(scopeContinue < tempContinue) {
+				ast.e3.visit(this, null);
+				b = (Boolean) ast.e2.visit(this, null);
+			}
+			// break statement
+			else if(scopeBreak >= tempScope) {
+				ast.e3.visit(this, null);
+				b = (Boolean) ast.e2.visit(this, null);
+			}
+			else
+			{
+				b = false;
+			}
+		}
+		scopeBreak = tempScope - 1;
+		scopeContinue = tempContinue - 1;
+		return null;
+	}
+	// trinhgiang-29/10/2013
+	// ExprListAST
+	public Object visitExprListAST(ExprListAST ast, Object o)
+			throws CompilationException {
+		ast.e.visit(this, null);
+		ast.l.visit(this, null);
 		return null;
 	}
 	// trinhgiang-28/10/2013
@@ -337,7 +415,6 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		
 		return null;
 	}
-	
 	// VarExprAST
 	public Object visitVarExprAST(VarExprAST ast, Object o)
 			throws CompilationException {
@@ -363,25 +440,38 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitEleExprAST(EleExprAST ast, Object o)
 			throws CompilationException {
 		Var v = varTable.getVar(ast.name.getText());
+		// index of array element
 		Integer i = (Integer) ((ExprListAST) ast.e).e.visit(this, null);
-		//trinhgiang-18/10/2013
-		return Integer.parseInt(v.getArrayValue(i));
+		//trinhgiang-29/10/2013
+		String ele = v.getArrayValue(i);
+		// only support one dimension array
+		if(ele.contains("."))
+		{
+			// element is float literal
+			return Float.parseFloat(ele);
+		}
+		else if(ele.contains("true") || ele.contains("false"))
+		{
+			// element is boolean literal
+			return Boolean.parseBoolean(ele);
+		}
+		else {
+			// element is integer literal
+			return Integer.parseInt(ele);
+		}
 	}
-	
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)
 			throws CompilationException {		
 		// return int value
 		return Integer.parseInt(ast.literal.getText());
 	}
-	
 	//BoolLiteralAST
 	public Object visitBoolLiteralAST(BoolLiteralAST ast, Object o)
 			throws CompilationException {
 		// return bool value
 		return Boolean.parseBoolean(ast.literal.getText());
 	}
-	
 	//trinhgiang-16/10/2013
 	//FloatLiteralAST
 	public Object visitFloatLiteralAST(FloatLiteralAST ast, Object o)
@@ -411,7 +501,6 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			return ! (Boolean) e;
 		}
 	}
-	
 	// BinExprAST
 	public Object visitBinExprAST(BinExprAST ast, Object o)
 			throws CompilationException {

@@ -99,8 +99,7 @@ public class AddLabelVisitor extends DoNothingVisitor {
 	public Object visitExprStmtAST(ExprStmtAST ast, Object o)
 			throws CompilationException {
 		return new ExprStmtAST(ast.e, num++);
-	}
-	
+	}	
 	// IfThenStmtAST
 	public Object visitIfThenStmtAST(IfThenStmtAST ast, Object o)
 			throws CompilationException {
@@ -108,7 +107,6 @@ public class AddLabelVisitor extends DoNothingVisitor {
 		OneStmtAST s = (OneStmtAST) ast.s.visit(this, o);
 		return new IfThenStmtAST(ast.e, s, label);
 	}
-	
 	// IfThenElseStmtAST
 	public Object visitIfThenElseStmtAST(IfThenElseStmtAST ast, Object o)
 			throws CompilationException {	
@@ -117,7 +115,6 @@ public class AddLabelVisitor extends DoNothingVisitor {
 		OneStmtAST s2 = (OneStmtAST) ast.s2.visit(this, o);
 		return new IfThenElseStmtAST(ast.e, s1, s2, label);
 	}
-	
 	// WhileStmtAST
 	public Object visitWhileStmtAST(WhileStmtAST ast, Object o)
 			throws CompilationException {
@@ -154,7 +151,7 @@ public class AddLabelVisitor extends DoNothingVisitor {
 	public Object visitContStmtAST(ContStmtAST ast, Object o)
 			throws CompilationException {
 		int label = num++;
-		return new ContStmtAST(ast.t);
+		return new ContStmtAST(ast.t, label);
 	}
 	// trinhgiang-22/10/2013
 	// CaseStmtAST
