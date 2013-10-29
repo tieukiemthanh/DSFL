@@ -63,13 +63,12 @@ public class GetPathVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		return "";
 	}
-
 	// VarDeclAST
 	public Object visitVarDeclAST(VarDeclAST ast, Object o)
 			throws CompilationException {
 		String value = ast.init.visit(this, o).toString();
-		//trinhgiang-18/10/2013
-		//them xu ly voi kieu float
+		// trinhgiang-18/10/2013
+		// them xu ly voi kieu float
 		Var v = null;
 		//kieu array
 		if(ast.t instanceof ArrayTypeAST) {
@@ -85,11 +84,24 @@ public class GetPathVisitor extends DoNothingVisitor {
 			
 		return path;
 	}
-	
 	// initializer
 	public Object visitVarInitializerAST(VarInitializerAST ast, Object o)
 			throws CompilationException {
 		return ast.e.visit(this, o);
+	}
+	// list variable initializer
+	public Object visitVarInitializerListAST(VarInitializerListAST ast, Object o)
+			throws CompilationException {
+		// for array value
+		if(ast.vl instanceof EmptyVarInitializerListAST)
+			return ast.v.visit(this, o);
+		else 
+			return ast.v.visit(this, o) + "!" + ast.vl.visit(this, o);
+	}
+	// array initializer
+	public Object visitArrayInitializerAST(ArrayInitializerAST ast, Object o)
+			throws CompilationException {
+		return ast.v.visit(this, o);
 	}
 	// for initializer
 	public Object visitForInitAST(ForInitAST ast, Object o)
@@ -166,7 +178,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 		if(signalRet) return path1;
 		else {
 			// break statement
-			if(o != null && (o.toString().equals("while") || o.toString().equals("for")) && (tempScope > scopeBreak || tempContinue > scopeContinue))
+			if(o != null && (o.toString().equals("while") || o.toString().equals("for") || o.toString().equals("dowhile")) && (tempScope > scopeBreak || tempContinue > scopeContinue))
 		    {
 				//System.out.println("BreakorContinueWhile");
 				return path1;
@@ -214,13 +226,24 @@ public class GetPathVisitor extends DoNothingVisitor {
 		String path = ast.label + ";";
 		//thoat ra khoi vong while, for, case
 		if(o != null && o.toString().equals("while"))
+	   {
+			System.out.println("Da qua while break");
 			scopeBreak--;
+		}
 		else if(o != null && o.toString().equals("case"))
 			switchBreak--;
 		else if(o != null && o.toString().equals("default"))
 			switchBreak--;
 		else if(o != null && o.toString().equals("for"))
+		{
+			System.out.println("Da qua for break");
 			scopeBreak--;
+		}
+		else if(o != null && o.toString().equals("dowhile"))
+		{
+			System.out.println("Da qua dowhile break");
+			scopeBreak--;
+		}
 		return path;
 	}
 	// trinhgiang-29/10/2013
@@ -237,6 +260,11 @@ public class GetPathVisitor extends DoNothingVisitor {
 		else if(o != null && o.toString().equals("for"))
 		{
 			System.out.println("Da qua for continue");
+			scopeContinue--;
+		}
+		else if(o != null && o.toString().equals("dowhile"))
+		{
+			System.out.println("Da qua dowhile continue");
 			scopeContinue--;
 		}
 		return path;
@@ -333,6 +361,46 @@ public class GetPathVisitor extends DoNothingVisitor {
 			{
 				b = false;
 			}
+		}
+		scopeBreak = tempScope - 1;
+		scopeContinue = tempContinue - 1;
+		return path;
+	}
+	// trinhgiang-29/10/2013
+	// DoStmtAST
+	public Object visitDoStmtAST(DoStmtAST ast, Object o)
+			throws CompilationException {
+		String path = ast.label + ";";
+		scopeBreak++;
+		scopeContinue++;
+		int tempContinue = scopeContinue;
+		int tempScope = scopeBreak;
+		
+		path += ast.o.visit(this, "dowhile");
+		// continue statement
+		if((scopeContinue < tempContinue) || (scopeBreak >= tempScope))
+		{
+			boolean b = (Boolean) ast.e.visit(this, null);
+			while (b) {
+				path += ast.o.visit(this, "dowhile");
+				// continue statement
+				if(scopeContinue < tempContinue) {
+					b = (Boolean) ast.e.visit(this, null);
+					path += ast.label + ";";
+				}
+				else if(scopeBreak >= tempScope) {
+					b = (Boolean) ast.e.visit(this, null);
+					path += ast.label + ";";
+				}
+				else
+				{
+					// break statement
+					b = false;
+				}
+			}
+		}
+		// break statement
+		else if(scopeBreak < tempScope) {
 		}
 		scopeBreak = tempScope - 1;
 		scopeContinue = tempContinue - 1;

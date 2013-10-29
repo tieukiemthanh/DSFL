@@ -127,11 +127,16 @@ public class AddLabelVisitor extends DoNothingVisitor {
 	public Object visitForStmtAST(ForStmtAST ast, Object o)
 			throws CompilationException {
 		int label = num++;
-		//ForInitAST e1 = (ForInitAST) ast.e1.visit(this, o);
-		//ExprAST e2 = (ExprAST) ast.e2.visit(this, o);
-		//ExprListAST e3 = (ExprListAST) ast.e3.visit(this, o);
 		OneStmtAST s = (OneStmtAST) ast.o.visit(this, o);
 		return new ForStmtAST(ast.e1, ast.e2, ast.e3, s, label);
+	}
+	// trinhgiang-29/10/2013
+	// DoStmtAST
+	public Object visitDoStmtAST(DoStmtAST ast, Object o)
+			throws CompilationException {
+		int label = num++;
+		OneStmtAST s = (OneStmtAST) ast.o.visit(this, o);
+		return new DoStmtAST(ast.e, s, label);
 	}
 	// RetStmtAST
 	public Object visitRetStmtAST(RetStmtAST ast, Object o)

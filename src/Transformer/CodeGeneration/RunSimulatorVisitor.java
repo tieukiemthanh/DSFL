@@ -139,6 +139,20 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		return ast.e.visit(this, o);
 	}
+	// list variable initializer
+	public Object visitVarInitializerListAST(VarInitializerListAST ast, Object o)
+			throws CompilationException {
+		// for array value
+		if(ast.vl instanceof EmptyVarInitializerListAST)
+			return ast.v.visit(this, o);
+		else 
+			return ast.v.visit(this, o) + "!" + ast.vl.visit(this, o);
+	}
+	// array initializer
+	public Object visitArrayInitializerAST(ArrayInitializerAST ast, Object o)
+			throws CompilationException {
+		return ast.v.visit(this, o);
+	}
 	// trinhgiang-29/10/2013
 	// for initializer
 	public Object visitForInitAST(ForInitAST ast, Object o)
@@ -268,6 +282,8 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			switchBreak--;
 		else if(o != null && o.toString().equals("for"))
 			scopeBreak--;
+		else if(o != null && o.toString().equals("dowhile"))
+			scopeBreak--;
 		return null;
 	}
     // trinhgiang-29/10/2013
@@ -280,6 +296,10 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			scopeContinue--;
 		}
 		else if(o != null && o.toString().equals("for"))
+		{
+			scopeContinue--;
+		}
+		else if(o != null && o.toString().equals("dowhile"))
 		{
 			scopeContinue--;
 		}
@@ -363,6 +383,43 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			{
 				b = false;
 			}
+		}
+		scopeBreak = tempScope - 1;
+		scopeContinue = tempContinue - 1;
+		return null;
+	}
+	// trinhgiang-29/10/2013
+	// DoStmtAST
+	public Object visitDoStmtAST(DoStmtAST ast, Object o)
+			throws CompilationException {
+		scopeBreak++;
+		scopeContinue++;
+		int tempContinue = scopeContinue;
+		int tempScope = scopeBreak;
+		
+		ast.o.visit(this, "dowhile");
+		// continue statement
+		if((scopeContinue < tempContinue) || (scopeBreak >= tempScope))
+		{
+			boolean b = (Boolean) ast.e.visit(this, null);
+			while (b) {
+				ast.o.visit(this, "dowhile");
+				// continue statement
+				if(scopeContinue < tempContinue) {
+					b = (Boolean) ast.e.visit(this, null);
+				}
+				else if(scopeBreak >= tempScope) {
+					b = (Boolean) ast.e.visit(this, null);
+				}
+				else
+				{
+					// break statement
+					b = false;
+				}
+			}
+		}
+		// break statement
+		else if(scopeBreak < tempScope) {
 		}
 		scopeBreak = tempScope - 1;
 		scopeContinue = tempContinue - 1;

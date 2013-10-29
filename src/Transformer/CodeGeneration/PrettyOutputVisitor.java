@@ -104,6 +104,13 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 		indentString();
 		if (ast.t instanceof ArrayTypeAST) {
 			ast.t.visit(this, ast.id.getText());
+			if(ast.init != null)
+			{
+				em.printout(" = {");
+				ast.init.visit(this, o);
+				em.printout("}");
+			}
+			em.printout(";" + newline());
 			return null;
 		}
 		ast.t.visit(this, o);
@@ -137,7 +144,25 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 		ast.e.visit(this, o);
 		return null;
 	}
-	
+	// list variable initializer
+	public Object visitVarInitializerListAST(VarInitializerListAST ast, Object o)
+			throws CompilationException {
+		// for array value
+		ast.v.visit(this, o);
+		if(ast.vl instanceof EmptyVarInitializerListAST)
+		{
+		}
+		else {
+			em.printout(",");
+		}
+		ast.vl.visit(this, o);
+		return null;
+	}
+	// array initializer
+	public Object visitArrayInitializerAST(ArrayInitializerAST ast, Object o)
+			throws CompilationException {
+		return ast.v.visit(this, o);
+	}
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)
 			throws CompilationException {		
@@ -209,7 +234,7 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 		if (id != null) {
 			em.printout(id);
 			ast.el.visit(this, "arraytype");		
-			em.printout(";" + newline());
+			//em.printout(";" + newline());
 		}
 		return null;
 	}
@@ -597,7 +622,8 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 	
 	// DoStmtAST
 	public Object visitDoStmtAST(DoStmtAST ast, Object o)
-			throws CompilationException {		
+			throws CompilationException {	
+		ast.line = line;	
 		indentString();
 		em.printout("do" + newline());
 		if (ast.o instanceof CompStmtAST)
@@ -607,7 +633,6 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 			ast.o.visit(this, o);
 			outScope();
 		}
-		ast.line = line;
 		indentString();
 		em.printout("while (");
 		em.setFilter(true);

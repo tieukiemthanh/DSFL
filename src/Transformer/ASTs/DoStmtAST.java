@@ -10,6 +10,13 @@ public class DoStmtAST extends OneStmtAST {
 		o=stmt;
 		e.parent=o.parent=this;
 	}
+	// trinhgiang-29/10/2013
+	public DoStmtAST(ExprAST exp, OneStmtAST stmt, int l){
+		e=exp;
+		o=stmt;
+		e.parent=o.parent=this;
+		label = l;
+	}
 	public Object visit(Visitor v, Object o) throws CompilationException{
 		return v.visitDoStmtAST(this,o);
 	}	
