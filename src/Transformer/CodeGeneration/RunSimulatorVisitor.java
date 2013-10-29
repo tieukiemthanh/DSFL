@@ -222,10 +222,16 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		// visitOneStmtAST
 		int tempScope = scopeBreak;
-		int tempSwitchScope = switchBreak;
 		int tempContinue = scopeContinue;
 		
-		ast.o.visit(this, o);
+		if(o != null && o.toString().startsWith("caseF"))
+		{
+			// don't nothing
+		}
+		else {
+			ast.o.visit(this, o);
+		}
+		
 		if(!signalRet) //yet not return
 		{
 			// visitStmtListAST or visitEmptyStmtListAST
@@ -241,19 +247,12 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 				else if(tempScope <= scopeBreak)
 					ast.s.visit(this, o);
 			}
-			// case statement
-			else if(o.toString().equals("case") || o.toString().startsWith("switch") || o.toString().equals("default"))
-			{
-				if(tempSwitchScope <= switchBreak)
-					ast.s.visit(this, o);
-			}
 			else {
 				ast.s.visit(this, o);
 			}
 		}
 		return null;
 	}
-	
 	// DeclarationStmtAST
 	public Object visitDeclarationStmtAST(DeclarationStmtAST ast, Object o)
 			throws CompilationException {
@@ -261,7 +260,6 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		
 		return null;
 	}
-	
 	// ExprStmtAST
 	public Object visitExprStmtAST(ExprStmtAST ast, Object o)
 			throws CompilationException {
@@ -276,10 +274,6 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		// thoat ra khoi vong while, for, case
 		if(o != null && o.toString().equals("while"))
 			scopeBreak--;
-		else if(o != null && o.toString().equals("case"))
-			switchBreak--;
-		else if(o != null && o.toString().equals("default"))
-			switchBreak--;
 		else if(o != null && o.toString().equals("for"))
 			scopeBreak--;
 		else if(o != null && o.toString().equals("dowhile"))
@@ -330,7 +324,6 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 				
 		return null;
 	}
-	
 	// WhileStmtAST
 	public Object visitWhileStmtAST(WhileStmtAST ast, Object o)
 			throws CompilationException {
@@ -438,20 +431,39 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitSwitchStmtAST(SwitchStmtAST sAst, Object o)
 			throws CompilationException {
 		String valueSwitch = sAst.e.visit(this, null).toString();
-		switchBreak++;
 		int tempSwitchBreak = switchBreak;
-		sAst.o.visit(this, "switch" + valueSwitch);
-		switchBreak = tempSwitchBreak - 1;
+		sAst.o.visit(this, valueSwitch);
 		return null;
 	}
 	// trinhgiang-28/10/2013
 	public Object visitCaseStmtAST(CaseStmtAST cAst, Object o)
 			throws CompilationException {
 		String valueCase = cAst.e.visit(this, null).toString();
-		if(valueCase.trim().equals(o.toString().trim().substring(6)))
-		{   
-			cAst.s.visit(this, "case");
-		}		
+		if(o != null && o.toString().equals("caseT")) {
+			//System.out.println("Da tim ra case true");
+			return null;
+		}
+		if(o != null && o.toString().startsWith("caseF")) {
+			//System.out.println("Chay trong case false");
+			if(valueCase.equals(o.toString().substring(5)))
+			{   
+				cAst.s.visit(this, "caseT");
+			}
+			else {
+				cAst.s.visit(this, o);
+			}
+		}
+		// first case statement
+		else {
+			//System.out.println("Chay trong first case");
+			if(valueCase.equals(o.toString()))
+			{   
+				cAst.s.visit(this, "caseT");
+			}
+			else {
+				cAst.s.visit(this, "caseF" + o.toString());
+			}
+		}
 		return null;
 	}
 	// trinhgiang-29/10/2013

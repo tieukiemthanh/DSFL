@@ -170,24 +170,28 @@ public class GetPathVisitor extends DoNothingVisitor {
 		// visitOneStmtAST
 		// trinhgiang-22/10/2013
 		int tempScope = scopeBreak;
-		int tempSwitchScope = switchBreak;
-        int tempContinue = scopeContinue;
+      int tempContinue = scopeContinue;
         		
-		String path1 = (String) ast.o.visit(this, o);
+		String path1 = "";
+		// false case statement
+		if(o != null && o.toString().startsWith("caseF")) {
+			if(ast.o instanceof CaseStmtAST || ast.o instanceof DefaultStmtAST){
+				path1 = (String) ast.o.visit(this, o);
+			}
+			else {
+				
+			}
+		}
+		else {
+			path1 = (String) ast.o.visit(this, o);
+		}
 		//sign teminal statement
 		if(signalRet) return path1;
 		else {
 			// break statement
 			if(o != null && (o.toString().equals("while") || o.toString().equals("for") || o.toString().equals("dowhile")) && (tempScope > scopeBreak || tempContinue > scopeContinue))
-		    {
-				//System.out.println("BreakorContinueWhile");
-				return path1;
-			}
-			// case break statement
-			else if(o != null && (o.toString().equals("case") || o.toString().startsWith("switch") || o.toString().equals("default")) && tempSwitchScope > switchBreak)
-			{
-				//switchBreak = tempSwitchBreak;
-				//System.out.println("BreakSwitch");
+		   {
+				System.out.println("BreakorContinueWhile");
 				return path1;
 			}
 		}
@@ -230,10 +234,6 @@ public class GetPathVisitor extends DoNothingVisitor {
 			System.out.println("Da qua while break");
 			scopeBreak--;
 		}
-		else if(o != null && o.toString().equals("case"))
-			switchBreak--;
-		else if(o != null && o.toString().equals("default"))
-			switchBreak--;
 		else if(o != null && o.toString().equals("for"))
 		{
 			System.out.println("Da qua for break");
@@ -421,10 +421,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		String path = sAst.label + ";";
 		String valueSwitch = sAst.e.visit(this, null).toString();
-		switchBreak++;
-		int tempSwitchBreak = switchBreak;
-		path += sAst.o.visit(this, "switch" + valueSwitch);
-		switchBreak = tempSwitchBreak - 1;
+		path += sAst.o.visit(this, valueSwitch);
 		return path;
 	}
 	// trinhgiang-28/10/2013
@@ -433,10 +430,31 @@ public class GetPathVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		String path = cAst.label + ";";
 		String valueCase = cAst.e.visit(this, null).toString();
-		if(valueCase.trim().equals(o.toString().trim().substring(6)))
-		{   
-			path += cAst.s.visit(this, "case");
-		}		
+		if(o != null && o.toString().equals("caseT")) {
+			System.out.println("Da tim ra case true");
+			return "";
+		}
+		if(o != null && o.toString().startsWith("caseF")) {
+			//System.out.println("Chay trong case false");
+			if(valueCase.equals(o.toString().substring(5)))
+			{   
+				path += cAst.s.visit(this, "caseT");
+			}
+			else {
+				path += cAst.s.visit(this, o);
+			}
+		}
+		// first case statement
+		else {
+			//System.out.println("Chay trong first case");
+			if(valueCase.equals(o.toString()))
+			{   
+				path += cAst.s.visit(this, "caseT");
+			}
+			else {
+				path += cAst.s.visit(this, "caseF" + o.toString());
+			}
+		}
 		return path;
 	}
 	// trinhgiang-29/10/2013
