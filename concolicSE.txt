@@ -1,4 +1,3 @@
 Begin test cases.
 -1.0
-4
 End test cases.

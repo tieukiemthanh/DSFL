@@ -120,18 +120,27 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		//trinhgiang-16/10/2013
 		//them xu ly voi kieu float
 		//kieu array
-		if(ast.t instanceof ArrayTypeAST) {
-			v = new Var(ast.id.getText(), "array", value);
+		if(ast.t instanceof TypeListAST) {
+			//System.out.println("type list");
+			if(((TypeListAST)ast.t).t instanceof ArrayTypeAST) {
+				//System.out.println("array type");
+				v = new Var(ast.id.getText(), "array", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
+				//System.out.println("float type");
+				v = new Var(ast.id.getText(), "float", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof IntTypeAST){
+				//System.out.println("integer type");
+				v = new Var(ast.id.getText(), "integer", value);	
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST)
+			{
+				//System.out.println("boolean type");
+				v = new Var(ast.id.getText(), "boolean", value);
+			}
 		}
-		else if(ast.t instanceof FloatTypeAST) {
-			v = new Var(ast.id.getText(), "float", value);
-		}
-		else {
-			v = new Var(ast.id.getText(), "integer", value);	
-		}
-		
 		varTable.addVar(v);
-		
 		return null;
 	}
 	// initializer
@@ -189,21 +198,20 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		String value = listInput.remove(0);
 		Var v = null;
 		
-		if (value.contains("!")) {
-			v = new Var(ast.id.getText(), "array", value);
-		} 
-		else {
-			//trinhgiang-16/10/2013
-			//them xu ly voi kieu float
-			//if(ast.t instanceof FloatTypeAST)
-			if(value.contains(".")) {
+		if(ast.t instanceof TypeListAST) {
+			if ((((TypeListAST)ast.t).t instanceof ArrayTypeAST) && value.contains("!")) {
+				v = new Var(ast.id.getText(), "array", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
 				v = new Var(ast.id.getText(), "float", value);
 			}
-			else {
+			else  if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
 				v = new Var(ast.id.getText(), "integer", value);
-			}	
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
+				v = new Var(ast.id.getText(), "boolean", value);
+			}
 		}
-		
 		varTable.addVar(v);
 		
 		return null;
@@ -505,29 +513,29 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		
 		return null;
 	}
-	
+	// EleExprAST
 	public Object visitEleExprAST(EleExprAST ast, Object o)
 			throws CompilationException {
 		Var v = varTable.getVar(ast.name.getText());
 		// index of array element
 		Integer i = (Integer) ((ExprListAST) ast.e).e.visit(this, null);
-		//trinhgiang-29/10/2013
+		//trinhgiang-30/10/2013
 		String ele = v.getArrayValue(i);
+		String eleType = v.getType();
 		// only support one dimension array
-		if(ele.contains("."))
-		{
+		if(eleType.equals("float")) {
 			// element is float literal
 			return Float.parseFloat(ele);
 		}
-		else if(ele.contains("true") || ele.contains("false"))
-		{
+		else if(eleType.equals("boolean") && (ele.contains("true") || ele.contains("false"))) {
 			// element is boolean literal
 			return Boolean.parseBoolean(ele);
 		}
-		else {
+		else if (eleType.equals("integer")) {
 			// element is integer literal
 			return Integer.parseInt(ele);
 		}
+		return null;
 	}
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)

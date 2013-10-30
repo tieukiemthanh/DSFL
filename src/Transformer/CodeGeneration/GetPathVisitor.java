@@ -71,14 +71,20 @@ public class GetPathVisitor extends DoNothingVisitor {
 		// them xu ly voi kieu float
 		Var v = null;
 		//kieu array
-		if(ast.t instanceof ArrayTypeAST) {
-			v = new Var(ast.id.getText(), "array", value);
+		if(ast.t instanceof TypeListAST) {
+			if(((TypeListAST)ast.t).t instanceof ArrayTypeAST) {
+				v = new Var(ast.id.getText(), "array", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
+				v = new Var(ast.id.getText(), "float", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
+				v = new Var(ast.id.getText(), "integer", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
+				v = new Var(ast.id.getText(), "boolean", value);
+			}
 		}
-		else if(ast.t instanceof FloatTypeAST)
-			v = new Var(ast.id.getText(), "float", value);
-		else 
-			v = new Var(ast.id.getText(), "integer", value);
-		
 		varTable.addVar(v);
 		String path = ast.label + ";";
 			
@@ -138,18 +144,20 @@ public class GetPathVisitor extends DoNothingVisitor {
 		String value = listInput.remove(0);
 		Var v = null;
 		
-		if (value.contains("!")) {
-			v = new Var(ast.id.getText(), "array", value);
+		if(ast.t instanceof TypeListAST) {
+			if ((((TypeListAST)ast.t).t instanceof ArrayTypeAST) && value.contains("!")) {
+				v = new Var(ast.id.getText(), "array", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
+				v = new Var(ast.id.getText(), "float", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
+				v = new Var(ast.id.getText(), "integer", value);
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
+				v = new Var(ast.id.getText(), "boolean", value);
+			}
 		}
-		//trinhgiang-18/10/2013
-		//them xu ly kieu float 
-		else if(value.contains(".")) {
-			v = new Var(ast.id.getText(), "float", value);
-		}
-		else {
-			v = new Var(ast.id.getText(), "integer", value);
-		}
-		
 		varTable.addVar(v);
 		
 		return null;
@@ -491,7 +499,6 @@ public class GetPathVisitor extends DoNothingVisitor {
 		
 		return null;
 	}
-	
 	public Object visitEleExprAST(EleExprAST ast, Object o)
 			throws CompilationException {
 		Var v = varTable.getVar(ast.name.getText());
@@ -499,21 +506,21 @@ public class GetPathVisitor extends DoNothingVisitor {
 		Integer i = (Integer) ((ExprListAST) ast.e).e.visit(this, null);
 		// trinhgiang-29/10/2013
 		String ele = v.getArrayValue(i);
+		String eleType = v.getType();
 		// only support one dimension array
-		if(ele.contains("."))
-		{
+		if(eleType.equals("float")) {
 			// element is float literal
 			return Float.parseFloat(ele);
 		}
-		else if(ele.contains("true") || ele.contains("false"))
-		{
+		else if(eleType.equals("boolean") && (ele.contains("true") || ele.contains("false"))) {
 			// element is boolean literal
 			return Boolean.parseBoolean(ele);
 		}
-		else {
+		else if (eleType.equals("integer")) {
 			// element is integer literal
 			return Integer.parseInt(ele);
 		}
+		return null;
 	}
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)
