@@ -30,7 +30,10 @@ public class ControlDep
 		node = that.node;
 		branch = that.branch;
 	}
-	
+	// trinhgiang-31/10/2013
+	public Node get() {
+		return node;
+	}
 	public String toString() {
 		String result = "";
 		result =  "{Node " + node.getIndex() + " (lineID=" + node.getID() + "),     " + branch + "}";

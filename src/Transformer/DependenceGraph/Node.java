@@ -24,8 +24,10 @@ public class Node
 	}
 	
 	public int getID() {return StatementID;}
-	public ArrayList<DataDep> getDataDep() {return dataDep;}
-	public void setIndex(int id) {indexInPDG = id;}
+	public ArrayList<DataDep> getDataDep() {return dataDep; }
+	public ControlDep getControlDep() { return conDep; }
+	public void setIndex(int id) {indexInPDG = id; }
+	public void setID(int id) { StatementID = id; }
 	public int getIndex() {return indexInPDG;}
 	public void setAssignedVar(String var) {assignedVar = var;}
 

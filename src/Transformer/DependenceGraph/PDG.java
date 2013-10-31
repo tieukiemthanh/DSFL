@@ -25,7 +25,17 @@ public class PDG
 		}
 		return null;
 	}
-	
+	// trinhgiang-31/10/2013
+	// mapping line to statement
+	public void mappingLine2Stmt(ArrayList<Integer> mapTable) {
+		for(int i = 0; i < progDepGraph.size(); i++) {
+			Node n = progDepGraph.get(i);
+			int index = mapTable.indexOf(n.getID());
+			if(index != -1) {
+				n.setID(index);
+			}
+		}
+	}
 	public void changeLineIdAtDataDepPointToNode() {
 		for (int i = 0; i < progDepGraph.size(); i++){			
 			Node nodeInPDG = progDepGraph.get(i);

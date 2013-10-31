@@ -250,16 +250,17 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// VarDeclAST
 	public Object visitVarDeclAST(VarDeclAST ast, Object o)
 			throws CompilationException {
-		ast.line = ast.id.getLine();
-		if (ast.parent.parent instanceof DeclarationStmtAST)
-			ast.parent.parent.line = ast.line;
+		//ast.line = ast.id.getLine();
+		//if (ast.parent.parent instanceof DeclarationStmtAST)
+		//	ast.parent.parent.line = ast.line;
 
 		ast.t.visit(this, o);
 		if (ast.init != null) {
 			// day la phep gan
 			String varNameAssigned = ast.id.getText();
 			// luu bien duoc gan vao danh sach
-			tableAssignedVar.addAssignedVar(ast.line, varNameAssigned);			
+			//tableAssignedVar.addAssignedVar(ast.line, varNameAssigned);			
+			tableAssignedVar.addAssignedVar(ast.label, varNameAssigned);			
 			// neu return true <=> dang tim kiem lenh gan trong vong lap
 			if (checkEquals(o, FIND_ASSIGN_STMT_IN_LOOP))
 				return null;
@@ -267,7 +268,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 			ControlDep conDep = null;
 			if (!currentLevelNode.isEmpty())
 				conDep = new ControlDep(currentLevelNode);
-			Node assignNode = new Node(ast.line, TYPE.ASSIGN, data, conDep, null);
+			//Node assignNode = new Node(ast.line, TYPE.ASSIGN, data, conDep, null);
+			Node assignNode = new Node(ast.label, TYPE.ASSIGN, data, conDep, null);
 			assignNode.setAssignedVar(varNameAssigned);
 			graph.addNode(assignNode);
 		} else {
@@ -277,7 +279,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 			ControlDep conDep = null;
 			if (!currentLevelNode.isEmpty())
 				conDep = new ControlDep(currentLevelNode);				
-			graph.addNode(new Node(ast.line, TYPE.DECLARATION, null, conDep, null));
+			//graph.addNode(new Node(ast.line, TYPE.DECLARATION, null, conDep, null));
+			graph.addNode(new Node(ast.label, TYPE.DECLARATION, null, conDep, null));
 		}
 		return null;
 	}
@@ -285,10 +288,11 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// FuncDeclAST
 	public Object visitFuncDeclAST(FuncDeclAST fAst, Object o)
 			throws CompilationException {
-		fAst.line = fAst.name.getLine();
+		//fAst.line = fAst.name.getLine();
 		fAst.para.visit(this, o);
 		fAst.ret.visit(this, o);		
-		Node funcNode = new Node(fAst.line, TYPE.ENTRANCE, null, null, null);
+		//Node funcNode = new Node(fAst.line, TYPE.ENTRANCE, null, null, null);
+		Node funcNode = new Node(0, TYPE.ENTRANCE, null, null, null);
 		graph.addNode(funcNode);
 		currentLevelNode.set(funcNode, true);
 		fAst.c.visit(this, o);
@@ -298,11 +302,12 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// ParaAST
 	public Object visitParaAST(ParaAST pAst, Object o)
 			throws CompilationException{		
-		pAst.line = pAst.id.getLine();
+		//pAst.line = pAst.id.getLine();
 		//bien khai bao tai para trong ham duoc luu vao table
 		String varNameAssigned = pAst.id.getText();
 		// luu bien duoc gan vao danh sach
-		tableAssignedVar.addAssignedVar(pAst.line, varNameAssigned);
+		//tableAssignedVar.addAssignedVar(pAst.line, varNameAssigned);
+		tableAssignedVar.addAssignedVar(0, varNameAssigned);
 		pAst.t.visit(this, o);
 		return null;
 	}
@@ -352,8 +357,10 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		String varName = ast.name.getText();
 		ArrayList<Integer> linesOfVar = tableAssignedVar.getLinesOfAssignedVar(varName);
 		ArrayList<DataDep> result = new ArrayList<DataDep>();
-		for (int i = 0; i < linesOfVar.size(); i++)
+		for (int i = 0; i < linesOfVar.size(); i++) {
+			System.out.println(linesOfVar.get(i));
 			result.add(new DataDep(linesOfVar.get(i).intValue(), varName));
+		}
 		if (result.size() == 0)
 			result.add(new DataDep(0, varName));
 		return result;
@@ -443,8 +450,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// ExprStmtAST
 	public Object visitExprStmtAST(ExprStmtAST ast, Object o)
 			throws CompilationException {
-		ast.line = getLineOfExpr(ast.e);
-		ast.e.line = ast.line;
+		//ast.line = getLineOfExpr(ast.e);
+		//ast.e.line = ast.line;
 		Object res = ast.e.visit(this, o);
 		if (res instanceof String)
 			if (((String) res).equals("skip_adding_node"))
@@ -465,7 +472,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ControlDep conDep = null;
 		if (!currentLevelNode.isEmpty())
 			conDep = new ControlDep(currentLevelNode);		
-		Node assignNode = new Node(ast.line, TYPE.ASSIGN, data, conDep, null);
+		//Node assignNode = new Node(ast.line, TYPE.ASSIGN, data, conDep, null);
+		Node assignNode = new Node(ast.label, TYPE.ASSIGN, data, conDep, null);
 		assignNode.setAssignedVar(varNameAssigned);
 		graph.addNode(assignNode);
 		return null;
@@ -485,7 +493,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ControlDep conDep = null;
 		if (!currentLevelNode.isEmpty())
 			conDep = new ControlDep(currentLevelNode);		
-		Node ifNode = new Node(iAst.line, TYPE.CONDITION, data, conDep, null);		
+		//Node ifNode = new Node(iAst.line, TYPE.CONDITION, data, conDep, null);		
+		Node ifNode = new Node(iAst.label, TYPE.CONDITION, data, conDep, null);		
 		graph.addNode(ifNode);
 		
 		// backup lai node o phia tren cua lenh if
@@ -503,7 +512,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// IfThenElseStmtAST
 	public Object visitIfThenElseStmtAST(IfThenElseStmtAST iAst, Object o)
 			throws CompilationException {
-		iAst.line = getLineOfExpr(iAst.e);
+		//iAst.line = getLineOfExpr(iAst.e);
 		// neu return true <=> dang tim kiem lenh gan trong vong lap
 		if (checkEquals(o, FIND_ASSIGN_STMT_IN_LOOP)) {
 			iAst.s1.visit(this, o);
@@ -515,7 +524,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ControlDep conDep = null;
 		if (!currentLevelNode.isEmpty())
 			conDep = new ControlDep(currentLevelNode);		
-		Node ifNode = new Node(iAst.line, TYPE.CONDITION, data, conDep, null);
+		//Node ifNode = new Node(iAst.line, TYPE.CONDITION, data, conDep, null);
+		Node ifNode = new Node(iAst.label, TYPE.CONDITION, data, conDep, null);
 		graph.addNode(ifNode);
 		
 		// backup lai node o phia tren cua lenh if
@@ -680,7 +690,9 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 			ControlDep conDep = null;
 			if (!currentLevelNode.isEmpty())
 				conDep = new ControlDep(currentLevelNode);			
-			graph.addNode(new Node(rAst.line, TYPE.RETURN, data, conDep, null));
+			//graph.addNode(new Node(rAst.line, TYPE.RETURN, data, conDep, null));
+			// tinh theo cau lenh
+			graph.addNode(new Node(rAst.label, TYPE.RETURN, data, conDep, null));
 		}
 		return null;
 	}

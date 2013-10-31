@@ -32,6 +32,10 @@ public class Slice
 			this.addLine(nSlice.getLine(i));
 		}
 	}
+	// check a number is in slice
+	public boolean contains(int n) {
+		return listLine.contains(n);
+	}
 	// slice to string
 	public String toString() {
 		String resultString = "";

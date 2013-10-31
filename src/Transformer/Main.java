@@ -25,6 +25,8 @@ public class Main {
 	static int failLine = 2;
 	static int[] statement2line;
 	
+	static Slice sliceProg = new Slice();
+	
 	static String standardSourceFile = "standard_output_student.txt";
 	static String mappingTableFile = "mapping_statement2line.txt";
 	
@@ -47,11 +49,43 @@ public class Main {
 			max = _max;
 		}
 	}
-
+	// trinhgiang-31/10/2013
+	// dynamic slicing
+	public static Slice getSliceOfTestcase(PDG graph, ArrayList<Integer> path, int stmt) {
+		Slice s = new Slice();
+		if(path.contains(stmt)) {
+			s.addLine(stmt);
+		}
+		Node n = graph.findNodeAtLine(stmt);
+		// data criterion
+		ArrayList<DataDep> dataDep = n.getDataDep();
+		if(dataDep != null) {
+			for(int i = 0; i < dataDep.size(); i++) {
+				int indexDataDep = dataDep.get(i).getID();
+				Slice dataSlice = new Slice();
+				if(!s.contains(indexDataDep) && path.contains(indexDataDep)) {
+					dataSlice = getSliceOfTestcase(graph, path, indexDataDep);
+				}
+				s.addSlice(dataSlice);
+			}
+		}
+		// control criterion
+		Node nControl = ((ControlDep)n.getControlDep()).get();
+		if(nControl != null) {
+			int indexControlDep = nControl.getID();
+			Slice controlSlice = new Slice();
+			if(!s.contains(indexControlDep) && path.contains(indexControlDep)) {
+				controlSlice = getSliceOfTestcase(graph, path, indexControlDep);
+			}
+			s.addSlice(controlSlice);
+		}
+		
+		return s;
+	}
 	// thoi gian can thiet de sinh ra bo test cases doi voi tung options
-	//index la option cua giai thuat sinh testcase
-	//gia tri 0-4
-	//phan tao test cases can den AST label va tat ca path execution
+	// index la option cua giai thuat sinh testcase
+	// gia tri 0-4
+	// phan tao test cases can den AST label va tat ca path execution
 	public static void calcTime(int index, AST labelTree, List<String> paths) {
 		Generator gen = null;
 		// lua chon option
@@ -177,6 +211,26 @@ public class Main {
 			} else {
 				//cong thuc cua tarantula
 				scores[i] = ((float)fail[i] / totalFail) / ((float)pass[i] / totalPass + (float)fail[i] / totalFail);
+			}
+		}
+			
+		return scores;
+	}
+	//lay ket qua score table cua phuong phap slicing tarantula
+	public static float[] tarantulaSlice(float[] newPass, float[] newFail, int totalPass, int totalFail) {
+		float[] scores = new float[numLine];
+		// cho phan tu 0 bang -1 vi thuc chat khong xet phan tu nay (chi xet tu 1)
+		scores[0] = -1;
+		
+		// tinh diem cho tung cau lenh theo cong thuc
+		for (int i = 1; i < numLine; i++) {
+			if (newFail[i] == 0) {
+				scores[i] = 0;
+			} else if (newPass[i] == 0) {
+				scores[i] = 1;
+			} else {
+				//cong thuc cua tarantula
+				scores[i] = ((float)newFail[i] / totalFail) / ((float)newPass[i] / totalPass + (float)newFail[i] / totalFail);
 			}
 		}
 			
@@ -361,7 +415,7 @@ public class Main {
 	// de lay thong tin ve dung sai cua chuong trinh
 	// chuong trinh mau chi ton tai de giup viec so sanh ket qua output
 	// duoc de dang, khong co vai tro gi trong thi nghiem
-	public static void readTestCases(int index, AST labelTree, AST solutionTree) {
+	public static void readTestCases(int index, AST labelTree, AST solutionTree, PDG graph) {
 		try {
 			float[] mintPercent = new float[100]; // min % cua pp tarantula
 			float[] minoPercent = new float[100]; // min % cua pp ochiai
@@ -372,6 +426,7 @@ public class Main {
 			float[] maxjPercent = new float[100]; // max % cua pp jaccard
 	
 			float[] tarantulaScores = new float[numLine];
+			float[] tarantulaScoresSlice = new float[numLine];
 			float[] ochiaiScores = new float[numLine];
 			float[] jaccardScores = new float[numLine];
 			
@@ -382,15 +437,23 @@ public class Main {
 
 			int[] pass = new int[numLine]; // so test case dung ung voi tung cau lenh
 			int[] fail = new int[numLine]; // so test case sai ung voi tung cau lenh
-
+			ArrayList<Integer>[] passSlice = (ArrayList<Integer>[])new ArrayList[numLine];
+			ArrayList<Integer>[] failSlice = (ArrayList<Integer>[])new ArrayList[numLine];
+			for(int i = 0; i < numLine; i++) {
+				passSlice[i] = new ArrayList<Integer>();
+				failSlice[i] = new ArrayList<Integer>();
+			}
+			ArrayList<Integer> pTestcase = new ArrayList<Integer>();
+			
 			Visitor walker1 = new GetPathVisitor("", false);
-			//run simulator co reuse cai gi cua get path duoc khong
+			// run simulator co reuse cai gi cua get path duoc khong
 			Visitor walker2 = new RunSimulatorVisitor("", false);
 				
-		    //lay tap testcase ung voi tung option
+		   // lay tap testcase ung voi tung option
 			BufferedReader br = getReader(index);
 
 			String testcase = br.readLine();
+			int nTestcase = 0;
 			
 			while (testcase != null) {
 				// khoi tao khi vao 1 bo test case moi
@@ -403,8 +466,55 @@ public class Main {
 				}
 				// ket thuc test case, danh gia chat luong cua bo test case nay
 				else if (testcase.equals("End test cases.")) {
+					int nSizeSlice = sliceProg.getSize();
+					int[] sumFreq = new int[nTestcase];
+					for(int k = 0; k < nTestcase; k++) {
+						sumFreq[k] = 0;
+					}
+					// tinh tuan suat cua moi cau lenh
+					int[][] freqSlice = new int[numLine][nTestcase];
+					for(int j = 0; j < nTestcase; j++) {
+						for(int i = 1; i < numLine; i++) {
+							if(sliceProg.contains(i)) {
+								if(passSlice[i].contains(j+1) || failSlice[i].contains(j+1)) {
+									freqSlice[i][j] = 1;
+									sumFreq[j]++;
+								}
+							}
+							else {
+								freqSlice[i][j] = 0;
+							}
+						}
+					}
+					// tinh toan lai pass and fail
+					float[] newPass = new float[numLine];
+					float[] newFail = new float[numLine];
+					// tinh new pass with slicing metric
+					for(int i = 1; i < numLine; i++) {
+						float TSPass = 0.0f;
+						for(int j = 0; j < nTestcase; j++) {
+							TSPass += ((1 - pTestcase.get(j))*freqSlice[i][j])/(sumFreq[j]);
+						}
+						if(totalPass == 0) newPass[i] = 0; 
+						else {
+							newPass[i] = TSPass/totalPass;
+						}
+					}
+					// tinh new fail with slicing metric
+					for(int i = 1; i < numLine; i++) {
+						float TSFail = 0.0f;
+						for(int j = 0; j < nTestcase; j++) {
+							TSFail += (pTestcase.get(j)*freqSlice[i][j])/(sumFreq[j]);
+						}
+						if(totalFail == 0) newFail[i] = 0; 
+						else {
+							newPass[i] = TSFail/totalFail;
+						}
+					}
+					
 					Percent tPercent = tarantula(pass, fail, totalPass, totalFail);
 					tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
+					tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
 					
 					Percent oPercent = ochiai(pass, fail, totalPass, totalFail);
 					ochiaiScores = ochiaiPrint(pass, fail, totalPass, totalFail);
@@ -423,12 +533,21 @@ public class Main {
 					step++;
 				}
 				// so sanh ket qua cua chuong trinh can kiem tra va chuong trinh mau
-				//chi de kiem tra viec dung sai
+				// chi de kiem tra viec dung sai
 				else {
 					//duong thuc thi cua 1 testcase cu the
 					//se duoc dung trong dynamic slicing
 					String path = (String) labelTree.visit(walker1, testcase);
-					System.out.println(path);
+					//System.out.println(path);
+					// tao array list chua path execution
+					ArrayList<Integer> pathArrayList = new ArrayList<Integer>();
+					String[] arrPath = path.split(";");
+					for(String p : arrPath) {
+						pathArrayList.add(Integer.parseInt(p));
+					}
+			
+					Slice sData = getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
+					sliceProg.addSlice(sData);
 					
 					//simulator ket qua cua sinh vien
 					String studentResult = (String) labelTree.visit(walker2, testcase);
@@ -446,13 +565,16 @@ public class Main {
 					} 
 					writerTestCasesAndPath.println(studentResult + ":" + stmt2line);
 				
+					nTestcase++;
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
 						totalPass++; // tang tong so test case pass
 						for (int i = 1; i < numLine; i++) {
-							if (path.contains(i + ";")) {
+							if (pathArrayList.contains(i)) {
 								pass[i]++; // tang gia tri pass cho cac cau lenh
 										   // tren duong thuc thi
+								passSlice[i].add(nTestcase);
+								pTestcase.add(1);
 							}
 						}
 					}
@@ -460,9 +582,11 @@ public class Main {
 					else {
 						totalFail++; // tang tong so test case fail
 						for (int i = 1; i < numLine; i++) {
-							if (path.contains(i + ";")) {
+							if (pathArrayList.contains(i)) {
 								fail[i]++; // tang gia tri fail cho cac cau lenh
 										   // tren duong thuc thi
+								failSlice[i].add(nTestcase);
+								pTestcase.add(0);
 							}
 						}
 					}
@@ -472,9 +596,12 @@ public class Main {
 			}
 	
 			//tam thoi in ket qua FL cua tarantula
-			//writerFL.println("Tarantula technique");
+			writerFL.println("Tarantula technique");
 			for(int j = 1; j < numLine; j++)
 				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
+			writerFL.println("Tarantula technique with dynamic slicing");
+			for(int j = 1; j < numLine; j++)
+				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
 			/*
 			writerFL.println("Ochiai technique");
 			for(int j = 1; j < numLine; j++)
@@ -534,14 +661,6 @@ public class Main {
 			Visitor walkerC = new PrettyOutputVisitor(standardSourceFile, false);
 			labelTree.visit(walkerC, "no_output_line");
 			
-			//in ra program dependence graph
-			String PDGFilename = "output_graph.txt";
-			Ast2GraphVisitor ast2PDG = new Ast2GraphVisitor();
-			labelTree.visit(ast2PDG, "");
-			// use for dynamic slicing
-			PDG graph = ast2PDG.getProgramDependenceGraph();
-			writeToFile(PDGFilename, graph.toString());
-			
 			//in ra mapping table
 			Ast2MappingTableVisitor ast2Table = new Ast2MappingTableVisitor();
 			labelTree.visit(ast2Table, "");
@@ -549,18 +668,31 @@ public class Main {
 	
 			//trinhgiang-21/10/2013
 			//mapping table statement to line
+			ArrayList<Integer> mapTableArray = new ArrayList<Integer>();
 			statement2line = new int[mapTable.getSize()+1];
 			//cau lenh bat dau tu 1
 			statement2line[0] = -1;
+			mapTableArray.add(-1);
 			
 			for(int i = 1; i < mapTable.getSize()+1; i++)
 			{
 				statement2line[i] = mapTable.getStatementId(i-1);
+				mapTableArray.add(mapTable.getStatementId(i-1));
 				//System.out.println(statement2line[i]);
 			}
 			//ghi mapping table ra file
 			//System.out.println(mapTable.toString());
 			writeToFile(mappingTableFile, mapTable.toString());
+			
+			//in ra program dependence graph
+			String PDGFilename = "output_graph.txt";
+			Ast2GraphVisitor ast2PDG = new Ast2GraphVisitor();
+			labelTree.visit(ast2PDG, "");
+			// use for dynamic slicing
+			PDG graph = ast2PDG.getProgramDependenceGraph();
+			writeToFile(PDGFilename, graph.toString());
+			// mapping line in pdg into statement
+			//graph.mappingLine2Stmt(mapTableArray);
 			
 			//in ra so dong lenh trong chuong trinh
 			//System.out.println(numLine);
@@ -614,15 +746,7 @@ public class Main {
 				writer.println("***********************");
 			}
 			*/
-			//trinhgiang-22/10/2013
-			//ham sinh test case tu giai thuat cua anh DucAnh
-			//test case lay tu file concolicSE.txt gui qua tu chuong trinh cua Mai
-			//List<String> testcaseConcolicSE = getTestCaseFromFile(concolicSE.txt);
-			//for(testcase : testcaseConcolicSE) {
-			//	writerConcolicSE.println(testcase);
-			//  String path = (String) labelTree.visit(new GetPathVisitor("", false), testcase);
-			//	System.out.println(path);
-			//}
+			
 			
 			writer.println();
 			writer.println("Compare percent:");
@@ -637,10 +761,12 @@ public class Main {
 			//trinhgiang-16/10/2013
 			
 			for (int i = 5; i < 6; i++) {
-				readTestCases(i, labelTree, solutionTree);
+				readTestCases(i, labelTree, solutionTree, graph);
 				writer.println("***********************");
 				//writerFL.println("***********************");
 			}
+			System.out.println("Data slice");
+			System.out.println(sliceProg.toString());
 			
 			writer.close();
 			writerFL.close();

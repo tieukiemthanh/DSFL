@@ -3,37 +3,36 @@
 Program Dependence Graph: 
 
 Node 0:
-StatementID = 1
+StatementID = 0
 StatementTYPE = ENTRANCE
 dataDep = null
 conDep = null
 
 Node 1:
-StatementID = 2
-StatementTYPE = ASSIGN
-Assigned Variable = k
-dataDep = 
-	{Node 0 (lineID=1),     i}
-conDep = {Node 0 (lineID=1),     true}
-
-Node 2:
-StatementID = 3
+StatementID = 1
 StatementTYPE = CONDITION
 dataDep = 
-	{Node 0 (lineID=1),     i}
-conDep = {Node 0 (lineID=1),     true}
+	{Node 0 (lineID=0),     i}
+conDep = {Node 0 (lineID=0),     true}
+
+Node 2:
+StatementID = 2
+StatementTYPE = ASSIGN
+Assigned Variable = j
+dataDep = null
+conDep = {Node 1 (lineID=1),     true}
 
 Node 3:
 StatementID = 3
 StatementTYPE = RETURN
 dataDep = 
-	{Node 0 (lineID=1),     i}
-conDep = {Node 2 (lineID=3),     true}
+	{Node 0 (lineID=0),     i}
+conDep = {Node 1 (lineID=1),     true}
 
 Node 4:
 StatementID = 4
 StatementTYPE = RETURN
 dataDep = 
-	{Node 0 (lineID=1),     i}
-conDep = {Node 0 (lineID=1),     true}
+	{Node 0 (lineID=0),     i}
+conDep = {Node 1 (lineID=1),     false}
 
