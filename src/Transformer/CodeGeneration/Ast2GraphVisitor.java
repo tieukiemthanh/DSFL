@@ -358,7 +358,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ArrayList<Integer> linesOfVar = tableAssignedVar.getLinesOfAssignedVar(varName);
 		ArrayList<DataDep> result = new ArrayList<DataDep>();
 		for (int i = 0; i < linesOfVar.size(); i++) {
-			System.out.println(linesOfVar.get(i));
+			//System.out.println(linesOfVar.get(i));
 			result.add(new DataDep(linesOfVar.get(i).intValue(), varName));
 		}
 		if (result.size() == 0)

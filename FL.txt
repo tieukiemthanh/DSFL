@@ -1,10 +1,10 @@
 Tarantula technique
-3:1.000
+3:0.500
 5:1.000
 6:1.000
 10:0.000
 Tarantula technique with dynamic slicing
-3:0.000
+3:0.333
 5:0.000
-6:0.000
+6:1.000
 10:0.000

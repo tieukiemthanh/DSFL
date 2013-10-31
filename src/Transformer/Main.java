@@ -486,6 +486,7 @@ public class Main {
 							}
 						}
 					}
+					
 					// tinh toan lai pass and fail
 					float[] newPass = new float[numLine];
 					float[] newFail = new float[numLine];
@@ -493,25 +494,24 @@ public class Main {
 					for(int i = 1; i < numLine; i++) {
 						float TSPass = 0.0f;
 						for(int j = 0; j < nTestcase; j++) {
-							TSPass += ((1 - pTestcase.get(j))*freqSlice[i][j])/(sumFreq[j]);
+							TSPass += (float)((1 - pTestcase.get(j))*freqSlice[i][j])/(sumFreq[j]);
 						}
 						if(totalPass == 0) newPass[i] = 0; 
 						else {
-							newPass[i] = TSPass/totalPass;
+							newPass[i] = (float)TSPass/totalPass;
 						}
 					}
 					// tinh new fail with slicing metric
 					for(int i = 1; i < numLine; i++) {
 						float TSFail = 0.0f;
 						for(int j = 0; j < nTestcase; j++) {
-							TSFail += (pTestcase.get(j)*freqSlice[i][j])/(sumFreq[j]);
+							TSFail += (pTestcase.get(j)*freqSlice[i][j])/(float)(sumFreq[j]);
 						}
 						if(totalFail == 0) newFail[i] = 0; 
 						else {
-							newPass[i] = TSFail/totalFail;
+							newFail[i] = (float)TSFail/totalFail;
 						}
 					}
-					
 					Percent tPercent = tarantula(pass, fail, totalPass, totalFail);
 					tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
 					tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
@@ -545,9 +545,6 @@ public class Main {
 					for(String p : arrPath) {
 						pathArrayList.add(Integer.parseInt(p));
 					}
-			
-					Slice sData = getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
-					sliceProg.addSlice(sData);
 					
 					//simulator ket qua cua sinh vien
 					String studentResult = (String) labelTree.visit(walker2, testcase);
@@ -569,24 +566,28 @@ public class Main {
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
 						totalPass++; // tang tong so test case pass
+						pTestcase.add(0);
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
 								pass[i]++; // tang gia tri pass cho cac cau lenh
 										   // tren duong thuc thi
 								passSlice[i].add(nTestcase);
-								pTestcase.add(1);
 							}
 						}
 					}
 					// test case fail
 					else {
 						totalFail++; // tang tong so test case fail
+						pTestcase.add(1);
+						// chi xay dung slice cho nhung test cases fail
+						Slice sData = getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
+						sliceProg.addSlice(sData);
+						
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
 								fail[i]++; // tang gia tri fail cho cac cau lenh
 										   // tren duong thuc thi
 								failSlice[i].add(nTestcase);
-								pTestcase.add(0);
 							}
 						}
 					}
@@ -755,18 +756,18 @@ public class Main {
 			AST solutionTree = getTree("solution.c");
 
 			// doc test cases sinh ra do tung option va phan tich
-			//chi chay 1 lan
-			//day la qua trinh dynamic analyst nen khong dung tat ca cac paths 
-			//lay test case tu tao
-			//trinhgiang-16/10/2013
+			// chi chay 1 lan
+			// day la qua trinh dynamic analyst nen khong dung tat ca cac paths 
+			// lay test case tu tao
+			// trinhgiang-16/10/2013
 			
 			for (int i = 5; i < 6; i++) {
 				readTestCases(i, labelTree, solutionTree, graph);
 				writer.println("***********************");
 				//writerFL.println("***********************");
 			}
-			System.out.println("Data slice");
-			System.out.println(sliceProg.toString());
+			//System.out.println("Data slice");
+			//System.out.println(sliceProg.toString());
 			
 			writer.close();
 			writerFL.close();
