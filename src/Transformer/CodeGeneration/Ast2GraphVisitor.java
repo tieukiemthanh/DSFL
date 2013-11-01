@@ -691,8 +691,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 			ArrayList<DataDep> data = (ArrayList<DataDep>) rAst.e.visit(this, o);
 			ControlDep conDep = null;
 			if (!currentLevelNode.isEmpty())
-				conDep = new ControlDep(currentLevelNode);
-			System.out.println(conDep.toString());			
+				conDep = new ControlDep(currentLevelNode);	
 			//graph.addNode(new Node(rAst.line, TYPE.RETURN, data, conDep, null));
 			// tinh theo cau lenh
 			graph.addNode(new Node(rAst.label, TYPE.RETURN, data, conDep, null));
