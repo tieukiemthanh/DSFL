@@ -388,7 +388,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// BinExprAST
 	public Object visitBinExprAST(BinExprAST ast, Object o)
 			throws CompilationException {
-		ast.line = ast.op.getLine();
+		//ast.line = ast.op.getLine();
 		ArrayList<DataDep> list1 = (ArrayList<DataDep>) ast.e1.visit(this, o);
 		ArrayList<DataDep> list2 = (ArrayList<DataDep>) ast.e2.visit(this, o);
 		
@@ -397,7 +397,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 			// day la phep gan
 			String varNameAssigned = list1.get(0).getVarName();
 			// luu bien duoc gan vao danh sach
-			tableAssignedVar.addAssignedVar(ast.line, varNameAssigned);
+			//tableAssignedVar.addAssignedVar(ast.line, varNameAssigned);
+			tableAssignedVar.addAssignedVar(ast.label, varNameAssigned);
 			if (ast.parent instanceof ExprStmtAST) {
 				// neu return true <=> dang tim kiem lenh gan trong vong lap
 				if (checkEquals(o, FIND_ASSIGN_STMT_IN_LOOP))
@@ -452,12 +453,13 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		//ast.line = getLineOfExpr(ast.e);
 		//ast.e.line = ast.line;
+		ast.e.label = ast.label;
 		Object res = ast.e.visit(this, o);
 		if (res instanceof String)
 			if (((String) res).equals("skip_adding_node"))
 				return null;
-
 		ArrayList<DataDep> data = (ArrayList<DataDep>) res;
+		// variable assigned name
 		String varNameAssigned = "";
 		// lay thong tin cua variable duoc gan
 		if (ast.e instanceof BinExprAST) {
@@ -482,7 +484,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// IfThenStmtAST
 	public Object visitIfThenStmtAST(IfThenStmtAST iAst, Object o)
 			throws CompilationException {
-		iAst.line = getLineOfExpr(iAst.e);
+		//iAst.line = getLineOfExpr(iAst.e);
 		// neu return true <=> dang tim kiem lenh gan trong vong lap
 		if (checkEquals(o, FIND_ASSIGN_STMT_IN_LOOP)) {
 			iAst.s.visit(this, o);
@@ -492,7 +494,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ArrayList<DataDep> data = (ArrayList<DataDep>) iAst.e.visit(this, o);
 		ControlDep conDep = null;
 		if (!currentLevelNode.isEmpty())
-			conDep = new ControlDep(currentLevelNode);		
+			conDep = new ControlDep(currentLevelNode);
 		//Node ifNode = new Node(iAst.line, TYPE.CONDITION, data, conDep, null);		
 		Node ifNode = new Node(iAst.label, TYPE.CONDITION, data, conDep, null);		
 		graph.addNode(ifNode);
@@ -689,7 +691,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 			ArrayList<DataDep> data = (ArrayList<DataDep>) rAst.e.visit(this, o);
 			ControlDep conDep = null;
 			if (!currentLevelNode.isEmpty())
-				conDep = new ControlDep(currentLevelNode);			
+				conDep = new ControlDep(currentLevelNode);
+			System.out.println(conDep.toString());			
 			//graph.addNode(new Node(rAst.line, TYPE.RETURN, data, conDep, null));
 			// tinh theo cau lenh
 			graph.addNode(new Node(rAst.label, TYPE.RETURN, data, conDep, null));

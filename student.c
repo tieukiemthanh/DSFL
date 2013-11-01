@@ -1,7 +1,7 @@
 float absNumber(float i) {
+	i = 1;
 	if(i > 0) {
-		int j = 1;
 		return -i;
 	}
-	else return -i;
+	return -i;
 }
