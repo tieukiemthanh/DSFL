@@ -1,4 +1,4 @@
-float absNumber(float i) {
+int absNumber(int i) {
 	if(i > 0) return i;
 	else return -i;
 }

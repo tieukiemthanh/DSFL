@@ -5,14 +5,14 @@ Program(
 			Para(
 				i
 				TypeList(
-					Float
+					Int
 					EmptyTypeList()
 				)
 			)
 			EmptyParaList()
 		)
 		TypeList(
-			Float
+			Int
 			EmptyTypeList()
 		)
 		CompStmt(

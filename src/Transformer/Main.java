@@ -368,7 +368,7 @@ public class Main {
 			switch (index) {
 				case 0:
 					writer.println("Random generator:");
-					writerFL.println("Random generator:");
+					//writerFL.println("Random generator:");
 					return new BufferedReader(new FileReader("random.txt"));
 				case 1:
 					writer.println("Simple generator:");
@@ -710,6 +710,7 @@ public class Main {
 				writerAllPaths.println(path);
 			}
 			*/
+			
 			/*
 			String testcase = "3.0;2.0";
 			String path = (String) labelTree.visit(new GetPathVisitor("", false), testcase);
@@ -762,7 +763,8 @@ public class Main {
 			// lay test case tu tao
 			// trinhgiang-16/10/2013
 			
-			for (int i = 5; i < 6; i++) {
+			// random generation
+			for (int i = 0; i < 1; i++) {
 				readTestCases(i, labelTree, solutionTree, graph);
 				writer.println("***********************");
 				//writerFL.println("***********************");
