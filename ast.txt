@@ -17,56 +17,69 @@ Program(
 		)
 		CompStmt(
 			StmtList(
-				IfThenElseStmt(
+				ExprStmt(
 					BinExpr(
 						VarExpr(
 							i
 						)
-						>
+						=
 						IntLiteral(
-							0
-						)
-					)
-					CompStmt(
-						StmtList(
-							DeclarationStmt(
-								VarDecl(
-									k
-									TypeList(
-										Int
-										EmptyTypeList()
-									)
-									VarInitializer(
-										IntLiteral(
-											1
-										)
-									)
-								)
-								EmptyDeclarationList()
-							)
-							StmtList(
-								RetStmt(
-									UnaryExpr(
-										-
-										VarExpr(
-											i
-										)
-									)
-								)
-								EmptyStmtList()
-							)
-						)
-					)
-					RetStmt(
-						UnaryExpr(
-							-
-							VarExpr(
-								i
-							)
+							1
 						)
 					)
 				)
-				EmptyStmtList()
+				StmtList(
+					IfThenElseStmt(
+						BinExpr(
+							VarExpr(
+								i
+							)
+							>
+							IntLiteral(
+								0
+							)
+						)
+						CompStmt(
+							StmtList(
+								DeclarationStmt(
+									VarDecl(
+										k
+										TypeList(
+											Int
+											EmptyTypeList()
+										)
+										VarInitializer(
+											IntLiteral(
+												1
+											)
+										)
+									)
+									EmptyDeclarationList()
+								)
+								StmtList(
+									RetStmt(
+										UnaryExpr(
+											-
+											VarExpr(
+												i
+											)
+										)
+									)
+									EmptyStmtList()
+								)
+							)
+						)
+						RetStmt(
+							UnaryExpr(
+								-
+								VarExpr(
+									i
+								)
+							)
+						)
+					)
+					EmptyStmtList()
+				)
 			)
 		)
 	)
