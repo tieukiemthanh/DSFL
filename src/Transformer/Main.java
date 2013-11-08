@@ -692,12 +692,7 @@ public class Main {
 			// use for dynamic slicing
 			PDG graph = ast2PDG.getProgramDependenceGraph();
 			writeToFile(PDGFilename, graph.toString());
-			
-			// mapping line in pdg into statement
-			//graph.mappingLine2Stmt(mapTableArray);
-			
-			//in ra so dong lenh trong chuong trinh
-			//System.out.println(numLine);
+		
 			
 			// lay tat ca cac path
 			//dung cho viec tao testcase
