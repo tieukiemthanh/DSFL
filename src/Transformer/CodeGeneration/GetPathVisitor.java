@@ -238,7 +238,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 		String path = ast.label + ";";
 		//thoat ra khoi vong while, for, case
 		if(o != null && o.toString().equals("while"))
-	   {
+	    {
 			System.out.println("Da qua while break");
 			scopeBreak--;
 		}

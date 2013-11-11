@@ -1,9 +1,10 @@
-int absNumber(int i) {
-	int t = 1;
-	while(t < 2) t = t + 1;
-	if(i > 0) {
-		int k = 1;
-		return -i;
+int absNumber(int i)
+{
+	int k = 0;
+	while( k < 1)
+	{
+		i = i + 1;
+		k = k + 1;
 	}
-	else return -i;
+	return i;
 }

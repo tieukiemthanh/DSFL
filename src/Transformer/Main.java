@@ -51,36 +51,37 @@ public class Main {
 	}
 	// trinhgiang-31/10/2013
 	// dynamic slicing
-	public static Slice getSliceOfTestcase(PDG graph, ArrayList<Integer> path, int stmt) {
-		Slice s = new Slice();
-		if(path.contains(stmt)) {
-			s.addLine(stmt);
+	public static void getSliceOfTestcase(PDG graph, ArrayList<Integer> path, int stmt) {
+		//Slice s = new Slice();
+		if(path.contains(stmt) && !sliceProg.contains(stmt)) {
+			sliceProg.addLine(stmt);
 		}
 		Node n = graph.findNodeAtLine(stmt);
+		if(n == null) return;
 		// data criterion
 		ArrayList<DataDep> dataDep = n.getDataDep();
 		if(dataDep != null) {
 			for(int i = 0; i < dataDep.size(); i++) {
 				int indexDataDep = dataDep.get(i).getID();
-				Slice dataSlice = new Slice();
-				if(!s.contains(indexDataDep) && path.contains(indexDataDep)) {
-					dataSlice = getSliceOfTestcase(graph, path, indexDataDep);
+				//Slice dataSlice = new Slice();
+				if(!sliceProg.contains(indexDataDep) && path.contains(indexDataDep)) {
+					getSliceOfTestcase(graph, path, indexDataDep);
 				}
-				s.addSlice(dataSlice);
+				//s.addSlice(dataSlice);
 			}
 		}
 		// control criterion
 		Node nControl = ((ControlDep)n.getControlDep()).get();
 		if(nControl != null) {
 			int indexControlDep = nControl.getID();
-			Slice controlSlice = new Slice();
-			if(!s.contains(indexControlDep) && path.contains(indexControlDep)) {
-				controlSlice = getSliceOfTestcase(graph, path, indexControlDep);
+			//Slice controlSlice = new Slice();
+			if(!sliceProg.contains(indexControlDep) && path.contains(indexControlDep)) {
+				getSliceOfTestcase(graph, path, indexControlDep);
 			}
-			s.addSlice(controlSlice);
+			//s.addSlice(controlSlice);
 		}
 		
-		return s;
+		return;
 	}
 	// thoi gian can thiet de sinh ra bo test cases doi voi tung options
 	// index la option cua giai thuat sinh testcase
@@ -575,8 +576,9 @@ public class Main {
 						totalFail++; // tang tong so test case fail
 						pTestcase.add(1);
 						// chi xay dung slice cho nhung test cases fail
-						Slice sData = getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
-						sliceProg.addSlice(sData);
+						//Slice sData = getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
+						//sliceProg.addSlice(sData);
+						getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
 						
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
@@ -742,16 +744,16 @@ public class Main {
 			// day la qua trinh dynamic analyst nen khong dung tat ca cac paths 
 			// lay test case tu tao
 			// trinhgiang-16/10/2013
-			/*
+			
 			// concolic test cases
 			for (int i = 5; i < 6; i++) {
 				readTestCases(i, labelTree, solutionTree, graph);
 				writer.println("***********************");
 				//writerFL.println("***********************");
 			}
-			*/
-			//System.out.println("Data slice");
-			//System.out.println(sliceProg.toString());	
+			
+			System.out.println("Data slice");
+			System.out.println(sliceProg.toString());	
 			writer.close();
 			writerFL.close();
 			writerAllPaths.close();

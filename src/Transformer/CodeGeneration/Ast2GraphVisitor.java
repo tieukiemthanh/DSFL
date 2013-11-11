@@ -358,11 +358,12 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ArrayList<Integer> linesOfVar = tableAssignedVar.getLinesOfAssignedVar(varName);
 		ArrayList<DataDep> result = new ArrayList<DataDep>();
 		for (int i = 0; i < linesOfVar.size(); i++) {
-			//System.out.println(linesOfVar.get(i));
 			result.add(new DataDep(linesOfVar.get(i).intValue(), varName));
 		}
+		
 		if (result.size() == 0)
 			result.add(new DataDep(0, varName));
+
 		return result;
 	}
 
@@ -561,33 +562,37 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// ForStmtAST
 	public Object visitForStmtAST(ForStmtAST fAst, Object o)
 			throws CompilationException {
-		fAst.line = getLineOfExpr(fAst.e2);
+		//fAst.line = getLineOfExpr(fAst.e2);
 		// neu return true <=> dang tim kiem lenh gan trong vong lap
 		if (checkEquals(o, FIND_ASSIGN_STMT_IN_LOOP)) {
+			/*
 			if (fAst.e1 != null)
 				fAst.e1.visit(this, o);
 			if (fAst.e3 != null)
 				fAst.e3.visit(this, o);
+			*/
 			fAst.o.visit(this, o);
 			return null;
 		}
 		
 		// duyet lan dau so qua de tim cac phep gan trong than vong lap
 		// khong add node trong lan duyet nay
-		if (fAst.e1 != null)
-			fAst.e1.visit(this, FIND_ASSIGN_STMT_IN_LOOP);
-		if (fAst.e3 != null)
-			fAst.e3.visit(this, FIND_ASSIGN_STMT_IN_LOOP);
+		//if (fAst.e1 != null)
+			//fAst.e1.visit(this, FIND_ASSIGN_STMT_IN_LOOP);
+		//if (fAst.e3 != null)
+			//fAst.e3.visit(this, FIND_ASSIGN_STMT_IN_LOOP);
 		fAst.o.visit(this, FIND_ASSIGN_STMT_IN_LOOP);
 		
 		// duyet lan thu 2 de tim ra data dependence
 		ArrayList<DataDep> data1 = null;
 		ArrayList<DataDep> data2 = null;
 		ArrayList<DataDep> data3 = null;
+		
 		if (fAst.e1 != null)
 			data1 = (ArrayList<DataDep>) fAst.e1.visit(this, "");
 		if (fAst.e2 != null)
 			data2 = (ArrayList<DataDep>) fAst.e2.visit(this, "");
+			
 		if (fAst.e3 != null)
 			data3 = (ArrayList<DataDep>) fAst.e3.visit(this, "");
 		
@@ -601,7 +606,9 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ControlDep conDep = null;
 		if (!currentLevelNode.isEmpty())
 			conDep = new ControlDep(currentLevelNode);
-		Node forNode = new Node(fAst.line, TYPE.FORLOOP, data, conDep, null);
+		//Node forNode = new Node(fAst.line, TYPE.FORLOOP, data, conDep, null);
+		Node forNode = new Node(fAst.label, TYPE.FORLOOP, data, conDep, null);
+		
 		graph.addNode(forNode);
 		
 		// backup lai node o phia tren cua lenh loop
@@ -654,7 +661,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// DoStmtAST
 	public Object visitDoStmtAST(DoStmtAST wAst, Object o)
 			throws CompilationException {
-		wAst.line = getLineOfExpr(wAst.e);
+		//wAst.line = getLineOfExpr(wAst.e);
 		// neu return true <=> dang tim kiem lenh gan trong vong lap
 		if (checkEquals(o, FIND_ASSIGN_STMT_IN_LOOP)) {
 			wAst.o.visit(this, o);
@@ -669,8 +676,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ControlDep conDep = null;
 		if (!currentLevelNode.isEmpty())
 			conDep = new ControlDep(currentLevelNode);
-		Node doNode = new Node(wAst.line, TYPE.CONDITION, data, conDep, null);
-		
+		//Node doNode = new Node(wAst.line, TYPE.CONDITION, data, conDep, null);
+		Node doNode = new Node(wAst.label, TYPE.CONDITION, data, conDep, null);
 		// backup lai node o phia tren cua lenh loop
 		ControlDep backupLevelNode = new ControlDep(currentLevelNode);
 		currentLevelNode.set(doNode, true);
@@ -701,26 +708,24 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////
-	// chua xu ly cac cau lenh ben duoi
+	// khong can thiet vi phan simulator da xu ly phan nay
 	// BreakStmtAST
 	public Object visitBreakStmtAST(BreakStmtAST ast, Object o)
 			throws CompilationException {
-		ast.line = ast.t.getLine();
-		println("BreakStmtAST: " + ast.line);
 		return null;
 	}		
 	// ContStmtAST
 	public Object visitContStmtAST(ContStmtAST ast, Object o)
 			throws CompilationException {
-		ast.line = ast.t.getLine();
+		//ast.line = ast.t.getLine();
 		println("ContStmtAST: " + ast.line);
 		return null;
 	}
 	// SwitchStmtAST
 	public Object visitSwitchStmtAST(SwitchStmtAST sAst, Object o)
 			throws CompilationException {
-		sAst.line = getLineOfExpr(sAst.e);
-		println("SwitchStmtAST: " + sAst.line);
+		//sAst.line = getLineOfExpr(sAst.e);
+		//println("SwitchStmtAST: " + sAst.line);
 		sAst.e.visit(this, o);
 		sAst.o.visit(this, o);
 		return null;
@@ -728,8 +733,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// CaseStmtAST
 	public Object visitCaseStmtAST(CaseStmtAST cAst, Object o)
 			throws CompilationException {
-		cAst.line = getLineOfExpr(cAst.e);		
-		println("CaseStmtAST: " + cAst.line);
+		//cAst.line = getLineOfExpr(cAst.e);		
+		//println("CaseStmtAST: " + cAst.line);
 		cAst.e.visit(this, o);
 		cAst.s.visit(this, o);
 		return null;
@@ -737,8 +742,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// DefaultStmtAST
 	public Object visitDefaultStmtAST(DefaultStmtAST dAst, Object o)
 			throws CompilationException {
-		dAst.line = getLineFromNode(dAst.s.o)-1;
-		println("DefaultStmtAST: " + dAst.line);
+		//dAst.line = getLineFromNode(dAst.s.o)-1;
+		//println("DefaultStmtAST: " + dAst.line);
 		dAst.s.visit(this, o);
 		return null;
 	}
