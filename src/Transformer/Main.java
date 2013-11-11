@@ -22,7 +22,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 2;
+	static int failLine = 3;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -167,9 +167,10 @@ public class Main {
 				maxCheckLine++;
 			}
 		}
-
+		//System.out.println("Da get percent " + (float)minCheckLine / (numLine - 1) + "--" + (float)maxCheckLine / (numLine - 1));
 		// tra ve ket qua la mot doi tuong percent
 		// nho la numLine phai tru 1
+		if(numLine == 1) return new Percent(0.0f, 0.0f);
 		return new Percent((float)minCheckLine / (numLine - 1), (float)maxCheckLine / (numLine - 1));
 	}
 
@@ -417,13 +418,11 @@ public class Main {
 	// duoc de dang, khong co vai tro gi trong thi nghiem
 	public static void readTestCases(int index, AST labelTree, AST solutionTree, PDG graph) {
 		try {
-			float[] mintPercent = new float[100]; // min % cua pp tarantula
-			float[] minoPercent = new float[100]; // min % cua pp ochiai
-			float[] minjPercent = new float[100]; // min % cua pp jaccard
+			float mintPercent = 0.0f; // min % cua pp tarantula
+			float mintPercentSlice = 0.0f; // min % cua pp tarantula with dynamic slicing
 
-			float[] maxtPercent = new float[100]; // max % cua pp tarantuala
-			float[] maxoPercent = new float[100]; // max % cua pp ochiai
-			float[] maxjPercent = new float[100]; // max % cua pp jaccard
+			float maxtPercent = 0.0f; // max % cua pp tarantuala
+			float maxtPercentSlice = 0.0f; // max % cua pp tarantuala with dynamic slicing
 	
 			float[] tarantulaScores = new float[numLine];
 			float[] tarantulaScoresSlice = new float[numLine];
@@ -446,7 +445,6 @@ public class Main {
 			ArrayList<Integer> pTestcase = new ArrayList<Integer>();
 			
 			Visitor walker1 = new GetPathVisitor("", false);
-			// run simulator co reuse cai gi cua get path duoc khong
 			Visitor walker2 = new RunSimulatorVisitor("", false);
 				
 		   // lay tap testcase ung voi tung option
@@ -512,24 +510,21 @@ public class Main {
 							newFail[i] = (float)TSFail/totalFail;
 						}
 					}
-					Percent tPercent = tarantula(pass, fail, totalPass, totalFail);
+		
+					// tarantula technique computation
 					tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
 					tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
 					
-					Percent oPercent = ochiai(pass, fail, totalPass, totalFail);
-					ochiaiScores = ochiaiPrint(pass, fail, totalPass, totalFail);
+					// tarantula technique evaluation
+					Percent tPercent = getPercent(tarantulaScores);
+					Percent tPercentSlice = getPercent(tarantulaScoresSlice);
+					mintPercent = tPercent.min;
+					maxtPercent = tPercent.max;
+					mintPercentSlice = tPercentSlice.min;
+					maxtPercentSlice = tPercentSlice.max;
+					//System.out.println("Da get percent " + mintPercent + "--" + maxtPercent);
+					//System.out.println("Da get percent slice " + mintPercentSlice + "--" + maxtPercentSlice);
 					
-					Percent jPercent = jaccard(pass, fail, totalPass, totalFail);
-					jaccardScores = jaccardPrint(pass, fail, totalPass, totalFail);
-					
-					mintPercent[step] = tPercent.min;
-					minoPercent[step] = oPercent.min;
-					minjPercent[step] = jPercent.min;
-
-					maxtPercent[step] = tPercent.max;
-					maxoPercent[step] = oPercent.max;
-					maxjPercent[step] = jPercent.max;
-
 					step++;
 				}
 				// so sanh ket qua cua chuong trinh can kiem tra va chuong trinh mau
@@ -603,26 +598,16 @@ public class Main {
 			writerFL.println("Tarantula technique with dynamic slicing");
 			for(int j = 1; j < numLine; j++)
 				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
-			/*
-			writerFL.println("Ochiai technique");
-			for(int j = 1; j < numLine; j++)
-				writerFL.printf("%d:	%.3f\n", j, ochiaiScores[j]);
-			writerFL.println("Jaccard technique");
-			for(int j = 1; j < numLine; j++)
-				writerFL.printf("%d:	%.3f\n", j, jaccardScores[j]);
-			*/
-			// viet ket qua ra file
-			writer.printf("Tarantula min = %.2f\n", average(mintPercent));
-			writer.printf("Ochiai min = %.2f\n", average(minoPercent));
-			writer.printf("Jaccard min = %.2f\n", average(minjPercent));
-
-			writer.printf("Tarantula max = %.2f\n", average(maxtPercent));
-			writer.printf("Ochiai max = %.2f\n", average(maxoPercent));
-			writer.printf("Jaccard max = %.2f\n", average(maxjPercent));
 			
-			//in ket qua thong ke
-			//System.out.println("Total pass: " + totalPass);
-			//System.out.println("Total fail: " + totalFail);
+			// write evaluation result to file
+			String eval = "Tarantula technique\n";
+			eval += "Min percent: " + mintPercent + "\n";
+			eval += "Max percent: " + maxtPercent + "\n";
+			eval += "Tarantula technique with dynamic slicing\n";
+			eval += "Min percent: " + mintPercentSlice + "\n";
+			eval += "Max percent: " + maxtPercentSlice + "\n";
+			writeToFile("evaluation.txt", eval);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -757,16 +742,16 @@ public class Main {
 			// day la qua trinh dynamic analyst nen khong dung tat ca cac paths 
 			// lay test case tu tao
 			// trinhgiang-16/10/2013
-			
-			// random generation
-			for (int i = 0; i < 1; i++) {
+			/*
+			// concolic test cases
+			for (int i = 5; i < 6; i++) {
 				readTestCases(i, labelTree, solutionTree, graph);
 				writer.println("***********************");
 				//writerFL.println("***********************");
 			}
+			*/
 			//System.out.println("Data slice");
-			//System.out.println(sliceProg.toString());
-			
+			//System.out.println(sliceProg.toString());	
 			writer.close();
 			writerFL.close();
 			writerAllPaths.close();

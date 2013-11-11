@@ -624,7 +624,7 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 	// WhileStmtAST
 	public Object visitWhileStmtAST(WhileStmtAST wAst, Object o)
 			throws CompilationException {
-		wAst.line = getLineOfExpr(wAst.e);
+		//wAst.line = getLineOfExpr(wAst.e);
 		// neu return true <=> dang tim kiem lenh gan trong vong lap
 		if (checkEquals(o, FIND_ASSIGN_STMT_IN_LOOP)) {
 			wAst.o.visit(this, o);
@@ -639,7 +639,8 @@ public class Ast2GraphVisitor extends DoNothingVisitor {
 		ControlDep conDep = null;
 		if (!currentLevelNode.isEmpty())
 			conDep = new ControlDep(currentLevelNode);
-		Node whileNode = new Node(wAst.line, TYPE.CONDITION, data, conDep, null);
+		//Node whileNode = new Node(wAst.line, TYPE.CONDITION, data, conDep, null);
+		Node whileNode = new Node(wAst.label, TYPE.CONDITION, data, conDep, null);
 		graph.addNode(whileNode);
 
 		// backup lai node o phia tren cua lenh loop

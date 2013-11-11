@@ -17,68 +17,102 @@ Program(
 		)
 		CompStmt(
 			StmtList(
-				ExprStmt(
-					BinExpr(
-						VarExpr(
-							i
+				DeclarationStmt(
+					VarDecl(
+						t
+						TypeList(
+							Int
+							EmptyTypeList()
 						)
-						=
-						IntLiteral(
-							1
+						VarInitializer(
+							IntLiteral(
+								1
+							)
 						)
 					)
+					EmptyDeclarationList()
 				)
 				StmtList(
-					IfThenElseStmt(
+					WhileStmt(
 						BinExpr(
 							VarExpr(
-								i
+								t
 							)
-							>
+							<
 							IntLiteral(
-								0
+								2
 							)
 						)
-						CompStmt(
-							StmtList(
-								DeclarationStmt(
-									VarDecl(
-										k
-										TypeList(
-											Int
-											EmptyTypeList()
-										)
-										VarInitializer(
-											IntLiteral(
-												1
-											)
-										)
-									)
-									EmptyDeclarationList()
+						ExprStmt(
+							BinExpr(
+								VarExpr(
+									t
 								)
-								StmtList(
-									RetStmt(
-										UnaryExpr(
-											-
-											VarExpr(
-												i
-											)
-										)
+								=
+								BinExpr(
+									VarExpr(
+										t
 									)
-									EmptyStmtList()
+									+
+									IntLiteral(
+										1
+									)
 								)
 							)
 						)
-						RetStmt(
-							UnaryExpr(
-								-
+					)
+					StmtList(
+						IfThenElseStmt(
+							BinExpr(
 								VarExpr(
 									i
 								)
+								>
+								IntLiteral(
+									0
+								)
+							)
+							CompStmt(
+								StmtList(
+									DeclarationStmt(
+										VarDecl(
+											k
+											TypeList(
+												Int
+												EmptyTypeList()
+											)
+											VarInitializer(
+												IntLiteral(
+													1
+												)
+											)
+										)
+										EmptyDeclarationList()
+									)
+									StmtList(
+										RetStmt(
+											UnaryExpr(
+												-
+												VarExpr(
+													i
+												)
+											)
+										)
+										EmptyStmtList()
+									)
+								)
+							)
+							RetStmt(
+								UnaryExpr(
+									-
+									VarExpr(
+										i
+									)
+								)
 							)
 						)
+						EmptyStmtList()
 					)
-					EmptyStmtList()
 				)
 			)
 		)

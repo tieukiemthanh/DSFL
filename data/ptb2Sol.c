@@ -1,8 +1,8 @@
-int ptb2(double a, double b, double c) 
+int ptb2(float a, float b, float c) 
 {
 	if(a!=0)
 	{
-		double delta = b*2 - 4*a*c;
+		float delta = b*2 - 4*a*c;
 		if(delta >= 0)
 		{
 			if(delta > 0){
