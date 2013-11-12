@@ -66,6 +66,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 	// VarDeclAST
 	public Object visitVarDeclAST(VarDeclAST ast, Object o)
 			throws CompilationException {
+		// chu y thang nay
 		String value = ast.init.visit(this, o).toString();
 		// trinhgiang-18/10/2013
 		// them xu ly voi kieu float

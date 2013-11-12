@@ -11,22 +11,102 @@ conDep = null
 Node 1:
 StatementID = 1
 StatementTYPE = ASSIGN
-Assigned Variable = a
+Assigned Variable = i
 dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 
 Node 2:
 StatementID = 2
 StatementTYPE = ASSIGN
-Assigned Variable = a
+Assigned Variable = z
 dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 
 Node 3:
 StatementID = 3
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 1 (lineID=1),     i}
+	{Node 11 (lineID=11),     i}
+	{Node 0 (lineID=0),     n}
+conDep = {Node 0 (lineID=0),     true}
+
+Node 4:
+StatementID = 4
+StatementTYPE = ASSIGN
+Assigned Variable = a
+dataDep = 
+	{Node 0 (lineID=0),     a}
+	{Node 4 (lineID=4),     a}
+	{Node 0 (lineID=0),     x}
+conDep = {Node 3 (lineID=3),     true}
+
+Node 5:
+StatementID = 5
+StatementTYPE = ASSIGN
+Assigned Variable = b
+dataDep = 
+	{Node 0 (lineID=0),     x}
+conDep = {Node 3 (lineID=3),     true}
+
+Node 6:
+StatementID = 6
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     a}
+	{Node 4 (lineID=4),     a}
+conDep = {Node 3 (lineID=3),     true}
+
+Node 7:
+StatementID = 7
+StatementTYPE = ASSIGN
+Assigned Variable = b
+dataDep = 
+	{Node 0 (lineID=0),     a}
+	{Node 4 (lineID=4),     a}
+conDep = {Node 6 (lineID=6),     true}
+
+Node 8:
+StatementID = 8
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 5 (lineID=5),     b}
+	{Node 7 (lineID=7),     b}
+conDep = {Node 3 (lineID=3),     true}
+
+Node 9:
+StatementID = 9
+StatementTYPE = ASSIGN
+Assigned Variable = z
+dataDep = 
+	{Node 0 (lineID=0),     x}
+	{Node 0 (lineID=0),     y}
+conDep = {Node 8 (lineID=8),     true}
+
+Node 10:
+StatementID = 10
+StatementTYPE = ASSIGN
+Assigned Variable = z
+dataDep = 
+	{Node 0 (lineID=0),     x}
+	{Node 0 (lineID=0),     y}
+conDep = {Node 8 (lineID=8),     false}
+
+Node 11:
+StatementID = 11
+StatementTYPE = ASSIGN
+Assigned Variable = i
+dataDep = 
+	{Node 1 (lineID=1),     i}
+	{Node 11 (lineID=11),     i}
+conDep = {Node 3 (lineID=3),     true}
+
+Node 12:
+StatementID = 12
 StatementTYPE = RETURN
 dataDep = 
-	{Node 1 (lineID=1),     a}
-	{Node 2 (lineID=2),     a}
+	{Node 2 (lineID=2),     z}
+	{Node 9 (lineID=9),     z}
+	{Node 10 (lineID=10),     z}
 conDep = {Node 0 (lineID=0),     true}
 
