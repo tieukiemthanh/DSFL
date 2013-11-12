@@ -11,41 +11,22 @@ conDep = null
 Node 1:
 StatementID = 1
 StatementTYPE = ASSIGN
-Assigned Variable = k
+Assigned Variable = a
 dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 
 Node 2:
 StatementID = 2
-StatementTYPE = CONDITION
-dataDep = 
-	{Node 1 (lineID=1),     k}
-	{Node 4 (lineID=4),     k}
+StatementTYPE = ASSIGN
+Assigned Variable = a
+dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 
 Node 3:
 StatementID = 3
-StatementTYPE = ASSIGN
-Assigned Variable = i
-dataDep = 
-	{Node 0 (lineID=0),     i}
-	{Node 3 (lineID=3),     i}
-conDep = {Node 2 (lineID=2),     true}
-
-Node 4:
-StatementID = 4
-StatementTYPE = ASSIGN
-Assigned Variable = k
-dataDep = 
-	{Node 1 (lineID=1),     k}
-	{Node 4 (lineID=4),     k}
-conDep = {Node 2 (lineID=2),     true}
-
-Node 5:
-StatementID = 5
 StatementTYPE = RETURN
 dataDep = 
-	{Node 0 (lineID=0),     i}
-	{Node 3 (lineID=3),     i}
+	{Node 1 (lineID=1),     a}
+	{Node 2 (lineID=2),     a}
 conDep = {Node 0 (lineID=0),     true}
 

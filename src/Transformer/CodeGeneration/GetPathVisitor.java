@@ -72,10 +72,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 		Var v = null;
 		//kieu array
 		if(ast.t instanceof TypeListAST) {
-			if(((TypeListAST)ast.t).t instanceof ArrayTypeAST) {
-				v = new Var(ast.id.getText(), "array", value);
-			}
-			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
+			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
 				v = new Var(ast.id.getText(), "float", value);
 			}
 			else if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
@@ -84,6 +81,9 @@ public class GetPathVisitor extends DoNothingVisitor {
 			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
 				v = new Var(ast.id.getText(), "boolean", value);
 			}
+		}
+		else if(ast.t instanceof ArrayTypeAST) {
+			v = new Var(ast.id.getText(), "array", value);
 		}
 		varTable.addVar(v);
 		String path = ast.label + ";";
@@ -145,10 +145,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 		Var v = null;
 		
 		if(ast.t instanceof TypeListAST) {
-			if ((((TypeListAST)ast.t).t instanceof ArrayTypeAST) && value.contains("!")) {
-				v = new Var(ast.id.getText(), "array", value);
-			}
-			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
+			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
 				v = new Var(ast.id.getText(), "float", value);
 			}
 			else if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
@@ -157,6 +154,9 @@ public class GetPathVisitor extends DoNothingVisitor {
 			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
 				v = new Var(ast.id.getText(), "boolean", value);
 			}
+		}
+		else if(ast.t instanceof ArrayTypeAST) {
+			v = new Var(ast.id.getText(), "array", value);
 		}
 		varTable.addVar(v);
 		
@@ -508,6 +508,7 @@ public class GetPathVisitor extends DoNothingVisitor {
 		String ele = v.getArrayValue(i);
 		String eleType = v.getType();
 		// only support one dimension array
+		/*
 		if(eleType.equals("float")) {
 			// element is float literal
 			return Float.parseFloat(ele);
@@ -521,6 +522,8 @@ public class GetPathVisitor extends DoNothingVisitor {
 			return Integer.parseInt(ele);
 		}
 		return null;
+		*/
+		return ele;
 	}
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)

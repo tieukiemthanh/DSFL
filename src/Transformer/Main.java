@@ -22,7 +22,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 3;
+	static int failLine = 1;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();

@@ -121,12 +121,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		//them xu ly voi kieu float
 		//kieu array
 		if(ast.t instanceof TypeListAST) {
-			//System.out.println("type list");
-			if(((TypeListAST)ast.t).t instanceof ArrayTypeAST) {
-				//System.out.println("array type");
-				v = new Var(ast.id.getText(), "array", value);
-			}
-			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
+			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
 				//System.out.println("float type");
 				v = new Var(ast.id.getText(), "float", value);
 			}
@@ -139,6 +134,10 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 				//System.out.println("boolean type");
 				v = new Var(ast.id.getText(), "boolean", value);
 			}
+		}
+		else if(ast.t instanceof ArrayTypeAST) {
+			//System.out.println("array type");
+			v = new Var(ast.id.getText(), "array", value);
 		}
 		varTable.addVar(v);
 		return null;
@@ -199,10 +198,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		Var v = null;
 		
 		if(ast.t instanceof TypeListAST) {
-			if ((((TypeListAST)ast.t).t instanceof ArrayTypeAST) && value.contains("!")) {
-				v = new Var(ast.id.getText(), "array", value);
-			}
-			else if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
+			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
 				v = new Var(ast.id.getText(), "float", value);
 			}
 			else  if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
@@ -211,6 +207,9 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
 				v = new Var(ast.id.getText(), "boolean", value);
 			}
+		}
+		else if(ast.t instanceof ArrayTypeAST) {
+			v = new Var(ast.id.getText(), "array", value);
 		}
 		varTable.addVar(v);
 		
@@ -522,6 +521,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		//trinhgiang-30/10/2013
 		String ele = v.getArrayValue(i);
 		String eleType = v.getType();
+		System.out.println(ast.name.getText() + "--" + i + "--" + eleType + "--" + ele);
 		// only support one dimension array
 		if(eleType.equals("float")) {
 			// element is float literal
@@ -535,7 +535,8 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			// element is integer literal
 			return Integer.parseInt(ele);
 		}
-		return null;
+		else return ele;
+		//return null;
 	}
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)
