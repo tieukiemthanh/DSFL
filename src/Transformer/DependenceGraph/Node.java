@@ -30,7 +30,21 @@ public class Node
 	public void setID(int id) { StatementID = id; }
 	public int getIndex() {return indexInPDG;}
 	public void setAssignedVar(String var) {assignedVar = var;}
-
+	public TYPE getType() {
+		return StatementTYPE;
+	}
+	public String getAssignedVar() {
+		return assignedVar;
+	}
+	public void addPotDep(Node pNode) {
+		potDep = new ArrayList<Node>();
+		if(pNode != null) {
+			potDep.add(pNode);
+		}
+	}
+	public ArrayList<Node> getPotDep() {
+		return potDep;
+	}
 	public String toString() {
 		String result = "";
 		result += "StatementID = " + StatementID + newline;
@@ -46,6 +60,15 @@ public class Node
 		if (conDep != null)
 			result += conDep.toString() + newline;
 		else
+			result += "null" + newline;
+		result += "potDep = ";
+		if(potDep != null) {
+			for (int i = 0; i < potDep.size(); i++){
+				result += potDep.get(i).getID();
+			}
+			result += newline;
+		}
+		else 
 			result += "null" + newline;
 		return result;
 	}

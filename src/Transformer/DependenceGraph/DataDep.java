@@ -20,6 +20,9 @@ public class DataDep
 	public String getVarName() {return var_depend;}
 	public int getID() {return lineID;}
 	public void setNode(Node n) {node = n;}
+	public Node getNode() {
+		return node;
+	}
 	
 	public String toString() {
 		String result = "";

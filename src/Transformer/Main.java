@@ -22,7 +22,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 3;
+	static int failLine = 4;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -53,6 +53,7 @@ public class Main {
 	// dynamic slicing
 	public static void getSliceOfTestcase(PDG graph, ArrayList<Integer> path, int stmt) {
 		//Slice s = new Slice();
+		if(stmt == 0) return;
 		if(path.contains(stmt) && !sliceProg.contains(stmt)) {
 			sliceProg.addLine(stmt);
 		}
@@ -71,7 +72,9 @@ public class Main {
 			}
 		}
 		// control criterion
-		Node nControl = ((ControlDep)n.getControlDep()).get();
+		ControlDep controlDep = (ControlDep)n.getControlDep();
+		Node nControl = null;
+		if(controlDep != null) nControl = controlDep.get();
 		if(nControl != null) {
 			int indexControlDep = nControl.getID();
 			//Slice controlSlice = new Slice();
@@ -80,7 +83,17 @@ public class Main {
 			}
 			//s.addSlice(controlSlice);
 		}
-		
+		// potential criterion
+		ArrayList<Node> potDep = n.getPotDep();
+		if(potDep != null) {
+			for(int i = 0; i < potDep.size(); i++) {
+				int indexNode = potDep.get(i).getID();
+				// not look to contain path execution
+				if(!sliceProg.contains(indexNode)) {
+					getSliceOfTestcase(graph, path, indexNode);
+				}
+			}
+		}
 		return;
 	}
 	// thoi gian can thiet de sinh ra bo test cases doi voi tung options
@@ -678,6 +691,7 @@ public class Main {
 			labelTree.visit(ast2PDG, "");
 			// use for dynamic slicing
 			PDG graph = ast2PDG.getProgramDependenceGraph();
+			graph.updatePD();
 			writeToFile(PDGFilename, graph.toString());
 		
 			
