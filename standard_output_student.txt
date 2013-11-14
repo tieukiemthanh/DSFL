@@ -1,22 +1,23 @@
-int dataSlice(int a, int n, int x, int y)
+int slice(int m, int n)
 {
-	int i = 0;
-	int z = 0;
-	while ((i < n))
+	int x = (2 * m);
+	int w = 5;
+	int a = 10;
+	int b = 1;
+	if ((w > n))
 	{
-		a = (a / (2 * x)) - 1;
-		int b = x;
-		if ((a > 1))
-			b = a - 4;
-		if ((b > 0))
+		b = 15;
+	}
+	else
+	{
+		if ((x > 5))
 		{
-			z = x + y;
+			a = 20;
 		}
 		else
 		{
-			z = x - y;
+			b = 25;
 		}
-		i = i + 1;
 	}
-	return z;
+	return a;
 }

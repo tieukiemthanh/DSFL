@@ -116,6 +116,7 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	public Object visitVarDeclAST(VarDeclAST ast, Object o)
 			throws CompilationException {
 		String value = ast.init.visit(this, o).toString();
+		
 		Var v = null;
 		//trinhgiang-16/10/2013
 		//them xu ly voi kieu float

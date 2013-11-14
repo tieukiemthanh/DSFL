@@ -22,7 +22,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 4;
+	static int failLine = 2;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -469,7 +469,7 @@ public class Main {
 			
 			while (testcase != null) {
 				// khoi tao khi vao 1 bo test case moi
-				if (testcase.equals("Begin test cases.")) {
+				if (testcase.contains("Begin test cases.")) {
 					totalPass = totalFail = 0;
 					for (int i = 1; i < numLine; i++) {
 						pass[i] = fail[i] = 0;
@@ -477,7 +477,7 @@ public class Main {
 					//System.out.println(step++);
 				}
 				// ket thuc test case, danh gia chat luong cua bo test case nay
-				else if (testcase.equals("End test cases.")) {
+				else if (testcase.contains("End test cases.")) {
 					int nSizeSlice = sliceProg.getSize();
 					int[] sumFreq = new int[nTestcase];
 					for(int k = 0; k < nTestcase; k++) {
