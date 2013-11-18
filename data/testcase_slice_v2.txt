@@ -1,4 +1,0 @@
-Begin test cases.
-1;2
-1;6
-End test cases.

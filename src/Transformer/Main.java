@@ -64,11 +64,10 @@ public class Main {
 		if(dataDep != null) {
 			for(int i = 0; i < dataDep.size(); i++) {
 				int indexDataDep = dataDep.get(i).getID();
-				//Slice dataSlice = new Slice();
+				
 				if(!sliceProg.contains(indexDataDep) && path.contains(indexDataDep)) {
 					getSliceOfTestcase(graph, path, indexDataDep);
 				}
-				//s.addSlice(dataSlice);
 			}
 		}
 		// control criterion
@@ -77,11 +76,9 @@ public class Main {
 		if(controlDep != null) nControl = controlDep.get();
 		if(nControl != null) {
 			int indexControlDep = nControl.getID();
-			//Slice controlSlice = new Slice();
 			if(!sliceProg.contains(indexControlDep) && path.contains(indexControlDep)) {
 				getSliceOfTestcase(graph, path, indexControlDep);
 			}
-			//s.addSlice(controlSlice);
 		}
 		// potential criterion
 		ArrayList<Node> potDep = n.getPotDep();
@@ -536,8 +533,6 @@ public class Main {
 					maxtPercent = tPercent.max;
 					mintPercentSlice = tPercentSlice.min;
 					maxtPercentSlice = tPercentSlice.max;
-					//System.out.println("Da get percent " + mintPercent + "--" + maxtPercent);
-					//System.out.println("Da get percent slice " + mintPercentSlice + "--" + maxtPercentSlice);
 					
 					step++;
 				}
