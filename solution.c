@@ -1,10 +1,16 @@
-int grade (int n) {
-	if (n > 100) return 0;
-	else if (n >= 90) return 1;
-	else if (n >= 80) return 2;
-	else if (n >= 70) return 3;
-	else if (n >= 60) return 4;
-	else if (n >= 50) return 5;
-	else if (n >= 0) return 6;
-	else return -1;
+int dataSlice(int a, int n, int x, int y) {
+	int i = 0;
+	int z = -10;
+	while( i < n) {
+		a = a/x;
+		int b = x;
+		if(a > 1) 
+			b = a - 4;
+		if(b > 0)
+			z = x + y;
+		else
+			z = x - y;
+		i = i + 1;
+	}
+	return z;
 }
