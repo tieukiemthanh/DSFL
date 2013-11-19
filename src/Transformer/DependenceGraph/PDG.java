@@ -19,8 +19,8 @@ public class PDG
 	// potential dependence
 	public void updatePD() {
 		for(int i = 0; i < progDepGraph.size(); i++) {
-			//System.out.println(i);
-			this.updatePDNode(i);
+			//System.out.println(progDepGraph.get(i).getID());
+			this.updatePDNode(progDepGraph.get(i).getID());
 		}
 	}
 	// potential dependence of a node
@@ -36,7 +36,7 @@ public class PDG
 			if(id != 0 && id < i) {
 				boolean isDefined = false;
 				for(int k = id + 1; k < i && !isDefined; k++) {
-					Node nTemp = findNodeAtLine(k);
+					Node nTemp = findNodeAtLine(progDepGraph.get(k).getID());
 					String nVar = nTemp.getAssignedVar();
 					if(nTemp.getType() == TYPE.ASSIGN && nVar != null) {
 						if(dVar != null && nVar.equals(dVar)) {

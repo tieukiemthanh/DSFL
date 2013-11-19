@@ -124,21 +124,29 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		if(ast.t instanceof TypeListAST) {
 			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
 				//System.out.println("float type");
-				v = new Var(ast.id.getText(), "float", value);
+				v = new Var(ast.id.getText(), "float", value, null);
 			}
 			else if(((TypeListAST)ast.t).t instanceof IntTypeAST){
 				//System.out.println("integer type");
-				v = new Var(ast.id.getText(), "integer", value);	
+				v = new Var(ast.id.getText(), "integer", value, null);	
 			}
 			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST)
 			{
 				//System.out.println("boolean type");
-				v = new Var(ast.id.getText(), "boolean", value);
+				v = new Var(ast.id.getText(), "boolean", value, null);
 			}
 		}
 		else if(ast.t instanceof ArrayTypeAST) {
-			//System.out.println("array type");
-			v = new Var(ast.id.getText(), "array", value);
+			TypeListAST arrType  = (TypeListAST) ((ArrayTypeAST)ast.t).type;
+			if(arrType.t instanceof FloatTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "float");
+			}
+			else if(arrType.t instanceof IntTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "integer");
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "boolean");
+			}
 		}
 		varTable.addVar(v);
 		return null;
@@ -200,17 +208,26 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		
 		if(ast.t instanceof TypeListAST) {
 			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
-				v = new Var(ast.id.getText(), "float", value);
+				v = new Var(ast.id.getText(), "float", value, null);
 			}
 			else  if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
-				v = new Var(ast.id.getText(), "integer", value);
+				v = new Var(ast.id.getText(), "integer", value, null);
 			}
 			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
-				v = new Var(ast.id.getText(), "boolean", value);
+				v = new Var(ast.id.getText(), "boolean", value, null);
 			}
 		}
 		else if(ast.t instanceof ArrayTypeAST) {
-			v = new Var(ast.id.getText(), "array", value);
+			TypeListAST arrType  = (TypeListAST) ((ArrayTypeAST)ast.t).type;
+			if(arrType.t instanceof FloatTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "float");
+			}
+			else if(arrType.t instanceof IntTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "integer");
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "boolean");
+			}
 		}
 		varTable.addVar(v);
 		
@@ -288,6 +305,12 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			scopeBreak--;
 		return null;
 	}
+	// trinhgiang-19/11/2013
+	// CallExprAST
+	public Object visitCallExprAST(CallExprAST ast, Object o) throws CompilationException
+    {
+        return null;
+    }
     // trinhgiang-29/10/2013
 	// ContStmtAST
 	public Object visitContStmtAST(ContStmtAST ast, Object o)
@@ -521,14 +544,13 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 		Integer i = (Integer) ((ExprListAST) ast.e).e.visit(this, null);
 		//trinhgiang-30/10/2013
 		String ele = v.getArrayValue(i);
-		String eleType = v.getType();
-		System.out.println(ast.name.getText() + "--" + i + "--" + eleType + "--" + ele);
+		String eleType = v.getEleType();
 		// only support one dimension array
 		if(eleType.equals("float")) {
 			// element is float literal
 			return Float.parseFloat(ele);
 		}
-		else if(eleType.equals("boolean") && (ele.contains("true") || ele.contains("false"))) {
+		else if(eleType.equals("boolean")) {
 			// element is boolean literal
 			return Boolean.parseBoolean(ele);
 		}
@@ -564,19 +586,89 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		Object e = ast.e.visit(this, null);		
 		
-		//mot so toan tu khac chua xu ly
-		if (ast.opType == UnaryExprAST.UNARY_MINUS) {
-			//trinhgiang-16/10/2013
-			//them xu ly voi kieu float
-			if(e instanceof Float)
-			{
-				return - (Float) e;
+		if ((ast.opType >= UnaryExprAST.PRE_INC) && (ast.opType <= UnaryExprAST.POST_DEC)) {
+			int opType;
+            boolean pre_increment; // true if (++i or --i), false if (i++ or i--)
+            boolean increment; // true if(++i ot i++), false if(--i or i--)
+            Integer index = new Integer(-1);
+            
+            String varName = "";
+            if (ast.e instanceof VarExprAST) {
+                varName = ((VarExprAST) ast.e).name.getText();
+            }
+            else if (ast.e instanceof EleExprAST) {
+                varName = ((EleExprAST) ast.e).name.getText();
+                index = (Integer) ((ExprListAST) ((EleExprAST) ast.e).e).e.visit(this, null);
+            }
+            
+            if (ast.opType == UnaryExprAST.PRE_INC) {
+                // ++i
+                opType = BinExprAST.PLUS;
+                pre_increment = true;
+                increment = true;
+            }
+            else if (ast.opType == UnaryExprAST.PRE_DEC) {
+                // --i
+                opType = BinExprAST.MINUS;
+                pre_increment = true;
+                increment = false;
+            }
+            else if (ast.opType == UnaryExprAST.POST_INC) {
+                // i++
+                opType = BinExprAST.PLUS;
+                pre_increment = false;
+                increment = true;
+            }
+            else {
+                // i--
+                opType = BinExprAST.MINUS;
+                pre_increment = false;
+                increment = false;
+            }
+            
+            Object newVal = null;
+            if(pre_increment) {
+				if(increment) {
+					// ++i
+					// chi ap dung cho so nguyen
+					newVal = (Integer) e + 1;
+				}
+				else {
+					// --i
+					newVal = (Integer) e - 1;
+				}
+				// update variable table
+				Var v = varTable.getVar(varName);
+				if(index.intValue() == -1)
+					v.setValue(newVal.toString());
+				else 
+					v.setArrayValue(index.intValue(), newVal.toString());
+				return newVal;
 			}
-			else 
+			else {
+				if(increment) {
+					// i++
+					newVal = (Integer) e + 1;
+				}
+				else {
+					// i--
+					newVal = (Integer) e - 1;
+				}
+				// update variable table
+				Var v = varTable.getVar(varName);
+				if(index.intValue() == -1)
+					v.setValue(newVal.toString());
+				else 
+					v.setArrayValue(index.intValue(), newVal.toString());
+				return e;
+			}
+		} else if (ast.opType == UnaryExprAST.UNARY_MINUS) {
+			if(e instanceof Float)
+				return - (Float) e;
+			else
 				return - (Integer) e;
 		} 
 		else {
-			//logical not
 			return ! (Boolean) e;
 		}
 	}

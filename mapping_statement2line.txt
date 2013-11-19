@@ -3,12 +3,8 @@
 Mapping Tables: 
 
 3: class Transformer.ASTs.DeclarationStmtAST
-4: class Transformer.ASTs.DeclarationStmtAST
-5: class Transformer.ASTs.DeclarationStmtAST
-6: class Transformer.ASTs.DeclarationStmtAST
-7: class Transformer.ASTs.IfThenElseStmtAST
-9: class Transformer.ASTs.ExprStmtAST
-13: class Transformer.ASTs.IfThenElseStmtAST
-15: class Transformer.ASTs.ExprStmtAST
-19: class Transformer.ASTs.ExprStmtAST
-22: class Transformer.ASTs.RetStmtAST
+4: class Transformer.ASTs.WhileStmtAST
+6: class Transformer.ASTs.IfThenElseStmtAST
+8: class Transformer.ASTs.BreakStmtAST
+12: class Transformer.ASTs.ExprStmtAST
+15: class Transformer.ASTs.RetStmtAST

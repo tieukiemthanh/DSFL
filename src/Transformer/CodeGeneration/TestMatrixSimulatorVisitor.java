@@ -11,12 +11,18 @@ import Transformer.ASTs.*;
 
 class Var {
 
-	private String name, type, value;
+	private String name, type, value, arrayEleType;
 
 	public Var(String name, String type, String value) {
 		this.name = name;
 		this.type = type;
 		this.value = value;
+	}
+	public Var(String name, String type, String value, String arrayEleType) {
+		this.name = name;
+		this.type = type;
+		this.value = value;
+		this.arrayEleType = arrayEleType;
 	}
 	
 	public String getName() {
@@ -29,6 +35,10 @@ class Var {
 	
 	public String getValue() {
 		return value;
+	}
+	
+	public String getEleType() {
+		return arrayEleType;
 	}
 	
 	public void setValue(String value) {

@@ -22,7 +22,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 2;
+	static int failLine = 3;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -651,6 +651,9 @@ public class Main {
 			// tao cay AST cho chuong trinh can kiem tra
 			//co the lay numLine tu day
 			AST labelTree = getLabelTree(getTree(args[0]));
+			int debug = 0;
+			if(debug == 1)
+				return;
 			
 			//trinhgiang-21/10/2013
 			//Standardize source

@@ -1,23 +1,16 @@
-int slice(int m, int n)
+int SearchArray(int t[], int n, int v)
 {
-	int x = (2 * m);
-	int w = 5;
-	int a = 10;
-	int b = 1;
-	if ((w > n))
+	int i = 0;
+	while ((i < n))
 	{
-		b = 15;
-	}
-	else
-	{
-		if ((x > 5))
+		if ((t[i] == (v + 3)))
 		{
-			a = 20;
+			break;
 		}
 		else
 		{
-			b = 25;
+			i++;
 		}
 	}
-	return a;
+	return i;
 }

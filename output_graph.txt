@@ -12,83 +12,48 @@ potDep = null
 Node 1:
 StatementID = 1
 StatementTYPE = ASSIGN
-Assigned Variable = x
-dataDep = 
-	{Node 0 (lineID=0),     m}
+Assigned Variable = i
+dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 2:
 StatementID = 2
-StatementTYPE = ASSIGN
-Assigned Variable = w
-dataDep = null
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 1 (lineID=1),     i}
+	{Node 4 (lineID=5),     i}
+	{Node 0 (lineID=0),     n}
 conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 3:
 StatementID = 3
-StatementTYPE = ASSIGN
-Assigned Variable = a
-dataDep = null
-conDep = {Node 0 (lineID=0),     true}
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     t}
+	{Node 1 (lineID=1),     i}
+	{Node 4 (lineID=5),     i}
+	{Node 0 (lineID=0),     v}
+conDep = {Node 2 (lineID=2),     true}
 potDep = null
 
 Node 4:
-StatementID = 4
+StatementID = 5
 StatementTYPE = ASSIGN
-Assigned Variable = b
-dataDep = null
-conDep = {Node 0 (lineID=0),     true}
+Assigned Variable = i
+dataDep = 
+	{Node 1 (lineID=1),     i}
+	{Node 4 (lineID=5),     i}
+conDep = {Node 3 (lineID=3),     false}
 potDep = null
 
 Node 5:
-StatementID = 5
-StatementTYPE = CONDITION
-dataDep = 
-	{Node 2 (lineID=2),     w}
-	{Node 0 (lineID=0),     n}
-conDep = {Node 0 (lineID=0),     true}
-potDep = null
-
-Node 6:
 StatementID = 6
-StatementTYPE = ASSIGN
-Assigned Variable = b
-dataDep = null
-conDep = {Node 5 (lineID=5),     true}
-potDep = null
-
-Node 7:
-StatementID = 7
-StatementTYPE = CONDITION
-dataDep = 
-	{Node 1 (lineID=1),     x}
-conDep = {Node 5 (lineID=5),     false}
-potDep = null
-
-Node 8:
-StatementID = 8
-StatementTYPE = ASSIGN
-Assigned Variable = a
-dataDep = null
-conDep = {Node 7 (lineID=7),     true}
-potDep = null
-
-Node 9:
-StatementID = 9
-StatementTYPE = ASSIGN
-Assigned Variable = b
-dataDep = null
-conDep = {Node 7 (lineID=7),     false}
-potDep = null
-
-Node 10:
-StatementID = 10
 StatementTYPE = RETURN
 dataDep = 
-	{Node 3 (lineID=3),     a}
-	{Node 8 (lineID=8),     a}
+	{Node 1 (lineID=1),     i}
+	{Node 4 (lineID=5),     i}
 conDep = {Node 0 (lineID=0),     true}
-potDep = 7
+potDep = 3
 

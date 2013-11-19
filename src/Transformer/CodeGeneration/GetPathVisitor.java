@@ -74,17 +74,26 @@ public class GetPathVisitor extends DoNothingVisitor {
 		//kieu array
 		if(ast.t instanceof TypeListAST) {
 			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
-				v = new Var(ast.id.getText(), "float", value);
+				v = new Var(ast.id.getText(), "float", value, null);
 			}
 			else if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
-				v = new Var(ast.id.getText(), "integer", value);
+				v = new Var(ast.id.getText(), "integer", value, null);
 			}
 			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
-				v = new Var(ast.id.getText(), "boolean", value);
+				v = new Var(ast.id.getText(), "boolean", value, null);
 			}
 		}
 		else if(ast.t instanceof ArrayTypeAST) {
-			v = new Var(ast.id.getText(), "array", value);
+			TypeListAST arrType  = (TypeListAST) ((ArrayTypeAST)ast.t).type;
+			if(arrType.t instanceof FloatTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "float");
+			}
+			else if(arrType.t instanceof IntTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "integer");
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "boolean");
+			}
 		}
 		varTable.addVar(v);
 		String path = ast.label + ";";
@@ -147,17 +156,26 @@ public class GetPathVisitor extends DoNothingVisitor {
 		
 		if(ast.t instanceof TypeListAST) {
 			if(((TypeListAST)ast.t).t instanceof FloatTypeAST) {
-				v = new Var(ast.id.getText(), "float", value);
+				v = new Var(ast.id.getText(), "float", value, null);
 			}
 			else if(((TypeListAST)ast.t).t instanceof IntTypeAST) {
-				v = new Var(ast.id.getText(), "integer", value);
+				v = new Var(ast.id.getText(), "integer", value, null);
 			}
 			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
-				v = new Var(ast.id.getText(), "boolean", value);
+				v = new Var(ast.id.getText(), "boolean", value, null);
 			}
 		}
 		else if(ast.t instanceof ArrayTypeAST) {
-			v = new Var(ast.id.getText(), "array", value);
+			TypeListAST arrType  = (TypeListAST) ((ArrayTypeAST)ast.t).type;
+			if(arrType.t instanceof FloatTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "float");
+			}
+			else if(arrType.t instanceof IntTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "integer");
+			}
+			else if(((TypeListAST)ast.t).t instanceof BoolTypeAST) {
+				v = new Var(ast.id.getText(), "array", value, "boolean");
+			}
 		}
 		varTable.addVar(v);
 		
@@ -255,6 +273,12 @@ public class GetPathVisitor extends DoNothingVisitor {
 		}
 		return path;
 	}
+	// trinhgiang-19/11/2013
+	// CallExprAST
+	public Object visitCallExprAST(CallExprAST ast, Object o) throws CompilationException
+    {
+        return null;
+    }
 	// trinhgiang-29/10/2013
 	// ContStmtAST
 	public Object visitContStmtAST(ContStmtAST ast, Object o)
@@ -507,9 +531,9 @@ public class GetPathVisitor extends DoNothingVisitor {
 		Integer i = (Integer) ((ExprListAST) ast.e).e.visit(this, null);
 		// trinhgiang-29/10/2013
 		String ele = v.getArrayValue(i);
-		String eleType = v.getType();
+		String eleType = v.getEleType();
 		// only support one dimension array
-		/*
+		
 		if(eleType.equals("float")) {
 			// element is float literal
 			return Float.parseFloat(ele);
@@ -523,8 +547,6 @@ public class GetPathVisitor extends DoNothingVisitor {
 			return Integer.parseInt(ele);
 		}
 		return null;
-		*/
-		return ele;
 	}
 	// IntLiteralAST
 	public Object visitIntLiteralAST(IntLiteralAST ast, Object o)
@@ -551,7 +573,83 @@ public class GetPathVisitor extends DoNothingVisitor {
 			throws CompilationException {
 		Object e = ast.e.visit(this, null);		
 		
-		if (ast.opType == UnaryExprAST.UNARY_MINUS) {
+		if ((ast.opType >= UnaryExprAST.PRE_INC) && (ast.opType <= UnaryExprAST.POST_DEC)) {
+			int opType;
+            boolean pre_increment; // true if (++i or --i), false if (i++ or i--)
+            boolean increment; // true if(++i ot i++), false if(--i or i--)
+            Integer index = new Integer(-1);
+            
+            String varName = "";
+            if (ast.e instanceof VarExprAST) {
+                varName = ((VarExprAST) ast.e).name.getText();
+            }
+            else if (ast.e instanceof EleExprAST) {
+                varName = ((EleExprAST) ast.e).name.getText();
+                index = (Integer) ((ExprListAST) ((EleExprAST) ast.e).e).e.visit(this, null);
+            }
+            
+            if (ast.opType == UnaryExprAST.PRE_INC) {
+                // ++i
+                opType = BinExprAST.PLUS;
+                pre_increment = true;
+                increment = true;
+            }
+            else if (ast.opType == UnaryExprAST.PRE_DEC) {
+                // --i
+                opType = BinExprAST.MINUS;
+                pre_increment = true;
+                increment = false;
+            }
+            else if (ast.opType == UnaryExprAST.POST_INC) {
+                // i++
+                opType = BinExprAST.PLUS;
+                pre_increment = false;
+                increment = true;
+            }
+            else {
+                // i--
+                opType = BinExprAST.MINUS;
+                pre_increment = false;
+                increment = false;
+            }
+            
+            Object newVal = null;
+            if(pre_increment) {
+				if(increment) {
+					// ++i
+					// chi ap dung cho so nguyen
+					newVal = (Integer) e + 1;
+				}
+				else {
+					// --i
+					newVal = (Integer) e - 1;
+				}
+				// update variable table
+				Var v = varTable.getVar(varName);
+				if(index.intValue() == -1)
+					v.setValue(newVal.toString());
+				else 
+					v.setArrayValue(index.intValue(), newVal.toString());
+				return newVal;
+			}
+			else {
+				if(increment) {
+					// i++
+					newVal = (Integer) e + 1;
+				}
+				else {
+					// i--
+					newVal = (Integer) e - 1;
+				}
+				// update variable table
+				Var v = varTable.getVar(varName);
+				if(index.intValue() == -1)
+					v.setValue(newVal.toString());
+				else 
+					v.setArrayValue(index.intValue(), newVal.toString());
+				return e;
+			}
+		} else if (ast.opType == UnaryExprAST.UNARY_MINUS) {
 			if(e instanceof Float)
 				return - (Float) e;
 			else
