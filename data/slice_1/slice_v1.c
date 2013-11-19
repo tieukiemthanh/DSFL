@@ -1,6 +1,6 @@
 int dataSlice(int a, int n, int x, int y) {
 	int i = 0;
-	int z;
+	int z = -10;
 	while( i < n) {
 		a = a/x;
 		int b = x;
