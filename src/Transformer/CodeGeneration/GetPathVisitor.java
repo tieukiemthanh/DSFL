@@ -651,9 +651,9 @@ public class GetPathVisitor extends DoNothingVisitor {
 			}
 		} else if (ast.opType == UnaryExprAST.UNARY_MINUS) {
 			if(e instanceof Float)
-				return - (Float) e;
+				return 0 - (Float) e;
 			else
-				return - (Integer) e;
+				return 0 - (Integer) e;
 		} 
 		else {
 			return ! (Boolean) e;

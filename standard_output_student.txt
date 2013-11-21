@@ -1,10 +1,11 @@
-int dataSlice(int a, int n, int x, int y)
+float abs(float a)
 {
-	int i = 2;
-	int z = 10;
-	if ((z == 10))
+	if ((a > 100))
 	{
-		--z;
+		return a;
 	}
-	return z;
+	else
+	{
+		return -a;
+	}
 }

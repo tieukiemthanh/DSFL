@@ -1,115 +1,47 @@
 Program(
 	FuncDecl(
-		dataSlice
+		abs
 		ParaList(
 			Para(
 				a
 				TypeList(
-					Int
+					Float
 					EmptyTypeList()
 				)
 			)
-			ParaList(
-				Para(
-					n
-					TypeList(
-						Int
-						EmptyTypeList()
-					)
-				)
-				ParaList(
-					Para(
-						x
-						TypeList(
-							Int
-							EmptyTypeList()
-						)
-					)
-					ParaList(
-						Para(
-							y
-							TypeList(
-								Int
-								EmptyTypeList()
-							)
-						)
-						EmptyParaList()
-					)
-				)
-			)
+			EmptyParaList()
 		)
 		TypeList(
-			Int
+			Float
 			EmptyTypeList()
 		)
 		CompStmt(
 			StmtList(
-				DeclarationStmt(
-					VarDecl(
-						i
-						TypeList(
-							Int
-							EmptyTypeList()
+				IfThenElseStmt(
+					BinExpr(
+						VarExpr(
+							a
 						)
-						VarInitializer(
-							IntLiteral(
-								2
-							)
+						>
+						IntLiteral(
+							100
 						)
 					)
-					EmptyDeclarationList()
-				)
-				StmtList(
-					DeclarationStmt(
-						VarDecl(
-							z
-							TypeList(
-								Int
-								EmptyTypeList()
-							)
-							VarInitializer(
-								IntLiteral(
-									10
-								)
-							)
+					RetStmt(
+						VarExpr(
+							a
 						)
-						EmptyDeclarationList()
 					)
-					StmtList(
-						IfThenStmt(
-							BinExpr(
-								VarExpr(
-									z
-								)
-								==
-								IntLiteral(
-									10
-								)
+					RetStmt(
+						UnaryExpr(
+							-
+							VarExpr(
+								a
 							)
-							CompStmt(
-								StmtList(
-									ExprStmt(
-										UnaryExpr(
-											--
-											VarExpr(
-												z
-											)
-										)
-									)
-									EmptyStmtList()
-								)
-							)
-						)
-						StmtList(
-							RetStmt(
-								VarExpr(
-									z
-								)
-							)
-							EmptyStmtList()
 						)
 					)
 				)
+				EmptyStmtList()
 			)
 		)
 	)

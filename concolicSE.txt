@@ -1,4 +1,4 @@
 Begin test cases.
-8;1;2;2
-2;1;-1;1
+0
+100
 End test cases.
