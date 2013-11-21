@@ -570,6 +570,7 @@ public class Main {
 					nTestcase++;
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
+						writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalPass++; // tang tong so test case pass
 						pTestcase.add(0);
 						for (int i = 1; i < numLine; i++) {
@@ -582,7 +583,7 @@ public class Main {
 					}
 					// test case fail
 					else {
-						writerTestCasesAndPath.println(studentResult + ":" + stmt2line);
+						writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalFail++; // tang tong so test case fail
 						pTestcase.add(1);
 						// chi xay dung slice cho nhung test cases fail
