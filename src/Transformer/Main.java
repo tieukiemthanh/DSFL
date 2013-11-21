@@ -33,6 +33,7 @@ public class Main {
 	// bien dung de ghi ket qua phan tich ra file
 	static PrintWriter writer;
 	static PrintWriter writerFL;
+	static PrintWriter writerFLSlice;
 	static PrintWriter writerAllPaths;
 	static PrintWriter writerTestCasesAndPath;
 	
@@ -564,7 +565,7 @@ public class Main {
 					{
 						stmt2line += statement2line[Integer.parseInt(pathUnit)] + ";";
 					} 
-					writerTestCasesAndPath.println(studentResult + ":" + stmt2line);
+					//writerTestCasesAndPath.println(studentResult + ":" + stmt2line);
 				
 					nTestcase++;
 					// test case pass
@@ -581,6 +582,7 @@ public class Main {
 					}
 					// test case fail
 					else {
+						writerTestCasesAndPath.println(studentResult + ":" + stmt2line);
 						totalFail++; // tang tong so test case fail
 						pTestcase.add(1);
 						// chi xay dung slice cho nhung test cases fail
@@ -602,12 +604,12 @@ public class Main {
 			}
 	
 			//tam thoi in ket qua FL cua tarantula
-			writerFL.println("Tarantula technique");
+			//writerFL.println("Tarantula technique");
 			for(int j = 1; j < numLine; j++)
 				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
-			writerFL.println("Tarantula technique with dynamic slicing");
+			//writerFL.println("Tarantula technique with dynamic slicing");
 			for(int j = 1; j < numLine; j++)
-				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
+				writerFLSlice.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
 			
 			// write evaluation result to file
 			String eval = "Tarantula technique\n";
@@ -641,6 +643,8 @@ public class Main {
 			
 			//file chua ket qua fault localization
 			writerFL = new PrintWriter("FL.txt", "UTF-8");
+			
+			writerFLSlice = new PrintWriter("FLSlice.txt", "UTF-8");
 			
 			//file chua tat ca cac paths cua chuong trinh
 			writerAllPaths = new PrintWriter("allpaths.txt", "UTF-8");
@@ -768,6 +772,7 @@ public class Main {
 			System.out.println(sliceProg.toString());	
 			writer.close();
 			writerFL.close();
+			writerFLSlice.close();
 			writerAllPaths.close();
 			writerTestCasesAndPath.close();
 			
