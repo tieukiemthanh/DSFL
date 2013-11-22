@@ -1,0 +1,168 @@
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 2.0
+// Description : Initial code for Assignment 1
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	in.close();
+
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of fOut in format of 0.XX
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(float pR){
+	cout << pR;
+}
+
+/**********************************************************************
+ * Name: main
+ * Target: Implements your application
+ **********************************************************************/
+int main() {
+
+	//Declare variables
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float P1 = 0;
+	float P2 = 0;
+	float pR = -1; //No valid
+
+	//Input data
+	if(readFile(hp, d, s)){
+		//write your code here
+		float g, f, k, tg, h;
+
+//Input data
+if(readFile(hp, d, s)){
+//kiem tra hp co phai la so nguyen to ko de gan P1, P2
+int i;
+for (i=2; i<hp; i++)
+{
+if((hp%i)==0) //hp khong la so nguyen to
+{
+P1=hp;
+P2=(hp+d)%100;
+break;
+}
+else //hp la so nguyen to
+{
+P1=1000;
+P2=(hp+s)%1000;
+}
+}
+if (hp==2) //hp = 2 vì 2 cung la so nguyen to
+{
+P1=1000;
+P2=(hp+s)%1000;
+}
+//tinh g(s)
+k = s % 6; //k = s mod 6
+if(k==0)
+g=((float) s/2);
+else if (k==1)
+g=2*s;
+else if (k==2)
+{
+tg= (s % 9)*(s % 9)*(s % 9); // t=(s mod 9)^3
+g=-tg/5;// g=-(s mod 9)^3/5;
+}
+else if (k==3)
+{
+tg=(s % 30)*(s % 30); //t=(s mod 30)^2
+g=-tg+3*s;// g=-(s mod 30)^2+3*s
+}
+else if (k==4)
+g=-s;
+else
+{
+tg=(s % 5)+5;
+g=((float) -tg*(tg+1)/2);
+}
+//tinh f(d, s)
+if (d<200)
+{
+//kiem tra (d+s) co thuoc day Fibonacci hay khong
+tg=d+s;
+int a=0,b=1,c=0;
+while(c<tg)
+{
+c=a+b;
+a=b;
+b=c;
+}
+if(c==tg)//tg thuoc day Fibonacci
+{
+h=d-500;
+if (h>=0)
+k=h;
+else
+k=-h;
+f=((float) 40-k/20+g); //f=40-abs(d-500)/20+g
+}
+else
+f=0;
+}
+else if (d>=200 && d<=800)
+{
+h=d-500;
+if (h>=0)
+k=h;
+else
+k=-h;
+f=((float) (40-k/20+g)); // k=abs(d-500)
+}
+else
+{
+f=((float)-(d*s)/1000);
+}
+//tinh p(R)
+pR=((float) (P1+P2*f)/(1000+(abs(P2*f)))); //k=abs(P2*f)
+if (pR < 0) pR = 0;
+else if (pR > 1) pR = 1;
+else pR = round(pR * 1000) / 1000;
+if (d>=200 && d<=300)
+{
+h=(d+P1+P2); //xac xuat bi ran can
+if (h>800)
+pR=0;
+}
+}
+
+	}
+
+	//Output result
+	display(pR);
+}
+_______Compiling_________
+________Running________
+________Testing________
+Result: 99
+Total: 99

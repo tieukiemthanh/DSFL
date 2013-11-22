@@ -1,0 +1,198 @@
+//============================================================================
+// Name        : btl1.cpp
+// Author      : cong
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+/*
+ * m.cpp
+ *
+ *  Created on: 23-03-2013
+ *      Author: NGUYEN VAN CONG
+ */
+
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 1.0
+// Description : Initial code for Assignment 1
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream.h>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	in.close();
+
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of fOut in format of 0.XX
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(float pR){
+	if (pR < 0) pR = 0;
+	else if (pR > 1) pR = 1;
+	else pR = round(pR * 1000) / 1000;
+
+	cout << pR;
+}
+
+/**********************************************************************
+ * Name: main
+ * Target: Implements your application
+ **********************************************************************/
+int main() {
+
+	//Declare variables
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float p1 = 0;
+	float p2 = 0;
+	float pR = -1; //No valid
+
+	//Input data
+	if(readFile(hp, d, s))
+	{
+	/************************************************
+	* Kiem xem hp co la so nguyen to khong ?
+	*************************************************/
+	int h, dem;
+	dem = 0;
+	for(h=1;h<=hp;h++)
+	{
+		if(hp%h == 0)
+		{
+			dem++;
+		}
+	}
+	if(dem == 2)
+	{
+		p1 = 1000; p2 = (hp+s)%1000;
+	}
+	else if(dem > 2)
+	{
+		p1 = hp;   p2 = (hp+d)%100;
+	}
+
+	/************************************************
+	************************************************/
+
+	/************************************************
+	* Tinh ham g(s) theo s.
+	************************************************/
+	int k, g, z, t;
+    if(s % 6 == 0)
+    {
+			g = s/2;
+    }
+	else     if(s % 6 == 1)
+    {
+	        g = 2*s;
+    }
+	else     if(s % 6 == 2)
+	{
+		    z =  s % 9;
+            g = -z*z*z/5;
+	}
+	else     if(s % 6 == 3)
+	{
+		    t = s % 30;
+		    g = 3*s - t*t;
+	}
+	else        if(s % 6 == 4)
+	{
+		    g = -s;
+	}
+	else     if(s % 6 == 5)
+	{
+		   k = s%5 +5 ;
+		   g = -k*(k+1)/2;
+	}
+
+   /**********************************************
+   **********************************************/
+
+	/********************************************
+	* Kiem xem (d +s) co la so fibonacci khong ?
+	*********************************************/
+int L, i, U, V;
+L = 0;
+U = 0;
+V = 1;
+for(i = 1;L < d +s;i++)
+{
+	L =  U +V;
+	U = V;
+	V = L;
+}
+
+   /***********************************************
+   * Tinh ham f(d,s).
+   ************************************************/
+
+float f;
+if((d < 200 && d +s == L)||( d > 200 && d < 800))
+{
+	f = 40 - fabs(float(d-500))/20 + g;
+}
+ else if(d < 200 && d + s != L )
+ {
+	 f=0;
+ }
+ else if(d > 800)
+{
+	f = -d*s/1000;
+}
+
+/*****************************************************
+******************************************************/
+
+/******************************************************
+* Tinh p(R) .
+*******************************************************/
+if((d > 200 && d < 300) && (p1 + p2 +d)/1000 > 0.8)
+{
+	 pR = 0;
+}
+ else
+	 pR = (p1 + p2*f)/(1000 + fabs(p2*f));
+
+display(pR);
+}
+}
+/***************************************************************
+                  HET.
+              XIN CAM ON.
+****************************************************************/
+
+
+
+
+_______Compiling_________
+________Running________
+________Testing________
+Result: 88
+Total: 88

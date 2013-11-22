@@ -1,0 +1,169 @@
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 1.0
+// Description : Initial code for Assignment 1
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	in.close();
+
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of fOut in format of 0.XX
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(float pR){
+	if (pR < 0&& pR!=-1) pR = 0;
+	else if (pR > 1) pR = 1;
+	else pR = round(pR * 1000) / 1000;	
+	cout << pR;
+}
+
+
+/**********************************************************************
+ * Name: main
+ * Target: Implements your application
+ **********************************************************************/
+int main() {
+
+	//Declare variables
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float P1 = 0;
+	float P2 = 0;
+	float pR = -1; //No valid
+	//Input data
+	if(readFile(hp, d, s)){
+	int i,g,j,o;
+	int T;
+	float C,f,k;
+	int a,b,c,z;
+				//kiem tra hp co phai la so nguyen to hay khong?
+
+						for (i=2;i<=hp;i++)
+						if(hp%i==0) break;
+				{if(hp==i)
+					{P1=1000;
+					P2=(hp+s)%1000;}
+				else
+					{P1=hp;
+					P2=(hp+d)%100;}}
+
+				//truong hop 1:  d<200
+
+														 if(d<200)
+						{if(d+s==0||d+s==1||d+s==2)
+							z=1;
+						else
+							{b=1;c=2;j=0;
+						while(j<=1)
+							{j=b;b=c;c=b+j;i=b+c;
+						if(i<d+s)
+						j=0;
+						else if(i==d+s)
+						{z=1;j=2;}
+						else 
+						{z=0;
+						j=2;}}}
+
+							//kiem tra s chia het cho 6
+
+						if(z==1)
+							{switch(s%6)
+					{case 0:g=s/2;break;
+					case 1:g=2*s;break;
+					case 2:g=-((s%9)*(s%9)*(s%9))/5;break;
+					case 3:g=-(s%30)*(s%30)+3*s;break;
+					case 4:g=-s;break;
+					case 5:j=((s%5)+5);
+							g=-j*(j+1)/2;break;}
+					f=40-((float)abs(d-500))/20+g;
+					pR=(P1+P2*f)/(1000+abs(P2*f));}
+						else
+					{pR=P1/1000;}}
+
+			//truong hop 2:  200<=d<=200
+
+															else if(d>=200&&d<=300)
+					{C= float(d+P1+P2)/1000;
+						if (C>0.8)
+					{f=0;
+					pR=0;
+					g=0;}
+					else 
+					{switch(s%6)
+					{case 0:g=s/2;break;
+					case 1:g=2*s;break;
+					case 2:g=-((s%9)*(s%9)*(s%9))/5;break;
+					case 3:g=-(s%30)*(s%30)+3*s;break;
+					case 4:g=-s;break;
+					case 5:j=((s%5)+5);g=-j*(j+1)/2;break;}
+						f=40-abs(d-500)/20+g;
+						pR=(P1+P2*f)/(1000+abs(P2*f));}}
+
+			//truong hop 3:  300<d<=800
+
+															else if (d>300&&d<=800)
+					{switch(s%6)
+					{case 0:g=s/2;break;
+					case 1:g=2*s;break;
+					case 2:g=-((s%9)*(s%9)*(s%9))/5;break;
+					case 3:g=-(s%30)*(s%30)+3*s;break;
+					case 4:g=-s;break;
+					case 5:j=((s%5)+5);g=-j*(j+1)/2;break;}
+						f=40-abs(d-500)/20+g;
+						pR=(P1+P2*f)/(1000+abs(P2*f));}
+
+			//truong hop 4: d>800
+
+															else if (d>800)
+					{f=-(((float)d*(float)s)/1000);
+					pR=(P1+P2*f)/(1000+abs(P2*f));}
+	//truong hop 4: d>800
+
+															else if (d>800)
+					{f=-(((float)d*(float)s)/1000);
+					pR=(P1+P2*f)/(1000+abs(P2*f));}
+	
+			//Output result
+	}
+	
+					display(pR);
+	}
+
+
+
+
+
+
+_______Compiling_________
+________Running________
+________Testing________
+Result: 78
+Total: 78

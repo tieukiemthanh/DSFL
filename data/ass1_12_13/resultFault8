@@ -1,0 +1,119 @@
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 2.0
+// Description : Initial code for Assignment 1
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	in.close();
+
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of fOut in format of 0.XX
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(float pR){
+	cout << pR;
+}
+
+/**********************************************************************
+ * Name: main
+ * Target: Implements your application
+ **********************************************************************/
+int main() {
+
+	//Declare variables
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float P1 = 0;
+	float P2 = 0;
+	float pR = -1; //No valid
+
+	//Input data
+	if(readFile(hp, d, s)){
+		//write your code here
+		//kiem tra so nguyen to
+		bool check=true;
+		if (hp<2) check=false;
+		else {
+			int i=2;
+			while (i*i<=hp) {
+			if (hp%i==0) {
+				check=false;
+				break;
+						 }
+			else i++;}
+			 }
+		if (check) {
+			P1=1000;
+			P2=(hp+s)%1000;
+					}
+			else {
+				P1=hp;
+				P2=(hp+d)%100;
+				 }
+		//fibonaci
+		int fib1 = 1, fib2 = 1, fib = 2;
+		while ((fib1+fib2) <= (d+s))
+			{
+				fib = fib1 + fib2;
+				fib2 = fib1;
+				fib1 = fib;
+			}
+		//tinh g(s)
+		float g;
+		if (s%6==0) g=((float) s)/2;
+		if (s%6==1) g=((float) 2*s); 	
+		if (s%6==2) g=-((float) (s%9)*(s%9)*(s%9))/5;
+		if (s%6==3) g=-((float) (s%30)*(s%30)+3*s);
+		if (s%6==4) g=-((float) s);
+		if (s%6==5) g=-((float) ((s%5)+5)*((s%5)+6))/2;
+		//tinh f(d,s)
+		float f;
+		if (d<200) f=0;
+		if ((d>=200 && d<=800)||(d<200 &&(d+s)==fib)) f=40-((float) abs(d-500))/20 +g;
+		if (d>800) f=-((float) (d*s))/1000;
+		// xac suat ran can & tinh pR
+		float xs=0;
+		if (d>=200 && d<=300) xs=(d+P1+P2)/1000;
+		if (xs>0.8) pR=0;
+		else pR=(P1+P2*f)/(1000+abs(P2*f));
+		if (pR>1) pR=1;
+		if (pR<0) pR=0;
+		pR=round(pR*1000)/1000;
+	}
+
+	//Output result
+	display(pR);
+}
+_______Compiling_________
+________Running________
+________Testing________
+Result: 93
+Total: 93

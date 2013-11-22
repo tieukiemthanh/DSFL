@@ -1,0 +1,144 @@
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 1.0
+// Description : Initial code for Assignment 1
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream.h>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	in.close();
+
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of fOut in format of 0.XX
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(float pR){
+	if (pR < 0) pR = 0;
+	else if (pR > 1) pR = 1;
+	else pR = round(pR * 1000) / 1000;
+	
+	cout << pR;
+}
+
+/**********************************************************************
+ * Name: main
+ * Target: Implements your application
+ **********************************************************************/
+int main() {
+
+	//Declare variables
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float P1 = 0;
+	float P2 = 0;
+	float pR = -1; //No valid
+
+	//Input data
+	if(readFile(hp, d, s)){
+		//write your code here
+//==========================Your code===========
+//--------kiem tra so nguyen to
+		bool flag = 1,songuyento = 0;
+		if (hp == 0 || hp == 1)
+			flag = 0;
+		for(int i = 2; i < hp; i ++) {
+			if (hp % i == 0)
+				flag = 0;
+		}
+		if (flag == 1 || hp == 2)
+			songuyento = 1;
+//---------------------------------
+//--------kiem tra day Fibonacci
+		bool fibonacci = 0;
+		int f, f1 = 0,f2 = 1;
+		do {
+			f = f1 + f2;
+			f1 = f2;
+			f2 = f;
+		}
+		while (f < (d + s));
+		if (f == d + s)
+			fibonacci = 1;
+//---------------------------------
+//----------xac dinh P1,P2
+		if (songuyento == 1) {
+			P1 = 1000;
+			P2 = (hp + s) % 1000;
+		}
+		else {
+			P1 = hp;
+			P2 = (hp + d) % 100;
+		}
+//---------------------------------
+//-----------xac dinh g(d,s)
+		float ham_g = 0;
+		int n;
+		if (s % 6 == 0) ham_g = s / 2.0;
+		else if (s % 6 == 1) ham_g = 2 * s;
+		else if (s % 6 == 2) ham_g = - (s % 9) * (s % 9) * (s % 9) / 5.0;
+		else if (s % 6 == 3) ham_g = - (s % 30)*(s % 30) + 3 * s;
+		else if (s % 6 == 4) ham_g = -s;
+		else {
+			n = s % 5 + 5;
+			ham_g = - (n + 1) * n / 2.0;
+		}
+//---------------------------------
+//--------------xac dinh f(d,s)
+		float ham_f = 0;
+		if (d > 800) ham_f = -d * s / 1000.0;
+		else if (d >= 200 && d <= 800) {
+			if (d - 500 > 0) ham_f = 40 - (d -500) / 20.0 + ham_g ;
+			else ham_f = 40 - (500 - d) / 20.0 + ham_g;
+		}
+		else {
+			if (fibonacci == 0) ham_f = 0;
+			else {
+				if (d - 500 > 0) ham_f = 40 - (d - 500) / 20.0 + ham_g ;
+				else ham_f = 40 - (500 - d) / 20.0 + ham_g;
+			}
+		}	
+//---------------------------------
+//----------------xac dinh pR
+	float rancat = 0;
+	rancat = (d + P1 + P2) / 1000.0;
+	if (rancat > 0.8 && d <300 && d > 200)
+		pR = 0;
+	else if (ham_f >= 0) pR = (P1 + P2 * ham_f) / (1000 + P2 * ham_f);
+	else pR = pR = (P1 + P2 * ham_f) / (1000 - P2 * ham_f);
+//---------------------------------
+//==============================================		
+	}
+
+	//Output result
+	display(pR);
+}_______Compiling_________
+________Running________
+________Testing________
+Result: 100
+Total: 100

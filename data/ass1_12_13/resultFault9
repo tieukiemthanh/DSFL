@@ -1,0 +1,137 @@
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 2.0
+// Description : Initial code for Assignment 1
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	in.close();
+
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of fOut in format of 0.XX
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(float pR){
+	cout << pR;
+}
+
+/**********************************************************************
+ * Name: main
+ * Target: Implements your application
+ **********************************************************************/
+int main() {
+
+	//Declare variables
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float P1 = 0;
+	float P2 = 0;
+	float pR = -1; //No valid
+
+	//Input data
+	if(readFile(hp, d, s)){
+		//write your code here
+		int i1,i2,k,n,i;
+	float f,g,h,T;
+	float pR,P1,P2;
+
+for(k=2;k<hp;k++)
+			if(hp%k==0)
+						
+{
+				P1=hp;
+				P2=(hp+d)%100;
+
+break;
+}
+			if(hp==k)
+			{P1=1000;
+		    P2=(hp+s)%1000;
+			}
+	
+if (d<=800)
+ {
+	 if(s%6==0) 
+ g=(s)/2;
+if (s%6==1) 
+	 g=(2*s);	
+if	(s%6==2) 
+	g=-((s%9)*(s%9)*(s%9))/5;
+if
+	(s%6==3) 
+	g=-((s%30)*(s%30)+3*s);
+if
+	(s%6==4) 
+	g=-(s);
+if
+	(s%6==5)  
+	g=-((((s%5)+5)*(((s%5)+5)+1)/2));
+										}
+ if ((d>=200)&&(d<=800)) f=40-abs(float(d)-500)/20+g;
+i1=0;
+i2=1;
+i=i1+i2;
+n=d+s;
+ if (d<200)
+	while(i<n)
+	{	
+		{
+		i1=i2;
+		i2=i;
+		i=i1+i2;
+}
+	if(n==i)  
+	f=40-abs(float(d)-500)/20+g;
+	else
+		f=0;}
+	h=((d+P1+P2)/1000);
+if(d>800) f=-float(d*s)/1000;
+pR=((P1+P2*f)/(1000+abs(P2*f)));
+
+if((d>200)&&(d<300))
+	if(h>0.8) pR=0;
+	else pR=((P1+P2*f)/(1000+abs(P2*f)));
+if (pR<0) pR=0;
+if(pR>1) pR=1;	
+pR=round(pR*1000)/1000;
+cout<<pR;
+return 0;
+	}
+
+	//Output result
+	display(pR);
+	
+	
+}
+_______Compiling_________
+________Running________
+________Testing________
+Result: 90
+Total: 90

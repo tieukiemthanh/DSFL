@@ -1,0 +1,132 @@
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 2.0
+// Description : Initial code for Assignment 1
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	in.close();
+
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of fOut in format of 0.XX
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(float pR){
+	cout << pR;
+}
+
+/**********************************************************************
+ * Name: main
+ * Target: Implements your application
+ **********************************************************************/
+int main() {
+
+	//Declare variables
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float P1 = 0;
+	float P2 = 0;
+	float pR = -1; //No valid
+
+	//Input data
+	if(readFile(hp, d, s)){
+		//write your code here
+		int i,t,t1,t2;
+		float f,g;
+
+			P1=1000;
+			P2=(hp+s) % 1000;
+
+			for (i=2;i<=int((sqrt(hp)+1));i++)
+			{
+				if ((hp%i)==0)
+				{
+					P1=hp;
+					P2=(hp+d)%100;
+					break;
+				}
+			}
+
+			if ( ((d>=200)&&(d<=300)) && ((d+P1+P2)/1000.000000)>0.8 )
+			{
+				pR=0;
+			}
+			else
+			{
+
+						t1=0; t2=1;
+						while  ((d+s)>t1)
+						{
+							t=t2;
+							t2=t1+t2;
+							t1=t;
+						}
+
+					if ((d<200)&&((d+s)!=t1))
+					{ f=0; }
+					else if ( ((d>=200)&&(d<=800)) || ((d<200)&&((d+s)==t1)) )
+					{
+
+						switch (s%6)
+						{
+							case 0: g=float(s/2.000000); break;
+							case 1: g=float(2*s); break;
+							case 2: g=float(-(s%9)*(s%9)*(s%9)/5.000000); break;
+							case 3: g=float(-(s%30)*(s%30)+3*s);  break;
+							case 4: g=float(-s); break;
+							case 5:	g=float(-(s%5+5)*(s%5+6)/2); break;
+						}
+
+						f=float(40-abs(d-500)/20.000000+g);
+
+					}
+					else if (d>800)
+					{
+						f=float(-d*s/1000.000000);
+					}
+					pR=float((P1+P2*f)/(1000.000000+abs(P2*f)));
+
+					if (pR<0)
+						{pR=0;}
+					else if (pR>1)
+						{pR=1;}
+					else
+						{pR=floor(pR*1000+0.5)/1000;}
+			}
+	}
+
+	//Output result
+	display(pR);
+}
+_______Compiling_________
+________Running________
+________Testing________
+Result: 95
+Total: 95

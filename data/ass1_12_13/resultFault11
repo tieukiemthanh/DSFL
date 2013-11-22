@@ -1,0 +1,96 @@
+#include <iostream>
+#include <cmath>
+#include <fstream>
+using namespace std;
+int hp, d, s;
+float pR = -1;
+
+bool readFile(int &hp, int &d, int &s){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+	in >> hp;
+	in >> d;
+	in >> s;
+	if (hp < 1 || hp > 999) return false;
+	if (d < 1 || d > 1000) return false;
+	if (s < 1 || s > 100) return false;
+	in.close();
+	return true;
+}
+void display(float pR){
+	cout << pR;
+	 cin.ignore();
+	system ("pause");
+}
+int main() 
+{
+	int hp = 0;
+	int d = 0;
+	int s = 0;
+	float P1 = 0;
+	float P2 = 0;
+	int k, a;
+	float f, g, r;
+	if(readFile(hp, d, s)){
+	int i=2;
+	{
+		if (hp=1){P1=1;P2=((hp+d)%100);}
+		else {
+	 while (((i*i)<=hp) && (hp%i !=0))++i;
+		if ((hp%i)!=0){P1=1000;P2=((hp+s)%1000);}
+		else {P1=hp;P2=((hp+d)%100);}
+		}
+	}
+	}
+	if (s%6==0)g=((float)(s))/2;
+	 else 
+		 if (s%6==1)g=(2*s);
+		 else 
+			 if (s%6==2)g=((float)((s%9)*(s%9)*(s%9)))/(-5);
+			 else
+				 if (s%6==3)g=((float)(-(s%30)*(s%30)))+(3*s);
+				 else
+					 if (s%6==4)g=(-s);
+					 else {a=(s%5);g=((float)(-(a+5)*(a+6)))/2;
+		}
+		{
+			if (d<200){
+	k=(d+s);	
+  int x=0,y=1,z=0;
+  while(z<k)
+  {
+     z=x+y;
+     x=y;
+     y=z;
+  }
+  if (z!=k && d<200)f=0;
+  else f=40+g-(((float)(abs(d-500)))/20);
+}
+					 else
+					 {
+						 if (d>=200 && d<=800){
+							 r=((float)(d+P1+P2))/1000;
+							 if (d>=200 && d<=300 && r>0.8) pR=0;
+							 else f=40+g-((float)(abs(int (d-500))))/20;
+						 }
+						 else {f=((float)(-d*s))/1000;}
+			}
+		}
+		if (d>=200 && d<=300 && r>0.8) pR=0;
+		else
+		pR=((float)(P1+P2*f))/(1000+abs(P2*f));
+		{
+			if (hp < 1 || hp > 999 || d < 1 || d > 1000 || s < 1 || s > 100)pR=-1;
+	else if (pR < 0 && pR!=-1) pR = 0;
+	else if (pR > 1) pR = 1;
+	else pR = floor (pR * 1000+0.5) / 1000;
+	display(pR);
+		}
+}
+
+_______Compiling_________
+________Running________
+________Testing________
+Result: 31
+Total: 31
