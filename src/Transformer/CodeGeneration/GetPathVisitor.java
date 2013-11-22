@@ -277,6 +277,34 @@ public class GetPathVisitor extends DoNothingVisitor {
 	// CallExprAST
 	public Object visitCallExprAST(CallExprAST ast, Object o) throws CompilationException
     {
+		if(ast.name.getText().equals("abs")) {
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				//System.out.println("Goi ham abs int");
+				return (Integer)Math.abs(((Integer)e).intValue());
+			} else if(e instanceof Float) {
+				//System.out.println("Goi ham abs float");
+				return (Float)Math.abs(((Float)e).floatValue());
+			}
+		} else if(ast.name.getText().equals("round")) {
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				//System.out.println("Goi ham round int");
+				return (Integer)e;
+			} else if(e instanceof Float) {
+				//System.out.println("Goi ham round float");
+				return (Integer)Math.round(((Float)e).floatValue());
+			}
+		} else if(ast.name.getText().equals("sqrt")) {
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				//System.out.println("Goi ham sqrt int");
+				return new Float((float)Math.sqrt((double)((Integer)e).intValue()));
+			} else if(e instanceof Float) {
+				//System.out.println("Goi ham sqrt float");
+				return new Float((float)Math.sqrt((double)((Float)e).floatValue()));
+			}
+		}
         return null;
     }
 	// trinhgiang-29/10/2013

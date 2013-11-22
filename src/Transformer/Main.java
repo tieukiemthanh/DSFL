@@ -655,15 +655,12 @@ public class Main {
 			// tao cay AST cho chuong trinh can kiem tra
 			//co the lay numLine tu day
 			AST labelTree = getLabelTree(getTree(args[0]));
-			int debug = 0;
-			if(debug == 1)
-				return;
 			
 			//trinhgiang-21/10/2013
 			//Standardize source
 			Visitor walkerC = new PrettyOutputVisitor(standardSourceFile, false);
 			labelTree.visit(walkerC, "no_output_line");
-			
+				
 			//in ra mapping table
 			Ast2MappingTableVisitor ast2Table = new Ast2MappingTableVisitor();
 			labelTree.visit(ast2Table, "");
@@ -687,6 +684,10 @@ public class Main {
 			//System.out.println(mapTable.toString());
 			writeToFile(mappingTableFile, mapTable.toString());
 			
+			int debug = 0;
+			if(debug == 1)
+				return;
+				
 			//in ra program dependence graph
 			String PDGFilename = "output_graph.txt";
 			Ast2GraphVisitor ast2PDG = new Ast2GraphVisitor();

@@ -247,6 +247,14 @@ public class PrettyOutputVisitor extends DoNothingVisitor {
 		return null;
 	}
 	
+	// CallStmtAST
+	public Object visitCallStmtAST(CallStmtAST ast, Object o)
+			throws CompilationException {
+		ast.line = line;
+		ast.e.visit(this, o);
+		return null;
+	}
+	
 	/*/ ProcDeclPartAST
 	public Object visitProcDeclPartAST(ProcDeclPartAST ast, Object o)
 			throws CompilationException {

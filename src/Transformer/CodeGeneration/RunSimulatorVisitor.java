@@ -309,6 +309,29 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	// CallExprAST
 	public Object visitCallExprAST(CallExprAST ast, Object o) throws CompilationException
     {
+		if(ast.name.getText().equals("abs")) {
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				return (Integer)Math.abs(((Integer)e).intValue());
+			} else if(e instanceof Float) {
+				//System.out.println("Goi ham abs float");
+				return (Float)Math.abs(((Float)e).floatValue());
+			}
+		} else if(ast.name.getText().equals("round")) {
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				return (Integer)e;
+			} else if(e instanceof Float) {
+				return (Integer)Math.round(((Float)e).floatValue());
+			}
+		} else if(ast.name.getText().equals("sqrt")) {
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				return new Float((float)Math.sqrt((double)((Integer)e).intValue()));
+			} else if(e instanceof Float) {
+				return new Float((float)Math.sqrt((double)((Float)e).floatValue()));
+			}
+		}
         return null;
     }
     // trinhgiang-29/10/2013
