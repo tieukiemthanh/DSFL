@@ -1,0 +1,439 @@
+//============================================================================
+// Name        : antiem.cpp
+// Author      : Tran Dinh huy
+// Version     : 1.0
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+// Created on  : Mar 5, 2013
+//============================================================================
+
+#include <iostream>
+#include <cmath>
+#include <fstream>
+using namespace std;
+
+/**********************************************************************
+ * Name: readFile
+ * Target: Read data from input file to corresponding variables
+ * Input: Input variables hp,d,s
+ * Result: 1 if successfully done, otherwise return 0
+**********************************************************************/
+bool readFile(int *events, int &size){
+	char* file_name = "input.txt";
+	ifstream in;
+	in.open(file_name);
+
+	int hp;
+	in >> hp;
+	if (hp > 999 || hp < 1) return false;
+	else events[size] = hp;
+	while (!in.eof()){
+		size++;
+		int eventID;
+		in >> eventID;
+		if (eventID > 9999 || eventID < 1) return false;
+		else events[size] = eventID;
+	}
+	size++;
+	in.close();
+	return true;
+}
+/**********************************************************************
+ * Name: display
+ * Target: Display value of pR
+ * Input: Calculated Result pR
+**********************************************************************/
+void display(int result){
+	cout << result;
+}
+/**********************************************************************
+ * Name: main
+ * Target: Implement your application
+ **********************************************************************/
+int main() {
+	int events[1000];
+	int sizeOfEvents = 0;
+	int result = -1;
+
+	//Input data
+	if(readFile(events, sizeOfEvents)){
+		int hp = events[0];
+		//write your code here
+		int i;float pR=-1;
+		                if(events[2]==0){
+						result=-1;
+						display(result);
+						return 0;}
+		                else{
+						for (i=1;i<sizeOfEvents;i++){                       //nho hon 1 dung bien y
+							if(events[i]<1){
+							result=-1;
+							display(result);
+							return 0;
+							break;
+							}
+						if((events[i]>=1)&&(events[i]<=1000)){             //tu 1 den 1000 dung a
+							int d=(events[i]),s=(events[i+1]);
+							if((s>100)||(s==0)){
+							result=-1;
+							display(result);
+							return 0;
+							break;}
+							else{
+								//////bat dau phan assi 1 biet assi 1 chay ra dung pR
+								if ((hp < 1 || hp > 999)||(d < 1 || d > 1000)||(s < 1 || s > 100))
+								pR=-1;
+								else{
+								float P1 = 0;
+								float P2 = 0;
+							float f,g;                                      //kiem tra hp co la so nguyen to
+								int i,souoc;
+								souoc=0;
+								for (i=2;i<hp;i++){
+								if(hp%i == 0)
+								{
+								souoc=1;
+								break;                                  //break: ket thuc vong lap
+								}
+								}
+
+								if((souoc==0)&&(hp!=0)&&(hp!=1)){          // hp la so nguyen to
+								P1=1000;
+								P2=(hp+s)% 1000;}
+								else {                                            //hp khong la nguyen to
+								P1=hp;
+								P2=(hp+d)% 100;}
+								if (d<200){                                         // d nho hon 200
+								int sothunhat,sothuhai,tong;
+								sothunhat=sothuhai=tong=1;
+								while(tong<(d+s)){
+								sothunhat=sothuhai;
+								sothuhai=tong;
+								tong=sothunhat+sothuhai;}
+								if (((d+s)==tong)||((d+s)==0)){            /*d+s thuoc day fibonacci
+																		      nen day la vung trong cay tot */
+								if(s%6==0)
+								g=s/2;
+								if(s%6==1)
+								g=2*s;
+								if(s%6==2)
+								g=-(s%9)*(s%9)*(s%9)/5;
+								if(s%6==3)
+								g=-(s%30)*(s%30)+3*s;
+								if(s%6==4)
+								g=-s;
+								if(s%6==5){
+								float bien;
+								bien=((s%5)+5);
+								g=-((bien*(bien+1))/2);}
+								int phu1;
+								phu1 = (abs(d-500));
+								f=40-(phu1/20)+g;
+								f=40-float(abs(d-500))/20+float(g);}
+								else                                          //d+s khong thuoc day fibonacci
+								f=0;}
+								else
+								if(d>=200&&d<=800){                           //d tu 200 den 800
+								float xacsuatrancan;
+								 xacsuatrancan =(float(d)+float(P1)+float(P2))/1000;
+								if((d>=200)&&(d<=300)&&(xacsuatrancan>0.8))        //gia dinh bi ran can chet
+								pR=0;
+								else{                                                 // vung trong cay tot
+								if(s%6==0)
+								g=s/2;
+								if(s%6==1)
+								g=2*s;
+								if(s%6==2)
+								g=-(s%9)*(s%9)*(s%9)/5;
+								if(s%6==3)
+								g=-(s%30)*(s%30)+3*s;
+								if(s%6==4)
+								g=-s;
+								if(s%6==5){
+								float bien;
+								bien=((s%5)+5);
+								g=-((bien*(bien+1))/2);}
+								int phu1;
+								phu1 = (abs(d-500));
+									f=40-(phu1/20)+g;
+									f=40-float(abs(d-500))/20+float(g);}
+									}
+									else
+								f=(-(float(d*s))/1000);                                   // d lon hon 800
+									pR=((float(P1)+float(P2*f))/(1000+float(abs(P2*f))));
+									pR=round(pR*1000)/1000;                                //lam tron 3 chu so thap phan
+								if (pR<0) pR=0;
+									else if(pR>1) pR=1;}
+				                     //ket thuc assi 1
+							if(pR<0)hp=hp;
+							else{
+								if((pR>=0)&&(pR<=0.5))
+								hp=hp-200;
+							else hp=hp*2;}
+							}
+							i=i+1;
+						}
+						if((events[i]>1000)&&(events[i]<=6000)){                //tu 1000 den 6000
+										if((events[i]>1000)&&(events[i]<=2000))hp=hp-200;
+										if((events[i]>2000)&&(events[i]<=3000))hp=hp-300;
+										if((events[i]>3000)&&(events[i]<=4000))hp=hp+200;
+										if((events[i]>4000)&&(events[i]<=5000)){
+											if(events[i]!=4444)hp=hp+500;
+											else hp=999;}
+										if((events[i]>5000)&&(events[i]<=6000)){
+											if(events[i+1]==0){
+											result=-1;
+											display(result);
+											return 0;
+											break;
+											}
+											else{
+											if(events[i]>events[i+1])hp=hp*2;
+											else hp=hp-50;}
+											i=i+1;
+									         }}
+								if((events[i]>6000)&&(events[i]<9000)){    //tu 6000 den 9000
+									if((events[i+1]==0)||(events[i+2]==0)){      //khong ton tai e(i+1)hoac khong ton tai e(i+2)
+									result=-1;
+									display(result);
+									return 0;
+									break;}
+									else{                                    //ca hai e(i+1) va e(i+2) deu khac 0
+							if((events[i]<=(events[i+1]+events[i+2]))&&(events[i]<=events[i+1])){hp=1;        //chi gap cuop
+							i=i+3;}
+							if((events[i]>events[i+1])&&(events[i]>(events[i+1]+events[i+2]))){hp=hp+400;  //  chi gap robinson
+							i=i+2;}
+							if((events[i]>events[i+1])&&(events[i]<=(events[i+1]+events[i+2]))){hp=hp;    //gap ca 2
+							i=i+3;};
+							}
+								}
+								if((events[i]>=9000)&&(events[i]<9999)){           //tu 9000 den 9999
+								result=-1;
+								display(result);
+								return 0;
+								break;}
+								if(events[i]==9999){                                   //bang 9999
+								result=2;
+								display(result);
+								return 0;
+								break;}
+								if(events[i]>9999){                                     //lon 9999
+								result=-1;
+								display(result);
+								break;
+								}
+								if (hp<=0){result=0;display(result);return 0;break;}
+								if (hp>999)hp=999;
+						}
+		                if(hp>0)result=1;
+	}}
+
+	display(result);
+
+	return 0;
+}
+
+----------Testcase----------
+testcase 1:36 4897 1508 1793 2088
+testcase 2:196 2368 7065 1370
+testcase 3:28 1189 2806 5419 2230
+testcase 4:117 2820
+testcase 5:68 2984 8847
+testcase 6:438 1291 2900 1292
+testcase 7:20 5055 6071 8611
+testcase 8:4 1563 4822 3211 4793
+testcase 9:427 6502 8004 9636 1250
+testcase 10:720 6967 8838 9111 1306
+testcase 11:694 6074 6921 336 1428
+testcase 12:170 1253 4285 2002
+testcase 13:33 1380 5159 656
+testcase 14:216 2145
+testcase 15:303 2834 5978 8011 3709
+testcase 16:703 -38
+testcase 17:402 5356
+testcase 18:43 866 10069
+testcase 19:202 7147 2272
+testcase 20:238 9123
+testcase 21:779 7064
+testcase 22:70 7210
+testcase 23:792 863
+testcase 24:911 -64
+testcase 25:306 29 2097 9975 191
+testcase 26:855 3530 227
+testcase 27:976 3234 1604 6060 1849
+testcase 28:430 5032
+testcase 29:409 395 3949
+testcase 30:17 9997 124 1496 149
+testcase 31:919 3008
+testcase 32:609 8251 8543 6205 4808
+testcase 33:999 1927 7290 1124 2735
+testcase 34:640 2834
+testcase 35:882 3990 1009
+testcase 36:886 1193
+testcase 37:207 5556 7663 5311 5327
+testcase 38:161 8914 3147 5664 7097
+testcase 39:600 3402 6510 2405 8810
+testcase 40:345 3005 2394
+testcase 41:63 6145 812 7672
+testcase 42:469 6028 8302 8061
+testcase 43:793 7767 9616 3246
+testcase 44:849 2371
+testcase 45:426 3707 6467 9297 278
+testcase 46:620 2030 1860
+testcase 47:524 6989 3988 7331 3392
+testcase 48:571 8994 6393 9465
+testcase 49:741 1282
+testcase 50:244 7859 1930 9223
+testcase 51:380 2590 8816 470 4239 5215 7589 4811 8728 8510 1340 7067 6813 305 8410 9879 2464 8759 2593 5592 2320 8255 2602 7916 1704
+testcase 52:128 8686 1798 6712 5370 1424 6936 4574 3957 3593 1323 5907 3774 3244 8802 1313 7692 6342 4888 2776
+testcase 53:11 7985 214 6088 6029 3746 6073 5780 3686 4464 2568 1891 7864 5180 1838 4288 5679 4998 5347 3300 2609 3706
+testcase 54:511 3442 3736 7563 441 1301 4672 3398 7989 4088 8657 4606 4428 4458 4084 1761 8345 2196 4973
+testcase 55:990 8846 2822 3506 5837 1888 2470 7123 409 4439 2787 8385 8795 289 3933 7710 5431 9919
+testcase 56:750 2957 5928 2002 1143 7313 1063 8289 6156 5010 8676 8955 7515 2030 7408 9891 6412
+testcase 57:492 6708 9501 8053 8658 4531 5137 3527 4013 7442 106 9761
+testcase 58:691 1780 5475 314 8968 5071 5638 8086 3690 6246 3218 2185 8734 8420 8686 6015 7053 5646 8628 7786 7885
+testcase 59:911 8741 4155 7915 3508 1788 8899 6189 1140 2411 5944 5771 3906
+testcase 60:417 8461 8649 9428 5048 3569 5177 3342 6792 9267 6739 3550 3334 7643 3122 9892 5207 7106 7269 4416 9289
+testcase 61:458 7771 7872 679 7772 5008 8433 4483 3876 4290 6786 7598 9798
+testcase 62:777 2839 8096 1065 2544 8216 2585 560 21 8467 8786 7617 5927 4499 8476 7491 4483
+testcase 63:735 6680 1348 9830 6458 2965 6465 8736 2719 3904 2017 5559 4087 4841 4971 3157 7742 7935 9392 4134 6850 5848 1382 2473 3713 3532 6645 3663 1790 5641 3967 1007
+testcase 64:300 8098 4807 2440 4147 6890 3169 5187 7732 9815 3753 8455 559 3939 2016 5602 6335 7638 8737 1122 7582 107 5138 9106
+testcase 65:941 6731 6518 6053 2816 1905 3743 7684 8364 1649 6635 1214 3565 4037 6874 5754 7966 2881 2629 8839 5769 9944 3479 8486 28 4039 5447 6216 6742 5543 5239 5405 8522 1922 1713
+testcase 66:413 2583 8332 7063 8225 5233 9272 8761 3687 4097 7195 3586 3736 1519 8789 4577 2968
+testcase 67:318 5236 6735 8335 9140 3445 2373 8502 3085 6219 4499 6839 1193 4220 4626 7070 8190 4762 1794 8146 5431 1910 6101 4862 6837
+testcase 68:194 5292 7203 6108 8296 4261 5141 340 5054 7092 4504 4302 5795 9689 7977 1572 2563 2696 1262 7857 7855 2546 8690 4844 3154 7408 2336 1813 3366 8327 787 576 2324 7444 8517 5905 1074 4161 6674
+testcase 69:279 7350 6342 2131 8444 1902 6574 2887 3257 2167 4319 5973 8205 1211 4760 4558 667 7361 8267 7251 7506 3688 2112 8575 5185 7624 1279 5943 9453 5354 8109 9994 5573 2645 6896 2190 1141
+testcase 70:708 6000 7435 7620 4213 9180 7701 1086 2277 5011 2548 1108 8650 9591 3436 2322 192 4033
+testcase 71:267 7232 7651 8383 2462 5598 835 1421 5959 4053 242 3075 3461 9615 7316 3661 2565 7762 2037 7646 3055 2657 562 4913 6762 4342 1034 357 2755 7379 6035 4284 1884 1151 1453 1754 6136 7398 6535
+testcase 72:176 2429 8400 470 8450 4316 3844 1954 906 4335
+testcase 73:109 1088 1393 6228 8130 8599 7749 9962 583 5766 7362
+testcase 74:567 4525 6627 8134 7421 2882 612 5809 2126 7656 9380 745 3474 4819 3510 3627 7029 1368 6188 9347 8881 1557 7565 234 3916
+testcase 75:539 6143 5331 9224 6355 9394 8671 2308 7578 8666 3041 6023 7588 2069 4592 5197 3361 667 3236 9609 1354 1001 4387
+testcase 76:189 2405 1079 5111 867 5343 5683 199 1153 9894 9548 9392 3260 1708 5943 446 6421 1048 9729 4780 995 4829 1079 1147 6177 138 5457 1531 5469 7560 2648 5926 4766 3527 5924 488 5278 1405 1445 2420 691
+testcase 77:271 2567 746 453 6236 7189 1327 3959 3022 6344 5524 7132 5964 6548 3672 714 753 4861 8055 9383 2848 8727 1450 1569 4959 4805 6782 2011 9157 9125 9794
+testcase 78:783 1060 8017 9843 2778 5332 3116 3219 1218 1106 8187 8212 8127 7004 2729 3286 1182 8247 9381 9919 1672 8877 8328 9604 3925 7624 3432 7250 4210 5019
+testcase 79:786 7883 9280 4801 6106 4626 6665 3036 5591 1925 6630 6390 5217 7951 4705 6217 1817 6390 5251 8461 8609 3324 8674 4393 5758 2879 7266 6460 8323 7729 5833 6653 3057 5752
+testcase 80:355 3021 6492 2346 4653 9757 1138 2059 7646 6418 6876 3845 4107 630 3038 8019 1503 320 1684 8014 9328 4178 5681 468 1304 4123 3122 6445 6449 4096 5170
+testcase 81:299 972 7536 7415 6576 4121 4560 8392 9837 894 9126 1731 1851 119 2068
+testcase 82:473 8499 3115 847 478 1310 8744 5898 3877 3669 9619 7432 817 2837 6028 1006 3676 4916 3162 2636 4849 8902 2749
+testcase 83:114 9411 3335 641 9555 9326 9899 9785 7625 8115 9151 4736 897 3006 7002 6422 1901 1323 657 4842 1906 7047 9638 6693 3959 723 6151 927 9428 3406 8627 7854 8199 2745 4091 5336 6363 744
+testcase 84:96 687 5956 8819 3602 9452 1085 729 4954 450 9731 4461 8061 9161 777 8858 7748 2174 844 9136 1830 6738 7435 1776 4562 6159 5983 4618 3631 2597 1621 4722 2616 5970 7808 8888 6957 5164 9638
+testcase 85:741 128 3335 6092 7934 3321 6328 4028 4244 4682 510 7369 943 848 6938 385 8749
+testcase 86:150 7668 2374 3170 6818 23 5899 861 7443 3469 495 9206 2303 3336 7913 8815 9692 7141 1503 9033 6577 2241 2268 3534 2457 9347 7472 9858 2416 8768 5604 6738 8801 4768 1920 9249 8155 6613
+testcase 87:322 2130 923 2656 6859 7127 6909 6131 6257 3213 3417 6101 3418 432 3591 1882 8248 8441 6285 3722 5723 2893 8445 660 9095 9576 5178 5840 6035 3451 5216 6062 8312 3325 8608 9414 3513 9200 9814 9561
+testcase 88:252 488 7744 1333 1534 6285 2153 4332 3667 2465 9292 9954 5933 163 3268 8171 850 8248 7863 7495 672 1186 3165 7608 984 4154 1342 2212 1240 7107 664 5721 7725 8708 3235 5588 7442 44 2104 4722 8889
+testcase 89:133 9999
+testcase 90:133 999 9999
+testcase 91:133 9999 999
+testcase 92:133 5001 9999
+testcase 93:133 5001 9999 4444 1200 1200 1200 1200
+testcase 94:133 5001 9999 4444 1200 1200 1200 1200 1200
+testcase 95:990 8846 2822 3506 5837 1888 9999 7123 409 4439 2787 8385 8795 289 3933 7710 5431 9919
+testcase 96:941 6731 6518 6053 2816 1905 3743 7684 8364 1649 6635 1214 3565 4037 6874 5754 7966 2881 2629 8839 5769 9944 3479 8486 28 4039 5447 6216 6742 5543 5239 5405 8522 9999 1713
+testcase 97:271 9999 453 6236 7189 1327 3959 3022 6344 5524 7132 5964 6548 3672 714 753 4861 8055 9383 2848 8727 1450 1569 4959 4805 6782 2011 9157 9125 9794
+testcase 98:2 999 3000 9999 999
+testcase 99:2 9999 -1
+testcase 100:1 4444 2222
+----------Result----------
+testcase 1: PASSED
+testcase 2: PASSED
+testcase 3: PASSED
+testcase 4: FAILED
+testcase 5: PASSED
+testcase 6: PASSED
+testcase 7: FAILED
+testcase 8: PASSED
+testcase 9: FAILED
+testcase 10: FAILED
+testcase 11: FAILED
+testcase 12: PASSED
+testcase 13: PASSED
+testcase 14: FAILED
+testcase 15: FAILED
+testcase 16: PASSED
+testcase 17: PASSED
+testcase 18: PASSED
+testcase 19: PASSED
+testcase 20: PASSED
+testcase 21: PASSED
+testcase 22: PASSED
+testcase 23: PASSED
+testcase 24: PASSED
+testcase 25: PASSED
+testcase 26: PASSED
+testcase 27: PASSED
+testcase 28: PASSED
+testcase 29: PASSED
+testcase 30: PASSED
+testcase 31: FAILED
+testcase 32: PASSED
+testcase 33: PASSED
+testcase 34: FAILED
+testcase 35: PASSED
+testcase 36: FAILED
+testcase 37: PASSED
+testcase 38: FAILED
+testcase 39: PASSED
+testcase 40: PASSED
+testcase 41: PASSED
+testcase 42: PASSED
+testcase 43: PASSED
+testcase 44: FAILED
+testcase 45: PASSED
+testcase 46: PASSED
+testcase 47: PASSED
+testcase 48: PASSED
+testcase 49: FAILED
+testcase 50: PASSED
+testcase 51: FAILED
+testcase 52: PASSED
+testcase 53: PASSED
+testcase 54: PASSED
+testcase 55: FAILED
+testcase 56: PASSED
+testcase 57: PASSED
+testcase 58: FAILED
+testcase 59: PASSED
+testcase 60: FAILED
+testcase 61: PASSED
+testcase 62: FAILED
+testcase 63: PASSED
+testcase 64: FAILED
+testcase 65: PASSED
+testcase 66: FAILED
+testcase 67: FAILED
+testcase 68: FAILED
+testcase 69: FAILED
+testcase 70: FAILED
+testcase 71: PASSED
+testcase 72: PASSED
+testcase 73: PASSED
+testcase 74: FAILED
+testcase 75: FAILED
+testcase 76: PASSED
+testcase 77: PASSED
+testcase 78: PASSED
+testcase 79: FAILED
+testcase 80: PASSED
+testcase 81: PASSED
+testcase 82: PASSED
+testcase 83: PASSED
+testcase 84: PASSED
+testcase 85: PASSED
+testcase 86: PASSED
+testcase 87: PASSED
+testcase 88: PASSED
+testcase 89: FAILED
+testcase 90: PASSED
+testcase 91: PASSED
+testcase 92: FAILED
+testcase 93: FAILED
+testcase 94: FAILED
+testcase 95: PASSED
+testcase 96: FAILED
+testcase 97: PASSED
+testcase 98: PASSED
+testcase 99: PASSED
+testcase 100: PASSED
+
+Total: 68/100
