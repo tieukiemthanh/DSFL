@@ -1,11 +1,37 @@
-float abs(float a)
+float getPR(int hp, int d, int s)
 {
-	if ((a > 123))
+	int P1 = 0;
+	int P2 = 0;
+	float pR = -1;
+	if (((hp < 1) || (hp > 999)))
+		return pR;
+	if (((d < 1) || (d > 1000)))
+		return pR;
+	if (((s < 1) || (s > 100)))
+		return pR;
+	int fibonacci = 0;
+	int f1 = 0;
+	int f2 = 1;
+	int f = (f1 + f2);
+	f1 = f2;
+	f2 = f;
+	while ((f < (d + s)))
 	{
-		return a;
+		f = f1 + f2;
+		f1 = f2;
+		f2 = f;
+	}
+	if ((f == (d + s)))
+		fibonacci = 1;
+	if ((songuyento == true))
+	{
+		P1 = 1000;
+		P2 = (hp + s) % 1000;
 	}
 	else
 	{
-		return -a;
+		P1 = hp;
+		P2 = (hp + d) % 100;
 	}
+	return pR;
 }

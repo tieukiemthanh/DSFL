@@ -11,25 +11,86 @@ potDep = null
 
 Node 1:
 StatementID = 1
-StatementTYPE = CONDITION
-dataDep = 
-	{Node 0 (lineID=0),     a}
+StatementTYPE = ASSIGN
+Assigned Variable = P1
+dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 2:
 StatementID = 2
-StatementTYPE = RETURN
-dataDep = 
-	{Node 0 (lineID=0),     a}
-conDep = {Node 1 (lineID=1),     true}
+StatementTYPE = ASSIGN
+Assigned Variable = P2
+dataDep = null
+conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 3:
 StatementID = 3
+StatementTYPE = ASSIGN
+Assigned Variable = pR
+dataDep = null
+conDep = {Node 0 (lineID=0),     true}
+potDep = null
+
+Node 4:
+StatementID = 4
+StatementTYPE = ASSIGN
+Assigned Variable = songuyento
+dataDep = null
+conDep = {Node 0 (lineID=0),     true}
+potDep = null
+
+Node 5:
+StatementID = 5
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 4 (lineID=4),     songuyento}
+conDep = {Node 0 (lineID=0),     true}
+potDep = null
+
+Node 6:
+StatementID = 6
+StatementTYPE = ASSIGN
+Assigned Variable = P1
+dataDep = null
+conDep = {Node 5 (lineID=5),     true}
+potDep = null
+
+Node 7:
+StatementID = 7
+StatementTYPE = ASSIGN
+Assigned Variable = P2
+dataDep = 
+	{Node 0 (lineID=0),     hp}
+	{Node 0 (lineID=0),     s}
+conDep = {Node 5 (lineID=5),     true}
+potDep = null
+
+Node 8:
+StatementID = 8
+StatementTYPE = ASSIGN
+Assigned Variable = P1
+dataDep = 
+	{Node 0 (lineID=0),     hp}
+conDep = {Node 5 (lineID=5),     false}
+potDep = null
+
+Node 9:
+StatementID = 9
+StatementTYPE = ASSIGN
+Assigned Variable = P2
+dataDep = 
+	{Node 0 (lineID=0),     hp}
+	{Node 0 (lineID=0),     d}
+conDep = {Node 5 (lineID=5),     false}
+potDep = null
+
+Node 10:
+StatementID = 10
 StatementTYPE = RETURN
 dataDep = 
-	{Node 0 (lineID=0),     a}
-conDep = {Node 1 (lineID=1),     false}
+	{Node 3 (lineID=3),     pR}
+conDep = {Node 0 (lineID=0),     true}
 potDep = null
 

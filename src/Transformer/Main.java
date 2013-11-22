@@ -355,6 +355,7 @@ public class Main {
 			//in ra cay AST thong thuong
 			Visitor walkerPrint = new AstPrinterVisitor("ast.txt");
 			temp.visit(walkerPrint, false);
+			//tree.visit(walkerPrint, false);
 			
 			return temp;
 		} catch (Exception e) {
@@ -655,11 +656,15 @@ public class Main {
 			// tao cay AST cho chuong trinh can kiem tra
 			//co the lay numLine tu day
 			AST labelTree = getLabelTree(getTree(args[0]));
-			
+		
 			//trinhgiang-21/10/2013
 			//Standardize source
 			Visitor walkerC = new PrettyOutputVisitor(standardSourceFile, false);
 			labelTree.visit(walkerC, "no_output_line");
+				
+			int debug = 1;
+			if(debug == 1)
+				return;
 				
 			//in ra mapping table
 			Ast2MappingTableVisitor ast2Table = new Ast2MappingTableVisitor();
@@ -684,9 +689,6 @@ public class Main {
 			//System.out.println(mapTable.toString());
 			writeToFile(mappingTableFile, mapTable.toString());
 			
-			int debug = 0;
-			if(debug == 1)
-				return;
 				
 			//in ra program dependence graph
 			String PDGFilename = "output_graph.txt";
