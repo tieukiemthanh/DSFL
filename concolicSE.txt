@@ -1,5 +1,4 @@
 Begin test cases.
-282;11;94
-404;70;25
-432;77;48
+0
+100
 End test cases.
