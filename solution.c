@@ -8,7 +8,7 @@ float getPR(int hp, int d, int s) {
 	if (d < 1 || d > 1000) return pR;
 	if (s < 1 || s > 100) return pR;
 	
-	int songuyento = 0;
+	int songuyento = isPrime(hp);
 	int fibonaci = 0;
 	
 	if (songuyento == 1) {

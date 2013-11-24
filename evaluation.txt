@@ -1,6 +1,6 @@
 Tarantula technique
-Min percent: 0.0
-Max percent: 0.42
+Min percent: 0.035714287
+Max percent: 0.42857143
 Tarantula technique with dynamic slicing
-Min percent: 0.0
-Max percent: 0.22
+Min percent: 0.017857144
+Max percent: 0.19642857

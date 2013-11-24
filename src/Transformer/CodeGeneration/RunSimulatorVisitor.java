@@ -74,6 +74,68 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	// continue statement apply on while, for statement
 	static int scopeContinue = 0;
 	
+	public static int isPrime(int n) {
+		int  flag = 1;
+		int songuyento = 0;
+		if (n == 0 || n == 1)
+			flag = 1;
+		for(int i = 2; i < n; i++) {
+			if (n % i == 0)
+				flag = 0;
+		}
+		if (flag == 1 || n == 2)
+			songuyento = 1;
+		return songuyento;
+	}
+	
+	public static int isFibonaci(int n) {
+		int fibonaci = 0;
+	    int f = 0;
+		int	f1 = 0;
+		int f2 = 1;
+		do {
+			f = f1 + f2;
+			f1 = f2;
+			f2 = f;
+		}
+		while (f < n);
+		if (f == n)
+			fibonaci = 1;
+		return fibonaci;
+	}
+	
+	public static int intMax(int a, int b) {
+		if( a > b) return a;
+		else return b;
+	}
+	public static float floatMax(float a, float b) {
+		if( a > b) return a;
+		else return b;
+	}
+	public static int intMin(int a, int b) {
+		if( a > b) return b;
+		else return a;
+	}
+	public static float floatMin(float a, float b) {
+		if( a > b) return b;
+		else return a;
+	}
+	
+	public static int intPow(int a, int n) {
+		int ret = 1;
+		for(int i = 0; i < n; i++) {
+			ret = ret * a;
+		}
+		return ret;
+	}
+	public static float floatPow(float a, int n) {
+		float ret = 1.0f;
+		for(int i = 0; i < n; i++) {
+			ret = ret * a;
+		}
+		return ret;
+	}
+	
 	public RunSimulatorVisitor(String outputFile, boolean debug) throws CompilationException {
 	
 	}
@@ -309,27 +371,90 @@ public class RunSimulatorVisitor extends DoNothingVisitor {
 	// CallExprAST
 	public Object visitCallExprAST(CallExprAST ast, Object o) throws CompilationException
     {
-		if(ast.name.getText().equals("abs")) {
+		String callName = ast.name.getText();
+		if(callName.equals("abs")) {
+			//--------------ham gia tri tuyet doi-----------------------
 			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
 			if(e instanceof Integer) {
+				//System.out.println("Goi ham abs int");
 				return (Integer)Math.abs(((Integer)e).intValue());
 			} else if(e instanceof Float) {
 				//System.out.println("Goi ham abs float");
 				return (Float)Math.abs(((Float)e).floatValue());
 			}
-		} else if(ast.name.getText().equals("round")) {
+		} else if(callName.equals("round")) {
+			//--------------ham tinh so nguyen gan nhat-----------------
 			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
 			if(e instanceof Integer) {
+				//System.out.println("Goi ham round int");
 				return (Integer)e;
 			} else if(e instanceof Float) {
+				//System.out.println("Goi ham round float");
 				return (Integer)Math.round(((Float)e).floatValue());
 			}
-		} else if(ast.name.getText().equals("sqrt")) {
+		} else if(callName.equals("sqrt")) {
+			//----------------ham tinh can bac 2--------------------
 			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
 			if(e instanceof Integer) {
+				//System.out.println("Goi ham sqrt int");
 				return new Float((float)Math.sqrt((double)((Integer)e).intValue()));
 			} else if(e instanceof Float) {
+				//System.out.println("Goi ham sqrt float");
 				return new Float((float)Math.sqrt((double)((Float)e).floatValue()));
+			}
+		} else if(callName.equals("isPrime")) {
+			//----------------ham kiem tra so nguyen to-----------------
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				return new Integer(isPrime(((Integer)e).intValue()));
+			}
+		} else if(callName.equals("isFibonaci")) {
+			//----------------ham kiem tra so fibonaci------------------
+			Object e = ((ExprAST)((ExprListAST)ast.e).e).visit(this, null);
+			if(e instanceof Integer) {
+				return new Integer(isFibonaci(((Integer)e).intValue()));
+			}
+		} else if(callName.equals("max")) {
+			//---------------ham tim max cua hai so---------------------
+			ExprListAST listParam = (ExprListAST)ast.e;
+			Object e1 = (ExprAST)(listParam.e).visit(this, null);
+			Object e2 = (ExprAST)(((ExprListAST)(listParam.l)).e).visit(this, null);
+			if(e1 instanceof Integer && e2 instanceof Integer) {
+				int i1 = ((Integer)e1).intValue();
+				int i2 = ((Integer)e2).intValue();
+				return new Integer(intMax(i1, i2));
+			} else if(e1 instanceof Float && e1 instanceof Float) {
+				float i1 = ((Float)e1).floatValue();
+				float i2 = ((Float)e2).floatValue();
+				return new Float(floatMax(i1, i2));
+			}
+		} else if(callName.equals("min")) {
+			//---------------ham tim min cua hai so---------------------
+			ExprListAST listParam = (ExprListAST)ast.e;
+			Object e1 = (ExprAST)(listParam.e).visit(this, null);
+			Object e2 = (ExprAST)(((ExprListAST)(listParam.l)).e).visit(this, null);
+			if(e1 instanceof Integer && e2 instanceof Integer) {
+				int i1 = ((Integer)e1).intValue();
+				int i2 = ((Integer)e2).intValue();
+				return new Integer(intMin(i1, i2));
+			} else if(e1 instanceof Float && e1 instanceof Float) {
+				float i1 = ((Float)e1).floatValue();
+				float i2 = ((Float)e2).floatValue();
+				return new Float(floatMin(i1, i2));
+			}
+		} else if(callName.equals("pow")) {
+			//---------------ham tim a mu n---------------------
+			ExprListAST listParam = (ExprListAST)ast.e;
+			Object e1 = (ExprAST)(listParam.e).visit(this, null);
+			Object e2 = (ExprAST)(((ExprListAST)(listParam.l)).e).visit(this, null);
+			if(e1 instanceof Integer && e2 instanceof Integer) {
+				int i1 = ((Integer)e1).intValue();
+				int i2 = ((Integer)e2).intValue();
+				return new Integer(intPow(i1, i2));
+			} else if(e1 instanceof Float && e1 instanceof Integer) {
+				float i1 = ((Float)e1).floatValue();
+				int i2 = ((Float)e2).intValue();
+				return new Float(floatPow(i1, i2));
 			}
 		}
         return null;
