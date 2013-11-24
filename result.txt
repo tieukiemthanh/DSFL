@@ -1,7 +1,0 @@
-Compare time:
-***********************
-
-Compare percent:
-***********************
-Concolic and Symblic Execution:
-***********************
