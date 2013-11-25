@@ -22,7 +22,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 1;
+	static int failLine = 14;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -36,6 +36,7 @@ public class Main {
 	static PrintWriter writerFLSlice;
 	static PrintWriter writerAllPaths;
 	static PrintWriter writerTestCasesAndPath;
+	static PrintWriter writerStatistic;
 	
 	// class cho biet % cau lenh can phan tich cho den
 	// khi gap cau lenh sai
@@ -653,10 +654,16 @@ public class Main {
 			//file chua tap testcases da dung
 			writerTestCasesAndPath = new PrintWriter("testcasesandpath.txt", "UTF-8");
 			
+			// thong tin thong ke
+			writerStatistic = new PrintWriter("statistic.txt", "UTF-8");
+			
 			// tao cay AST cho chuong trinh can kiem tra
-			//co the lay numLine tu day
+			// co the lay numLine tu day
+			long t1 = System.currentTimeMillis();
 			AST labelTree = getLabelTree(getTree(args[0]));
-		
+			AST solutionTree = getTree("solution.c");
+			long t2 = System.currentTimeMillis();
+			
 			//trinhgiang-21/10/2013
 			//Standardize source
 			Visitor walkerC = new PrettyOutputVisitor(standardSourceFile, false);
@@ -755,8 +762,6 @@ public class Main {
 			writer.println("Compare percent:");
 			writer.println("***********************");
 
-			AST solutionTree = getTree("solution.c");
-
 			// doc test cases sinh ra do tung option va phan tich
 			// chi chay 1 lan
 			// day la qua trinh dynamic analyst nen khong dung tat ca cac paths 
@@ -770,14 +775,17 @@ public class Main {
 				//writerFL.println("***********************");
 			}
 			
-			System.out.println("Data slice");
+			long t3 = System.currentTimeMillis();
+			writerStatistic.println(numLine + "\t\t" + (t2 - t1)/2 + "\t\t" + (t3 - t2));
+			
+			System.out.println("Relevant slice");
 			System.out.println(sliceProg.toString());	
 			writer.close();
 			writerFL.close();
 			writerFLSlice.close();
 			writerAllPaths.close();
 			writerTestCasesAndPath.close();
-			
+			writerStatistic.close();
 			/*
 			for (int i = 1; i < 2; i++) {
 				calcTime(i, labelTree, paths);
