@@ -3,6 +3,7 @@ package Transformer;
 import java.io.*;
 import java.util.*;
 import org.antlr.runtime.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
 
 import Transformer.Parser.*;
 import Transformer.ASTs.*;
@@ -22,7 +23,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 1;
+	static int failLine = 14;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -328,6 +329,7 @@ public class Main {
 			// System.out.println("\nCreate AST again from file: " + sourceFilename);
 			// using ANTLR library again to lexer and parser the standard code
 			CPPParser parser = new CPPParser(new CommonTokenStream(new CPPLexer(new ANTLRReaderStream(new BufferedReader(new FileReader(sourceFilename))))));
+			//parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 			// create AST Tree from standard code
 			AST studentTree = parser.parse();
 			
@@ -556,7 +558,7 @@ public class Main {
 					String studentResult = (String) labelTree.visit(walker2, testcase);
 					//simulator ket qua cua solution
 					String solutionResult = (String) solutionTree.visit(walker2, testcase);
-
+					
 					//in testcase va path thuc thi tuong ung ra file testcaseandpath.txt
 					//writerTestCasesAndPath.println(testcase);
 					//mapping statement to line code

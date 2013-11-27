@@ -16,12 +16,23 @@ class Var {
 	public Var(String name, String type, String value) {
 		this.name = name;
 		this.type = type;
-		this.value = value;
+		
+		if(value.contains(".")) {
+			this.value = String.format("%.6f", (new Float(value)).floatValue());
+		}
+		else { 
+			this.value = value;
+		}
 	}
 	public Var(String name, String type, String value, String arrayEleType) {
 		this.name = name;
 		this.type = type;
-		this.value = value;
+		if(value.contains(".")) {
+			this.value = String.format("%.6f", (new Float(value)).floatValue());
+		}
+		else { 
+			this.value = value;
+		}
 		this.arrayEleType = arrayEleType;
 	}
 	
@@ -34,7 +45,12 @@ class Var {
 	}
 	
 	public String getValue() {
-		return value;
+		if(value.contains(".")) {
+			return String.format("%.6f", (new Float(value)).floatValue());
+		}
+		else { 
+			return value;
+		}
 	}
 	
 	public String getEleType() {
@@ -42,17 +58,34 @@ class Var {
 	}
 	
 	public void setValue(String value) {
-		this.value = value;
+		
+		if(value.contains(".")) {
+			this.value = String.format("%.6f", (new Float(value)).floatValue());
+		}
+		else { 
+			this.value = value;
+		}
 	}
 	
 	public String getArrayValue(int index) {
 		String[] arrayValue = this.value.split("!");
-		return arrayValue[index];
+		if(arrayValue[index].contains(".")) {
+			return String.format("%.6f", (new Float(arrayValue[index])).floatValue());
+		}
+		else { 
+			return arrayValue[index];
+		}
 	}
 	
 	public void setArrayValue(int index, String value) {
 		String[] arrayValue = this.value.split("!");
-		arrayValue[index] = value;
+		if(value.contains(".")) {
+			arrayValue[index] = String.format("%.6f", (new Float(value)).floatValue());
+		}
+		else { 
+			arrayValue[index] = value;
+		}
+		
 		
 		this.value = "";
 		for (int i = 0; i < arrayValue.length; i++) {
