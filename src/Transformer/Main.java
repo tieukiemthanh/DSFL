@@ -22,11 +22,17 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 14;
+	static int failLine = 1;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
 	
+	static float mintPercent = 1.0f; // min % cua pp tarantula
+	static float mintPercentSlice = 1.0f; // min % cua pp tarantula with dynamic slicing
+
+	static float maxtPercent = 1.0f; // max % cua pp tarantuala
+	static float maxtPercentSlice = 1.0f; // max % cua pp tarantuala with dynamic slicing
+			
 	static String standardSourceFile = "standard_output_student.txt";
 	static String mappingTableFile = "mapping_statement2line.txt";
 	
@@ -36,7 +42,7 @@ public class Main {
 	static PrintWriter writerFLSlice;
 	static PrintWriter writerAllPaths;
 	static PrintWriter writerTestCasesAndPath;
-	static PrintWriter writerStatistic;
+	//static PrintWriter writerStatistic;
 	
 	// class cho biet % cau lenh can phan tich cho den
 	// khi gap cau lenh sai
@@ -431,12 +437,6 @@ public class Main {
 	// duoc de dang, khong co vai tro gi trong thi nghiem
 	public static void readTestCases(int index, AST labelTree, AST solutionTree, PDG graph) {
 		try {
-			float mintPercent = 0.0f; // min % cua pp tarantula
-			float mintPercentSlice = 0.0f; // min % cua pp tarantula with dynamic slicing
-
-			float maxtPercent = 0.0f; // max % cua pp tarantuala
-			float maxtPercentSlice = 0.0f; // max % cua pp tarantuala with dynamic slicing
-	
 			float[] tarantulaScores = new float[numLine];
 			float[] tarantulaScoresSlice = new float[numLine];
 			float[] ochiaiScores = new float[numLine];
@@ -613,14 +613,7 @@ public class Main {
 			for(int j = 1; j < numLine; j++)
 				writerFLSlice.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
 			
-			// write evaluation result to file
-			String eval = "Tarantula technique\n";
-			eval += "Min percent: " + mintPercent + "\n";
-			eval += "Max percent: " + maxtPercent + "\n";
-			eval += "Tarantula technique with dynamic slicing\n";
-			eval += "Min percent: " + mintPercentSlice + "\n";
-			eval += "Max percent: " + maxtPercentSlice + "\n";
-			writeToFile("evaluation.txt", eval);
+			//writeToFile("evaluation.txt", eval);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -655,7 +648,7 @@ public class Main {
 			writerTestCasesAndPath = new PrintWriter("testcasesandpath.txt", "UTF-8");
 			
 			// thong tin thong ke
-			writerStatistic = new PrintWriter("statistic.txt", "UTF-8");
+			//writerStatistic = new PrintWriter("statistic.txt", "UTF-8");
 			
 			// tao cay AST cho chuong trinh can kiem tra
 			// co the lay numLine tu day
@@ -776,7 +769,15 @@ public class Main {
 			}
 			
 			long t3 = System.currentTimeMillis();
-			writerStatistic.println(numLine + "\t\t" + (t2 - t1)/2 + "\t\t" + (t3 - t2));
+			
+			// in thong tin thong ke
+			FileWriter fstream = new FileWriter("statistic.txt", true);
+			BufferedWriter out = new BufferedWriter(fstream);
+			String timeSt = (t2 - t1)/2 + "\t\t\t\t" + (t3 - t2);
+			String tarantulaSt = String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
+			String sliceSt = String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
+			out.write(numLine + "\t\t\t" + timeSt + "\t\t\t\t\t" + tarantulaSt + "\t\t" + sliceSt +"\n");
+			out.close();
 			
 			System.out.println("Relevant slice");
 			System.out.println(sliceProg.toString());	
@@ -785,7 +786,7 @@ public class Main {
 			writerFLSlice.close();
 			writerAllPaths.close();
 			writerTestCasesAndPath.close();
-			writerStatistic.close();
+			//writerStatistic.close();
 			/*
 			for (int i = 1; i < 2; i++) {
 				calcTime(i, labelTree, paths);

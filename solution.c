@@ -2,14 +2,13 @@ float getPR(int hp, int d, int s) {
 	int P1 = 0;
 	int P2 = 0;
 	float pR = -1;
-
 	
 	if (hp < 1 || hp > 999) return pR;
 	if (d < 1 || d > 1000) return pR;
 	if (s < 1 || s > 100) return pR;
 	
 	int songuyento = isPrime(hp);
-	int fibonaci = 0;
+	int fibonaci = isFibonaci(d+s);
 	
 	if (songuyento == 1) {
 		P1 = 1000;
@@ -25,8 +24,8 @@ float getPR(int hp, int d, int s) {
 	if (s % 6 == 0) ham_g = s / 2.0;
 	else if (s % 6 == 1) ham_g = 2 * s;
 	else if (s % 6 == 2) ham_g = - (s % 9) * (s % 9) * (s % 9) / 5.0;
-	else if (s % 6 == 3) ham_g = - (s % 30)*(s % 30) + 3 * s;
-	else if (s % 6 == 4) ham_g = -s;
+	else if (s % 6 == 3) ham_g = - (s % 30)*(s % 30) + 3.0 * s;
+	else if (s % 6 == 4) ham_g = -s + 0.0;
 	else {
 		n = s % 5 + 5;
 		ham_g = - (n + 1) * n / 2.0;

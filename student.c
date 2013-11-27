@@ -1,71 +1,78 @@
 float getPR(int hp, int d, int s) {
-	int P1 = 0;
-	int P2 = 0;
+	int p1 = 0;
+	int p2 = 0;
 	float pR = -1;
-	float fds = 0;
+
+	if (hp < 1 || hp > 999) return pR;
+	if (d < 1 || d > 1000) return pR;
+	if (s < 1 || s > 100) return pR;
 	
 	int songuyento = isPrime(hp);
-	int xet = 0;
-	if(songuyento == 0) {
-		P1 = hp;
-		P2 = (hp + d)%100;
+	int fibonaci = isFibonaci(d+s);
+	
+	if(songuyento == 1)
+	{
+		p1 = 1000; 
+		p2 = (hp+s)%1000;
 	}
-	else {
-		P1 = 1000;
-		P2 = (hp+s)%1000;
+	else
+	{
+		p1 = hp;   
+		p2 = (hp+d)%100;
+	}
+	
+	int k = 0;
+	int g = 0; 
+	int z = 0;
+	int t = 0;
+    if(s % 6 == 0)
+    {
+		g = s/2;
+    }
+	else if(s % 6 == 1)
+    {
+	    g = 2*s;
+    }
+	else if(s % 6 == 2)
+	{
+		z =  s % 9;
+        g = -z*z*z/5;
+	}
+	else if(s % 6 == 3)
+	{
+		t = s % 30;
+		g = 3*s - t*t;
+	}
+	else if(s % 6 == 4)
+	{
+		g = -s;
+	}
+	else if(s % 6 == 5)
+	{
+		k = s%5 +5 ;
+		g = -k*(k+1)/2;
 	}
 
-	// truong hop a 
-	if(d < 200 && xet == 0) 
+	float f = 0;
+	if((d < 200 && fibonaci == 1)||( d > 200 && d < 800))
 	{
-		fds = 0;
-		pR = (P1 + 0.0)/1000;
+		f = 40 - abs(d-500.0)/20 + g;
 	}
-	// truong hop b 
-	if(d>=200 && d<800 || xet == 1) 
+	else if(d < 200 && fibonaci == 0)
 	{
-		float gs = 0;
-		if(s%6==0) 
-			gs = s/2;
-		if(s%6==1) 
-			gs = 2*s;
-		if(s%6==2) 
-			gs = 0 - (s%9)*(s%9)*(s%9)/5;
-		if(s%6==3)
-			gs = 0 - (s%30)*(s%30) + 3*s;
-		if(s%6==4) 
-			gs = 0 - s;
-		if(s%6==5) 
-		{
-			int c = (s%5) + 5;
-			gs = 0 - c*(c+1)/2;
-		}
-		fds = 40 - ((abs(d-500)))/20 + gs;
-		pR = (P1 + P2*fds)/(1000 + abs(P2*fds)) ;
+		f = 0;
 	}
-	if(d>200 && d <300) 
+	else if(d > 800)
 	{
-		float e = (d+P1+P2)/1000;
-		if(e > 0.8) 
-			pR = 0;
+		f = -d*s/1000; //cau lenh sai
 	}
-	if(d>=800) 
+
+	if((d > 200 && d < 300) && (p1 + p2 +d)/1000 > 0.8)
 	{
-		fds = 0 - (d*s)/1000;
-		pR = (P1 + P2*fds)/(1000 + abs(P2*fds)) ;
-	}
-	pR = round(pR*1000)/1000;
-	
-	if(pR<0) 
 		pR = 0;
-	if(pR>1) 
-		pR = 1;
-	if(hp<1 || hp>999) 
-		pR = -1;
-	if(d<1 || d>1000) 
-		pR = -1;
-	if(s<1 || s>100) 
-		pR = -1;
-		
+	}
+	else {
+		pR = (p1 + p2*f)/(1000 + abs(p2*f));
+	}
 	return pR;
 }
