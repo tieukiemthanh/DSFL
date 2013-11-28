@@ -23,7 +23,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 1;
+	static int failLine = 14;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -448,15 +448,23 @@ public class Main {
 			int totalFail = 0; // tong so test case sai
 
 			int step = 0;
-
+			
+			// dung cho tarantula
 			int[] pass = new int[numLine]; // so test case dung ung voi tung cau lenh
 			int[] fail = new int[numLine]; // so test case sai ung voi tung cau lenh
+			
+			// dung cho slicing
 			ArrayList<Integer>[] passSlice = (ArrayList<Integer>[])new ArrayList[numLine];
 			ArrayList<Integer>[] failSlice = (ArrayList<Integer>[])new ArrayList[numLine];
 			for(int i = 0; i < numLine; i++) {
 				passSlice[i] = new ArrayList<Integer>();
 				failSlice[i] = new ArrayList<Integer>();
 			}
+			
+			// thong ke moi path execution cua moi test case
+			ArrayList<ArrayList<Integer>> testCasePath = new ArrayList<ArrayList<Integer>>();
+			
+			// xac dinh tinh dung sai cua 1 test case
 			ArrayList<Integer> pTestcase = new ArrayList<Integer>();
 			
 			Visitor walker1 = new GetPathVisitor("", false);
@@ -479,20 +487,25 @@ public class Main {
 				}
 				// ket thuc test case, danh gia chat luong cua bo test case nay
 				else if (testcase.contains("End test cases.")) {
-					int nSizeSlice = sliceProg.getSize();
-					int[] sumFreq = new int[nTestcase];
-					for(int k = 0; k < nTestcase; k++) {
-						sumFreq[k] = 0;
-					}
-					// tinh tuan suat cua moi cau lenh
-					int[][] freqSlice = new int[numLine][nTestcase];
+					//int nSizeSlice = sliceProg.getSize();
+					//int[] sumFreq = new int[nTestcase];
+					//for(int k = 0; k < nTestcase; k++) {
+						//sumFreq[k] = 0;
+					//}
+					
+					// tinh tan suat cua moi cau lenh
+					float[][] freqSlice = new float[numLine][nTestcase];
 					for(int j = 0; j < nTestcase; j++) {
 						for(int i = 1; i < numLine; i++) {
 							if(sliceProg.contains(i)) {
-								if(passSlice[i].contains(j+1) || failSlice[i].contains(j+1)) {
-									freqSlice[i][j] = 1;
-									sumFreq[j]++;
-								}
+								//if(passSlice[i].contains(j+1) || failSlice[i].contains(j+1)) {
+									//freqSlice[i][j] = 1;
+									//sumFreq[j]++;
+								//}
+								ArrayList<Integer> temp = testCasePath.get(j);
+								int tempSize = temp.size();
+								int k = Collections.frequency(temp, i); // chu y tinh dung dan
+								freqSlice[i][j] = (float)k /tempSize;
 							}
 							else {
 								freqSlice[i][j] = 0;
@@ -503,11 +516,20 @@ public class Main {
 					// tinh toan lai pass and fail
 					float[] newPass = new float[numLine];
 					float[] newFail = new float[numLine];
+					
+					// tinh tong moi hang cua freq
+					float[] sumColFreq = new float[nTestcase];
+					for(int j = 0; j < nTestcase; j++) {
+						float sum = 0;
+						for(int i = 1; i < numLine; i++)
+							sum = sum + freqSlice[i][j];
+						sumColFreq[j] = sum;
+					}
 					// tinh new pass with slicing metric
 					for(int i = 1; i < numLine; i++) {
 						float TSPass = 0.0f;
 						for(int j = 0; j < nTestcase; j++) {
-							TSPass += (float)((1 - pTestcase.get(j))*freqSlice[i][j])/(sumFreq[j]);
+							TSPass += (float)((1 - pTestcase.get(j))*freqSlice[i][j])/(sumColFreq[j]);
 						}
 						if(totalPass == 0) newPass[i] = 0; 
 						else {
@@ -518,7 +540,7 @@ public class Main {
 					for(int i = 1; i < numLine; i++) {
 						float TSFail = 0.0f;
 						for(int j = 0; j < nTestcase; j++) {
-							TSFail += (pTestcase.get(j)*freqSlice[i][j])/(float)(sumFreq[j]);
+							TSFail += (pTestcase.get(j)*freqSlice[i][j])/(float)(sumColFreq[j]);
 						}
 						if(totalFail == 0) newFail[i] = 0; 
 						else {
@@ -554,6 +576,9 @@ public class Main {
 						pathArrayList.add(Integer.parseInt(p));
 					}
 					
+					// cap nhap vao path execution cua test case
+					testCasePath.add(pathArrayList);
+					
 					//simulator ket qua cua sinh vien
 					String studentResult = (String) labelTree.visit(walker2, testcase);
 					//simulator ket qua cua solution
@@ -575,12 +600,12 @@ public class Main {
 					if (studentResult.equals(solutionResult)) {
 						writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalPass++; // tang tong so test case pass
-						pTestcase.add(0);
+						pTestcase.add(0); // test case passed
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
 								pass[i]++; // tang gia tri pass cho cac cau lenh
 										   // tren duong thuc thi
-								passSlice[i].add(nTestcase);
+								//passSlice[i].add(nTestcase);
 							}
 						}
 					}
@@ -588,7 +613,7 @@ public class Main {
 					else {
 						writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalFail++; // tang tong so test case fail
-						pTestcase.add(1);
+						pTestcase.add(1); // test case failed
 						// chi xay dung slice cho nhung test cases fail
 						//Slice sData = getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
 						//sliceProg.addSlice(sData);
@@ -598,11 +623,10 @@ public class Main {
 							if (pathArrayList.contains(i)) {
 								fail[i]++; // tang gia tri fail cho cac cau lenh
 										   // tren duong thuc thi
-								failSlice[i].add(nTestcase);
+								//failSlice[i].add(nTestcase);
 							}
 						}
 					}
-					
 				}
 				testcase = br.readLine();
 			}
@@ -778,7 +802,7 @@ public class Main {
 			String timeSt = (t2 - t1)/2 + "\t\t\t\t" + (t3 - t2);
 			String tarantulaSt = String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
 			String sliceSt = String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
-			out.write(numLine + "\t\t\t" + timeSt + "\t\t\t\t\t" + tarantulaSt + "\t\t" + sliceSt +"\n");
+			out.write((numLine - 1) + "\t\t\t" + timeSt + "\t\t\t\t\t" + tarantulaSt + "\t\t" + sliceSt +"\n");
 			out.close();
 			
 			System.out.println("Relevant slice");
