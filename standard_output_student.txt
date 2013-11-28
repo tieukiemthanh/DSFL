@@ -19,7 +19,7 @@ float getPR(int hp, int d, int s)
 	if (((d < 200) && (xet == 0)))
 	{
 		fds = 0;
-		pR = P1 / 1000;
+		pR = P1 / 1000.0;
 	}
 	if ((((d >= 200) && (d < 800)) || (xet == 1)))
 	{
@@ -48,7 +48,7 @@ float getPR(int hp, int d, int s)
 		if ((e > 0.8))
 			pR = 0;
 	}
-	if ((d >= 800))
+	if ((d > 800))
 	{
 		fds = 0 - ((d * s) / 1000.0);
 		pR = (P1 + (P2 * fds)) / (1000.0 + abs((P2 * fds)));

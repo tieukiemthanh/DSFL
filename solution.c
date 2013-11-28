@@ -51,7 +51,7 @@ float getPR(int hp, int d, int s) {
 	rancat = (d + P1 + P2) / 1000.0;
 	if (rancat > 0.8 && d <300 && d > 200)
 		pR = 0;
-	else if (ham_f >= 0) pR = (P1 + P2 * ham_f) / (1000 + P2 * ham_f);
+	else if (ham_f >= 0) pR = (P1 + P2 * ham_f) / (1000.0 + P2 * ham_f);
 	else pR = (P1 + P2 * ham_f) / (1000.0 - P2 * ham_f);
 	//---------------------------------
 	//==============================================

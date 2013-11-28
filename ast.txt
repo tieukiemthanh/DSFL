@@ -293,8 +293,8 @@ Program(
 																			P1
 																		)
 																		/
-																		IntLiteral(
-																			1000
+																		FloatLiteral(
+																			1000.0
 																		)
 																	)
 																)
@@ -878,7 +878,7 @@ Program(
 																VarExpr(
 																	d
 																)
-																>=
+																>
 																IntLiteral(
 																	800
 																)
