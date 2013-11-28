@@ -1,6 +1,6 @@
 int slice(int m, int n) {
 	int x = 2*m;
-	int w = 5;
+	int w = 4;
 	int a = 10;
 	int b = 1;
 	if(w > n) 

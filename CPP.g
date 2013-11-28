@@ -2,7 +2,8 @@ grammar CPP;
 
 options {
   language = Java;
-  backtrack = true;
+  backtrack = false;
+  k = 1;
 }
 
 @lexer::header {
@@ -347,7 +348,7 @@ ifStmt
     expr {ast1 = out; out = null;}
     ')' 
     stmt {ast2 = out; out = null;}
-    (options {k=1;}:
+    (options {k=1;greedy=false;}:
     'else' 
     stmt {ast3 = out; out = null;}
     )?
