@@ -23,7 +23,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 15;
+	static int failLine = 48;
 	static int[] statement2line;
 	
 	static Slice sliceProg = new Slice();
@@ -393,25 +393,25 @@ public class Main {
 					//writerFL.println("Random generator:");
 					return new BufferedReader(new FileReader("random.txt"));
 				case 1:
-					writer.println("Simple generator:");
+					//writer.println("Simple generator:");
 					writerFL.println("Simple generator:");
 					return new BufferedReader(new FileReader("simple.txt"));
 				case 2:
-					writer.println("Steepest generator:");
+					//writer.println("Steepest generator:");
 					writerFL.println("Steepest generator:");
 					return new BufferedReader(new FileReader("steepest.txt"));
 				case 3:
-					writer.println("Simulated generator:");
+					//writer.println("Simulated generator:");
 					writerFL.println("Simulated generator:");
 					return new BufferedReader(new FileReader("simulated.txt"));
 				case 4:
-					writer.println("Genetic generator:");
+					//writer.println("Genetic generator:");
 					writerFL.println("Genetic generator:");
 					return new BufferedReader(new FileReader("genetic.txt"));
 				//giai thuat tao test case cua anh duc anh
 				//trinhgiang-16/10/2013
 				case 5:
-					writer.println("Concolic and Symblic Execution:");
+					//writer.println("Concolic and Symblic Execution:");
 					//writerFL.println("Concolic and Symblic Execution:");
 					return new BufferedReader(new FileReader("concolicSE.txt"));
 			}
@@ -432,17 +432,17 @@ public class Main {
 
 		return sum / 90;
 	}
-
+	
 	// so sanh output giua chuong trinh can kiem tra va chuong trinh mau
 	// de lay thong tin ve dung sai cua chuong trinh
 	// chuong trinh mau chi ton tai de giup viec so sanh ket qua output
 	// duoc de dang, khong co vai tro gi trong thi nghiem
-	public static void readTestCases(int index, AST labelTree, AST solutionTree, PDG graph) {
+	public static void readTestCasesTarantula(int index, AST labelTree, AST solutionTree) {
 		try {
 			float[] tarantulaScores = new float[numLine];
-			float[] tarantulaScoresSlice = new float[numLine];
-			float[] ochiaiScores = new float[numLine];
-			float[] jaccardScores = new float[numLine];
+			//float[] tarantulaScoresSlice = new float[numLine];
+			//float[] ochiaiScores = new float[numLine];
+			//float[] jaccardScores = new float[numLine];
 			
 			int totalPass = 0; // tong so test case dung
 			int totalFail = 0; // tong so test case sai
@@ -453,14 +453,123 @@ public class Main {
 			int[] pass = new int[numLine]; // so test case dung ung voi tung cau lenh
 			int[] fail = new int[numLine]; // so test case sai ung voi tung cau lenh
 			
-			// dung cho slicing
-			ArrayList<Integer>[] passSlice = (ArrayList<Integer>[])new ArrayList[numLine];
-			ArrayList<Integer>[] failSlice = (ArrayList<Integer>[])new ArrayList[numLine];
-			for(int i = 0; i < numLine; i++) {
-				passSlice[i] = new ArrayList<Integer>();
-				failSlice[i] = new ArrayList<Integer>();
-			}
+			Visitor walker1 = new GetPathVisitor("", false);
+			Visitor walker2 = new RunSimulatorVisitor("", false);
+				
+		   // lay tap testcase ung voi tung option
+			BufferedReader br = getReader(index);
+
+			String testcase = br.readLine();
+			int nTestcase = 0;
 			
+			while (testcase != null) {
+				// khoi tao khi vao 1 bo test case moi
+				if (testcase.contains("Begin test cases.")) {
+					totalPass = totalFail = 0;
+					for (int i = 1; i < numLine; i++) {
+						pass[i] = fail[i] = 0;
+					}
+					//System.out.println(step++);
+				}
+				// ket thuc test case, danh gia chat luong cua bo test case nay
+				else if (testcase.contains("End test cases.")) {
+					// tarantula technique computation
+					tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
+					//tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
+					
+					// tarantula technique evaluation
+					Percent tPercent = getPercent(tarantulaScores);
+					//Percent tPercentSlice = getPercent(tarantulaScoresSlice);
+					mintPercent = tPercent.min;
+					maxtPercent = tPercent.max;
+					//mintPercentSlice = tPercentSlice.min;
+					//maxtPercentSlice = tPercentSlice.max;
+					
+					step++;
+				}
+				// so sanh ket qua cua chuong trinh can kiem tra va chuong trinh mau
+				// chi de kiem tra viec dung sai
+				else {
+					String path = (String) labelTree.visit(walker1, testcase);
+					//System.out.println(path);
+					// tao array list chua path execution
+					ArrayList<Integer> pathArrayList = new ArrayList<Integer>();
+					String[] arrPath = path.split(";");
+					for(String p : arrPath) {
+						pathArrayList.add(Integer.parseInt(p));
+					}
+					
+					//simulator ket qua cua sinh vien
+					String studentResult = (String) labelTree.visit(walker2, testcase);
+					//simulator ket qua cua solution
+					String solutionResult = (String) solutionTree.visit(walker2, testcase);
+					
+					//in testcase va path thuc thi tuong ung ra file testcaseandpath.txt
+					//writerTestCasesAndPath.println(testcase);
+					//mapping statement to line code
+					String stmt2line = "";
+					String[] pathArray = path.split(";");
+					for(String pathUnit : pathArray)
+					{
+						stmt2line += statement2line[Integer.parseInt(pathUnit)] + ";";
+					}
+				
+					nTestcase++;
+					// test case pass
+					if (studentResult.equals(solutionResult)) {
+						//writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						totalPass++; // tang tong so test case pass
+						for (int i = 1; i < numLine; i++) {
+							if (pathArrayList.contains(i)) {
+								pass[i]++; // tang gia tri pass cho cac cau lenh
+										   // tren duong thuc thi
+							}
+						}
+					}
+					// test case fail
+					else {
+						//writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						totalFail++; // tang tong so test case fail
+						for (int i = 1; i < numLine; i++) {
+							if (pathArrayList.contains(i)) {
+								fail[i]++; // tang gia tri fail cho cac cau lenh
+										   // tren duong thuc thi
+							}
+						}
+					}
+				}
+				testcase = br.readLine();
+			}
+	
+			//tam thoi in ket qua FL cua tarantula
+			//writerFL.println("Tarantula technique");
+			for(int j = 1; j < numLine; j++)
+				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// so sanh output giua chuong trinh can kiem tra va chuong trinh mau
+	// de lay thong tin ve dung sai cua chuong trinh
+	// chuong trinh mau chi ton tai de giup viec so sanh ket qua output
+	// duoc de dang, khong co vai tro gi trong thi nghiem
+	public static void readTestCasesSlicing(int index, AST labelTree, AST solutionTree, PDG graph) {
+		try {
+			//float[] tarantulaScores = new float[numLine];
+			float[] tarantulaScoresSlice = new float[numLine];
+			//float[] ochiaiScores = new float[numLine];
+			//float[] jaccardScores = new float[numLine];
+			
+			int totalPass = 0; // tong so test case dung
+			int totalFail = 0; // tong so test case sai
+
+			int step = 0;
+			
+			// tinh toan lai pass and fail
+			float[] newPass = new float[numLine];
+			float[] newFail = new float[numLine];
+					
 			// thong ke moi path execution cua moi test case
 			ArrayList<ArrayList<Integer>> testCasePath = new ArrayList<ArrayList<Integer>>();
 			
@@ -481,7 +590,7 @@ public class Main {
 				if (testcase.contains("Begin test cases.")) {
 					totalPass = totalFail = 0;
 					for (int i = 1; i < numLine; i++) {
-						pass[i] = fail[i] = 0;
+						newPass[i] = newFail[i] = 0;
 					}
 					//System.out.println(step++);
 				}
@@ -513,10 +622,6 @@ public class Main {
 						}
 					}
 					
-					// tinh toan lai pass and fail
-					float[] newPass = new float[numLine];
-					float[] newFail = new float[numLine];
-					
 					// tinh tong moi hang cua freq
 					float[] sumColFreq = new float[nTestcase];
 					for(int j = 0; j < nTestcase; j++) {
@@ -547,16 +652,15 @@ public class Main {
 							newFail[i] = (float)TSFail/totalFail;
 						}
 					}
-		
-					// tarantula technique computation
-					tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
+					
+					// PSS-SFL
 					tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
 					
 					// tarantula technique evaluation
-					Percent tPercent = getPercent(tarantulaScores);
+					//Percent tPercent = getPercent(tarantulaScores);
 					Percent tPercentSlice = getPercent(tarantulaScoresSlice);
-					mintPercent = tPercent.min;
-					maxtPercent = tPercent.max;
+					//mintPercent = tPercent.min;
+				    //maxtPercent = tPercent.max;
 					mintPercentSlice = tPercentSlice.min;
 					maxtPercentSlice = tPercentSlice.max;
 					
@@ -598,12 +702,12 @@ public class Main {
 					nTestcase++;
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
-						writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						//writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalPass++; // tang tong so test case pass
 						pTestcase.add(0); // test case passed
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
-								pass[i]++; // tang gia tri pass cho cac cau lenh
+								//pass[i]++; // tang gia tri pass cho cac cau lenh
 										   // tren duong thuc thi
 								//passSlice[i].add(nTestcase);
 							}
@@ -611,7 +715,7 @@ public class Main {
 					}
 					// test case fail
 					else {
-						writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						//writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalFail++; // tang tong so test case fail
 						pTestcase.add(1); // test case failed
 						// chi xay dung slice cho nhung test cases fail
@@ -621,7 +725,7 @@ public class Main {
 						
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
-								fail[i]++; // tang gia tri fail cho cac cau lenh
+								//fail[i]++; // tang gia tri fail cho cac cau lenh
 										   // tren duong thuc thi
 								//failSlice[i].add(nTestcase);
 							}
@@ -631,10 +735,6 @@ public class Main {
 				testcase = br.readLine();
 			}
 	
-			//tam thoi in ket qua FL cua tarantula
-			//writerFL.println("Tarantula technique");
-			for(int j = 1; j < numLine; j++)
-				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
 			//writerFL.println("Tarantula technique with dynamic slicing");
 			for(int j = 1; j < numLine; j++)
 				writerFLSlice.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
@@ -660,7 +760,7 @@ public class Main {
 	public static void main(String[] args) {		
 		try {
 			// file ket qua
-			writer = new PrintWriter("result.txt", "UTF-8");
+			//writer = new PrintWriter("result.txt", "UTF-8");
 			
 			//file chua ket qua fault localization
 			writerFL = new PrintWriter("FL.txt", "UTF-8");
@@ -668,13 +768,10 @@ public class Main {
 			writerFLSlice = new PrintWriter("FLSlice.txt", "UTF-8");
 			
 			//file chua tat ca cac paths cua chuong trinh
-			writerAllPaths = new PrintWriter("allpaths.txt", "UTF-8");
+			//writerAllPaths = new PrintWriter("allpaths.txt", "UTF-8");
 			
 			//file chua tap testcases da dung
-			writerTestCasesAndPath = new PrintWriter("testcasesandpath.txt", "UTF-8");
-			
-			// thong tin thong ke
-			//writerStatistic = new PrintWriter("statistic.txt", "UTF-8");
+			//writerTestCasesAndPath = new PrintWriter("testcasesandpath.txt", "UTF-8");
 			
 			// tao cay AST cho chuong trinh can kiem tra
 			// co the lay numLine tu day
@@ -711,9 +808,20 @@ public class Main {
 			//System.out.println(mapTable.toString());
 			writeToFile(mappingTableFile, mapTable.toString());
 			
+			long t3 = System.currentTimeMillis();
+			
 			int debug = 0;
 			if(debug == 1)
 				return;
+			
+			// concolic test cases
+			for (int i = 5; i < 6; i++) {
+				readTestCasesTarantula(i, labelTree, solutionTree);
+				//writer.println("***********************");
+				//writerFL.println("***********************");
+			}
+			
+			long tTarantula = System.currentTimeMillis();
 					
 			//in ra program dependence graph
 			String PDGFilename = "output_graph.txt";
@@ -764,8 +872,8 @@ public class Main {
 			*/
 			//System.out.println(Utils.compare("1;2;3;4;5;3;", "1;2;3;4;"));
 			
-			writer.println("Compare time:");
-			writer.println("***********************");
+			//writer.println("Compare time:");
+			//writer.println("***********************");
 
 			// tinh thoi gian sinh test cases cho tung options
 			//chi chay 1 lan
@@ -777,9 +885,9 @@ public class Main {
 			*/
 			
 			
-			writer.println();
-			writer.println("Compare percent:");
-			writer.println("***********************");
+			//writer.println();
+			//writer.println("Compare percent:");
+			//writer.println("***********************");
 
 			// doc test cases sinh ra do tung option va phan tich
 			// chi chay 1 lan
@@ -789,29 +897,29 @@ public class Main {
 			
 			// concolic test cases
 			for (int i = 5; i < 6; i++) {
-				readTestCases(i, labelTree, solutionTree, graph);
-				writer.println("***********************");
+				readTestCasesSlicing(i, labelTree, solutionTree, graph);
+				//writer.println("***********************");
 				//writerFL.println("***********************");
 			}
 			
-			long t3 = System.currentTimeMillis();
+			long tSlicing = System.currentTimeMillis();
 			
 			// in thong tin thong ke
 			FileWriter fstream = new FileWriter("statistic.txt", true);
 			BufferedWriter out = new BufferedWriter(fstream);
-			String timeSt = (t2 - t1)/2 + "\t\t\t\t" + (t3 - t2);
-			String tarantulaSt = String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
-			String sliceSt = String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
-			out.write((numLine - 1) + "\t\t\t" + timeSt + "\t\t\t\t\t" + tarantulaSt + "\t\t" + sliceSt +"\n");
+			String astTime = (t2 - t1) + "";
+			String tarantulaSt = (tTarantula - t3) + "\t\t\t\t\t" + String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
+			String sliceSt = (tSlicing - tTarantula) + "\t\t\t\t\t" + String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
+			out.write((numLine - 1) + "\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt + "\t\t\t\t" + sliceSt +"\n");
 			out.close();
 			
 			System.out.println("Relevant slice");
 			System.out.println(sliceProg.toString());	
-			writer.close();
+			//writer.close();
 			writerFL.close();
 			writerFLSlice.close();
-			writerAllPaths.close();
-			writerTestCasesAndPath.close();
+			//writerAllPaths.close();
+			//writerTestCasesAndPath.close();
 			//writerStatistic.close();
 			/*
 			for (int i = 1; i < 2; i++) {
