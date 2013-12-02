@@ -23,8 +23,14 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 36;
+	static int failLine = 10;
+	// bien bieu thi giai thuat se su dung
+	// 0 : Tarantula
+	// 1 : Slicing
+	static int iMode = 1; 
+	
 	static int[] statement2line;
+	static final long KILOBYTE = 1024L;
 	
 	static Slice sliceProg = new Slice();
 	
@@ -807,30 +813,78 @@ public class Main {
 			//ghi mapping table ra file
 			//System.out.println(mapTable.toString());
 			writeToFile(mappingTableFile, mapTable.toString());
+		
+			if(iMode == 1) // Dynamic Slicing
+			{
+				//in ra program dependence graph
+				String PDGFilename = "output_graph.txt";
+				Ast2GraphVisitor ast2PDG = new Ast2GraphVisitor();
+				labelTree.visit(ast2PDG, "");
+				// use for dynamic slicing
+				PDG graph = ast2PDG.getProgramDependenceGraph();
+				graph.updatePD();
+				writeToFile(PDGFilename, graph.toString());
 			
-			long t3 = System.currentTimeMillis();
+				// concolic test cases
+				for (int i = 5; i < 6; i++) {
+					readTestCasesSlicing(i, labelTree, solutionTree, graph);
+					//writer.println("***********************");
+					//writerFL.println("***********************");
+				}
+				
+				writerFL.close();
+				writerFLSlice.close();
 			
-			int debug = 0;
-			if(debug == 1)
-				return;
+				long tSlicing = System.currentTimeMillis();
+				
+				// Get the Java runtime
+				Runtime runtime = Runtime.getRuntime();
+				// Run the garbage collector
+				runtime.gc();
+				// Calculate the used memory
+				long memory = (runtime.totalMemory() - runtime.freeMemory()) / KILOBYTE;
 			
-			// concolic test cases
-			for (int i = 5; i < 6; i++) {
-				readTestCasesTarantula(i, labelTree, solutionTree);
-				//writer.println("***********************");
-				//writerFL.println("***********************");
+				// in thong tin thong ke
+				FileWriter fstream = new FileWriter("statistic.txt", true);
+				BufferedWriter out = new BufferedWriter(fstream);
+				String astTime = (t2 - t1) + "";
+				String memoryConsum = memory + ""; // don vi kbytes
+				String sliceSt = (tSlicing - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
+				out.write(iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + sliceSt +"\n");
+				out.close();
+				
+				System.out.println("Relevant slice");
+				System.out.println(sliceProg.toString());
 			}
+			else // Tarantula
+			{
+				// concolic test cases
+				for (int i = 5; i < 6; i++) {
+					readTestCasesTarantula(i, labelTree, solutionTree);
+					//writer.println("***********************");
+					//writerFL.println("***********************");
+				}
+				writerFL.close();
+				writerFLSlice.close();
+				
+				long tTarantula = System.currentTimeMillis();
+				
+				// Get the Java runtime
+				Runtime runtime = Runtime.getRuntime();
+				// Run the garbage collector
+				runtime.gc();
+				// Calculate the used memory
+				long memory = (runtime.totalMemory() - runtime.freeMemory()) / KILOBYTE;
 			
-			long tTarantula = System.currentTimeMillis();
-					
-			//in ra program dependence graph
-			String PDGFilename = "output_graph.txt";
-			Ast2GraphVisitor ast2PDG = new Ast2GraphVisitor();
-			labelTree.visit(ast2PDG, "");
-			// use for dynamic slicing
-			PDG graph = ast2PDG.getProgramDependenceGraph();
-			graph.updatePD();
-			writeToFile(PDGFilename, graph.toString());
+				// in thong tin thong ke
+				FileWriter fstream = new FileWriter("statistic.txt", true);
+				BufferedWriter out = new BufferedWriter(fstream);
+				String astTime = (t2 - t1) + "";
+				String memoryConsum = memory + "";
+				String tarantulaSt = (tTarantula - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
+				out.write(iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt +"\n");
+				out.close();
+			}		
 		
 			
 			// lay tat ca cac path
@@ -893,31 +947,8 @@ public class Main {
 			// chi chay 1 lan
 			// day la qua trinh dynamic analyst nen khong dung tat ca cac paths 
 			// lay test case tu tao
-			// trinhgiang-16/10/2013
-			
-			// concolic test cases
-			for (int i = 5; i < 6; i++) {
-				readTestCasesSlicing(i, labelTree, solutionTree, graph);
-				//writer.println("***********************");
-				//writerFL.println("***********************");
-			}
-			
-			long tSlicing = System.currentTimeMillis();
-			
-			// in thong tin thong ke
-			FileWriter fstream = new FileWriter("statistic.txt", true);
-			BufferedWriter out = new BufferedWriter(fstream);
-			String astTime = (t2 - t1) + "";
-			String tarantulaSt = (tTarantula - t3) + "\t\t\t\t\t" + String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
-			String sliceSt = (tSlicing - tTarantula) + "\t\t\t\t\t" + String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
-			out.write((numLine - 1) + "\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt + "\t\t\t\t" + sliceSt +"\n");
-			out.close();
-			
-			System.out.println("Relevant slice");
-			System.out.println(sliceProg.toString());	
+			// trinhgiang-16/10/2013	
 			//writer.close();
-			writerFL.close();
-			writerFLSlice.close();
 			//writerAllPaths.close();
 			//writerTestCasesAndPath.close();
 			//writerStatistic.close();
