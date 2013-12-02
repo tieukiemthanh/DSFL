@@ -39,7 +39,7 @@ float getPR(int hp, int d, int s) {
 			gs = 0 - (s%30)*(s%30) + 3*s;
 		if(s%6==4) 
 			gs = 0 - s;
-		if(s%6==5)
+		if(s%6==5) 
 		{
 			int c = (s%5) + 5;
 			gs = 0 - c*(c+1)/2.0;
@@ -52,7 +52,7 @@ float getPR(int hp, int d, int s) {
 		fds = 0 - (d*s)/1000.0;
 		pR = (P1 + P2*fds)/(1000.0 + abs(P2*fds)) ;
 	}
-	if(d>200 && d <300)
+	if(d>200 || d <300) // CAU LENH LOI 
 	{
 		float e = (d+P1+P2)/1000.0;
 		if(e > 0.8) 

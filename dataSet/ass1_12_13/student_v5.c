@@ -11,7 +11,7 @@ float getPR(int hp, int d, int s) {
 	int songuyento = isPrime(hp);
 	int xet = isFibonaci(d+s);
 	if(songuyento == 0) {
-		P1 = hp;
+		P1 = 1000; // CAU LENH SAI
 		P2 = (hp + d)%100;
 	}
 	else {
@@ -26,7 +26,7 @@ float getPR(int hp, int d, int s) {
 		pR = (P1)/1000.0;
 	}
 	// truong hop b
-	if(d>=200 && d<=800 || xet == 1)
+	if(d>=200 && d<800 || xet == 1) 
 	{
 		float gs = 0;
 		if(s%6==0) 
@@ -39,7 +39,7 @@ float getPR(int hp, int d, int s) {
 			gs = 0 - (s%30)*(s%30) + 3*s;
 		if(s%6==4) 
 			gs = 0 - s;
-		if(s%6==5)
+		if(s%6==5) 
 		{
 			int c = (s%5) + 5;
 			gs = 0 - c*(c+1)/2.0;
@@ -52,7 +52,7 @@ float getPR(int hp, int d, int s) {
 		fds = 0 - (d*s)/1000.0;
 		pR = (P1 + P2*fds)/(1000.0 + abs(P2*fds)) ;
 	}
-	if(d>200 && d <300)
+	if(d>200 && d <300) 
 	{
 		float e = (d+P1+P2)/1000.0;
 		if(e > 0.8) 
