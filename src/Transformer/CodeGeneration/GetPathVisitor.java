@@ -385,8 +385,8 @@ public class GetPathVisitor extends DoNothingVisitor {
 		} else if(callName.equals("max")) {
 			//---------------ham tim max cua hai so---------------------
 			ExprListAST listParam = (ExprListAST)ast.e;
-			Object e1 = (ExprAST)(listParam.e).visit(this, null);
-			Object e2 = (ExprAST)(((ExprListAST)(listParam.l)).e).visit(this, null);
+			Object e1 = ((ExprAST)(listParam.e)).visit(this, null);
+			Object e2 = ((ExprAST)(((ExprListAST)(listParam.l)).e)).visit(this, null);
 			if(e1 instanceof Integer && e2 instanceof Integer) {
 				int i1 = ((Integer)e1).intValue();
 				int i2 = ((Integer)e2).intValue();
@@ -399,8 +399,8 @@ public class GetPathVisitor extends DoNothingVisitor {
 		} else if(callName.equals("min")) {
 			//---------------ham tim min cua hai so---------------------
 			ExprListAST listParam = (ExprListAST)ast.e;
-			Object e1 = (ExprAST)(listParam.e).visit(this, null);
-			Object e2 = (ExprAST)(((ExprListAST)(listParam.l)).e).visit(this, null);
+			Object e1 = ((ExprAST)(listParam.e)).visit(this, null);
+			Object e2 = ((ExprAST)(((ExprListAST)(listParam.l)).e)).visit(this, null);
 			if(e1 instanceof Integer && e2 instanceof Integer) {
 				int i1 = ((Integer)e1).intValue();
 				int i2 = ((Integer)e2).intValue();
@@ -413,8 +413,8 @@ public class GetPathVisitor extends DoNothingVisitor {
 		} else if(callName.equals("pow")) {
 			//---------------ham tim a mu n---------------------
 			ExprListAST listParam = (ExprListAST)ast.e;
-			Object e1 = (ExprAST)(listParam.e).visit(this, null);
-			Object e2 = (ExprAST)(((ExprListAST)(listParam.l)).e).visit(this, null);
+			Object e1 = ((ExprAST)(listParam.e)).visit(this, null);
+			Object e2 = ((ExprAST)(((ExprListAST)(listParam.l)).e)).visit(this, null);
 			if(e1 instanceof Integer && e2 instanceof Integer) {
 				int i1 = ((Integer)e1).intValue();
 				int i2 = ((Integer)e2).intValue();

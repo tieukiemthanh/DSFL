@@ -226,7 +226,8 @@ Node 25:
 StatementID = 25
 StatementTYPE = ASSIGN
 Assigned Variable = next_date
-dataDep = null
+dataDep = 
+	{Node 0 (lineID=0),     date}
 conDep = {Node 24 (lineID=24),     true}
 potDep = null
 
@@ -257,12 +258,12 @@ StatementTYPE = RETURN
 dataDep = 
 	{Node 2 (lineID=2),     next_date}
 	{Node 10 (lineID=10),     next_date}
+	{Node with lineID = 47, next_date}
 	{Node 15 (lineID=15),     next_date}
 	{Node 16 (lineID=16),     next_date}
 	{Node 19 (lineID=19),     next_date}
 	{Node 22 (lineID=22),     next_date}
 	{Node 25 (lineID=25),     next_date}
-	{Node with lineID = 46, next_date}
 conDep = {Node 5 (lineID=5),     true}
 potDep = null
 
