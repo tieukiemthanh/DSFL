@@ -55,14 +55,14 @@ Program(
 			StmtList(
 				DeclarationStmt(
 					VarDecl(
-						fOut
+						h
 						TypeList(
-							Float
+							Int
 							EmptyTypeList()
 						)
 						VarInitializer(
-							FloatLiteral(
-								0.0
+							IntLiteral(
+								0
 							)
 						)
 					)
@@ -71,14 +71,14 @@ Program(
 				StmtList(
 					DeclarationStmt(
 						VarDecl(
-							P1
+							h1
 							TypeList(
-								Float
+								Int
 								EmptyTypeList()
 							)
 							VarInitializer(
-								VarExpr(
-									HP1
+								IntLiteral(
+									0
 								)
 							)
 						)
@@ -87,14 +87,14 @@ Program(
 					StmtList(
 						DeclarationStmt(
 							VarDecl(
-								P2
+								P1
 								TypeList(
 									Float
 									EmptyTypeList()
 								)
 								VarInitializer(
 									VarExpr(
-										HP2
+										HP1
 									)
 								)
 							)
@@ -103,97 +103,135 @@ Program(
 						StmtList(
 							DeclarationStmt(
 								VarDecl(
-									h
+									P2
 									TypeList(
-										Int
+										Float
 										EmptyTypeList()
 									)
 									VarInitializer(
-										BinExpr(
-											BinExpr(
-												VarExpr(
-													HP1
-												)
-												+
-												VarExpr(
-													HP2
-												)
-											)
-											%
-											IntLiteral(
-												100
-											)
+										VarExpr(
+											HP2
 										)
 									)
 								)
 								EmptyDeclarationList()
 							)
 							StmtList(
-								IfThenElseStmt(
-									BinExpr(
-										BinExpr(
-											BinExpr(
-												VarExpr(
-													d
-												)
-												==
-												IntLiteral(
-													1000
-												)
-											)
-											&&
-											BinExpr(
-												VarExpr(
-													h
-												)
-												!=
-												IntLiteral(
-													99
-												)
-											)
+								DeclarationStmt(
+									VarDecl(
+										fOut
+										TypeList(
+											Float
+											EmptyTypeList()
 										)
-										&&
-										BinExpr(
-											VarExpr(
-												HP1
-											)
-											!=
-											IntLiteral(
-												999
-											)
-										)
-									)
-									ExprStmt(
-										BinExpr(
-											VarExpr(
-												fOut
-											)
-											=
+										VarInitializer(
 											FloatLiteral(
-												0.00
+												0.0
 											)
 										)
 									)
-									CompStmt(
+									EmptyDeclarationList()
+								)
+								StmtList(
+									DeclarationStmt(
+										VarDecl(
+											i
+											TypeList(
+												Int
+												EmptyTypeList()
+											)
+											VarInitializer(
+												IntLiteral(
+													0
+												)
+											)
+										)
+										EmptyDeclarationList()
+									)
+									StmtList(
+										IfThenStmt(
+											BinExpr(
+												BinExpr(
+													BinExpr(
+														VarExpr(
+															HP1
+														)
+														==
+														IntLiteral(
+															777
+														)
+													)
+													&&
+													BinExpr(
+														VarExpr(
+															Q1
+														)
+														<
+														VarExpr(
+															Q2
+														)
+													)
+												)
+												&&
+												BinExpr(
+													VarExpr(
+														d
+													)
+													!=
+													IntLiteral(
+														1000
+													)
+												)
+											)
+											CompStmt(
+												StmtList(
+													ExprStmt(
+														BinExpr(
+															VarExpr(
+																d
+															)
+															=
+															IntLiteral(
+																201
+															)
+														)
+													)
+													StmtList(
+														ExprStmt(
+															BinExpr(
+																VarExpr(
+																	i
+																)
+																=
+																BinExpr(
+																	VarExpr(
+																		i
+																	)
+																	+
+																	IntLiteral(
+																		1
+																	)
+																)
+															)
+														)
+														EmptyStmtList()
+													)
+												)
+											)
+										)
 										StmtList(
 											IfThenStmt(
 												BinExpr(
 													BinExpr(
-														BinExpr(
-															VarExpr(
-																HP1
-															)
-															==
-															IntLiteral(
-																777
-															)
+														VarExpr(
+															Q1
 														)
-														&&
+														>
 														BinExpr(
-															VarExpr(
-																Q1
+															IntLiteral(
+																2
 															)
-															<
+															*
 															VarExpr(
 																Q2
 															)
@@ -202,42 +240,90 @@ Program(
 													&&
 													BinExpr(
 														VarExpr(
-															HP2
+															d
 														)
-														!=
+														>=
 														IntLiteral(
-															888
+															800
 														)
 													)
 												)
-												ExprStmt(
-													BinExpr(
-														VarExpr(
-															d
+												CompStmt(
+													StmtList(
+														ExprStmt(
+															BinExpr(
+																VarExpr(
+																	P1
+																)
+																=
+																BinExpr(
+																	VarExpr(
+																		HP1
+																	)
+																	+
+																	BinExpr(
+																		BinExpr(
+																			BinExpr(
+																				VarExpr(
+																					Q1
+																				)
+																				-
+																				VarExpr(
+																					Q2
+																				)
+																			)
+																			*
+																			VarExpr(
+																				d
+																			)
+																		)
+																		/
+																		BinExpr(
+																			VarExpr(
+																				Q1
+																			)
+																			+
+																			VarExpr(
+																				Q2
+																			)
+																		)
+																	)
+																)
+															)
 														)
-														=
-														IntLiteral(
-															201
+														StmtList(
+															ExprStmt(
+																BinExpr(
+																	VarExpr(
+																		P2
+																	)
+																	=
+																	VarExpr(
+																		HP2
+																	)
+																)
+															)
+															EmptyStmtList()
 														)
 													)
 												)
 											)
 											StmtList(
-												IfThenElseStmt(
+												IfThenStmt(
 													BinExpr(
 														BinExpr(
-															VarExpr(
-																Q1
-															)
-															>
 															BinExpr(
 																IntLiteral(
 																	2
 																)
 																*
 																VarExpr(
-																	Q2
+																	Q1
 																)
+															)
+															<
+															VarExpr(
+																Q2
 															)
 														)
 														&&
@@ -245,9 +331,9 @@ Program(
 															VarExpr(
 																d
 															)
-															>=
+															<=
 															IntLiteral(
-																800
+																200
 															)
 														)
 													)
@@ -259,73 +345,11 @@ Program(
 																		P1
 																	)
 																	=
-																	BinExpr(
-																		VarExpr(
-																			HP1
-																		)
-																		+
-																		BinExpr(
-																			BinExpr(
-																				BinExpr(
-																					VarExpr(
-																						Q1
-																					)
-																					-
-																					VarExpr(
-																						Q2
-																					)
-																				)
-																				*
-																				VarExpr(
-																					d
-																				)
-																			)
-																			/
-																			BinExpr(
-																				VarExpr(
-																					Q1
-																				)
-																				+
-																				VarExpr(
-																					Q2
-																				)
-																			)
-																		)
-																	)
-																)
-															)
-															EmptyStmtList()
-														)
-													)
-													IfThenStmt(
-														BinExpr(
-															BinExpr(
-																BinExpr(
-																	IntLiteral(
-																		2
-																	)
-																	*
 																	VarExpr(
-																		Q1
+																		HP1
 																	)
 																)
-																<
-																VarExpr(
-																	Q2
-																)
 															)
-															&&
-															BinExpr(
-																VarExpr(
-																	d
-																)
-																<=
-																IntLiteral(
-																	200
-																)
-															)
-														)
-														CompStmt(
 															StmtList(
 																ExprStmt(
 																	BinExpr(
@@ -380,42 +404,25 @@ Program(
 													)
 												)
 												StmtList(
-													IfThenStmt(
+													ExprStmt(
 														BinExpr(
-															BinExpr(
-																VarExpr(
-																	HP1
-																)
-																==
-																IntLiteral(
-																	888
-																)
+															VarExpr(
+																h
 															)
-															&&
+															=
 															BinExpr(
-																VarExpr(
-																	HP2
-																)
-																!=
-																IntLiteral(
-																	888
-																)
-															)
-														)
-														ExprStmt(
-															BinExpr(
-																VarExpr(
-																	h
-																)
-																=
 																BinExpr(
-																	IntLiteral(
-																		10
-																	)
-																	*
 																	VarExpr(
-																		h
+																		HP1
 																	)
+																	+
+																	VarExpr(
+																		HP2
+																	)
+																)
+																%
+																IntLiteral(
+																	100
 																)
 															)
 														)
@@ -424,35 +431,11 @@ Program(
 														ExprStmt(
 															BinExpr(
 																VarExpr(
-																	fOut
+																	h1
 																)
 																=
-																BinExpr(
-																	BinExpr(
-																		BinExpr(
-																			BinExpr(
-																				VarExpr(
-																					P1
-																				)
-																				+
-																				VarExpr(
-																					h
-																				)
-																			)
-																			-
-																			VarExpr(
-																				P2
-																			)
-																		)
-																		+
-																		IntLiteral(
-																			1000
-																		)
-																	)
-																	/
-																	IntLiteral(
-																		2000
-																	)
+																VarExpr(
+																	h
 																)
 															)
 														)
@@ -460,7 +443,7 @@ Program(
 															IfThenStmt(
 																BinExpr(
 																	VarExpr(
-																		HP2
+																		HP1
 																	)
 																	==
 																	IntLiteral(
@@ -469,120 +452,114 @@ Program(
 																)
 																CompStmt(
 																	StmtList(
-																		IfThenElseStmt(
+																		ExprStmt(
+																			BinExpr(
+																				VarExpr(
+																					h
+																				)
+																				=
+																				BinExpr(
+																					VarExpr(
+																						h
+																					)
+																					*
+																					IntLiteral(
+																						10
+																					)
+																				)
+																			)
+																		)
+																		StmtList(
+																			ExprStmt(
+																				BinExpr(
+																					VarExpr(
+																						i
+																					)
+																					=
+																					BinExpr(
+																						VarExpr(
+																							i
+																						)
+																						+
+																						IntLiteral(
+																							1
+																						)
+																					)
+																				)
+																			)
+																			EmptyStmtList()
+																		)
+																	)
+																)
+															)
+															StmtList(
+																ExprStmt(
+																	BinExpr(
+																		VarExpr(
+																			fOut
+																		)
+																		=
+																		BinExpr(
+																			BinExpr(
+																				BinExpr(
+																					BinExpr(
+																						VarExpr(
+																							P1
+																						)
+																						+
+																						VarExpr(
+																							h
+																						)
+																					)
+																					-
+																					VarExpr(
+																						P2
+																					)
+																				)
+																				+
+																				IntLiteral(
+																					1000
+																				)
+																			)
+																			/
+																			IntLiteral(
+																				2000
+																			)
+																		)
+																	)
+																)
+																StmtList(
+																	IfThenStmt(
+																		BinExpr(
 																			BinExpr(
 																				VarExpr(
 																					HP1
 																				)
 																				==
 																				IntLiteral(
-																					999
+																					900
 																				)
 																			)
-																			ExprStmt(
+																			&&
+																			BinExpr(
 																				BinExpr(
 																					VarExpr(
 																						fOut
 																					)
-																					=
+																					<
 																					FloatLiteral(
-																						1.00
+																						0.5
 																					)
 																				)
-																			)
-																			IfThenStmt(
+																				||
 																				BinExpr(
-																					BinExpr(
-																						BinExpr(
-																							VarExpr(
-																								HP1
-																							)
-																							!=
-																							IntLiteral(
-																								777
-																							)
-																						)
-																						&&
-																						BinExpr(
-																							VarExpr(
-																								HP1
-																							)
-																							!=
-																							IntLiteral(
-																								888
-																							)
-																						)
+																					VarExpr(
+																						Q1
 																					)
-																					&&
-																					BinExpr(
-																						VarExpr(
-																							HP1
-																						)
-																						!=
-																						IntLiteral(
-																							900
-																						)
+																					>
+																					VarExpr(
+																						Q2
 																					)
-																				)
-																				ExprStmt(
-																					BinExpr(
-																						VarExpr(
-																							fOut
-																						)
-																						=
-																						FloatLiteral(
-																							0.01
-																						)
-																					)
-																				)
-																			)
-																		)
-																		EmptyStmtList()
-																	)
-																)
-															)
-															StmtList(
-																IfThenStmt(
-																	BinExpr(
-																		BinExpr(
-																			VarExpr(
-																				HP1
-																			)
-																			==
-																			IntLiteral(
-																				900
-																			)
-																		)
-																		&&
-																		BinExpr(
-																			VarExpr(
-																				HP2
-																			)
-																			!=
-																			IntLiteral(
-																				888
-																			)
-																		)
-																	)
-																	IfThenStmt(
-																		BinExpr(
-																			BinExpr(
-																				VarExpr(
-																					Q1
-																				)
-																				>
-																				VarExpr(
-																					Q2
-																				)
-																			)
-																			||
-																			BinExpr(
-																				VarExpr(
-																					fOut
-																				)
-																				<
-																				FloatLiteral(
-																					0.5
 																				)
 																			)
 																		)
@@ -593,13 +570,444 @@ Program(
 																				)
 																				=
 																				FloatLiteral(
-																					0.50
+																					0.5
+																				)
+																			)
+																		)
+																	)
+																	StmtList(
+																		IfThenStmt(
+																			BinExpr(
+																				VarExpr(
+																					HP1
+																				)
+																				==
+																				IntLiteral(
+																					900
+																				)
+																			)
+																			ExprStmt(
+																				BinExpr(
+																					VarExpr(
+																						i
+																					)
+																					=
+																					BinExpr(
+																						VarExpr(
+																							i
+																						)
+																						+
+																						IntLiteral(
+																							1
+																						)
+																					)
+																				)
+																			)
+																		)
+																		StmtList(
+																			IfThenStmt(
+																				BinExpr(
+																					VarExpr(
+																						HP2
+																					)
+																					==
+																					IntLiteral(
+																						888
+																					)
+																				)
+																				IfThenElseStmt(
+																					BinExpr(
+																						VarExpr(
+																							i
+																						)
+																						==
+																						IntLiteral(
+																							0
+																						)
+																					)
+																					ExprStmt(
+																						BinExpr(
+																							VarExpr(
+																								fOut
+																							)
+																							=
+																							FloatLiteral(
+																								0.01
+																							)
+																						)
+																					)
+																					CompStmt(
+																						StmtList(
+																							ExprStmt(
+																								BinExpr(
+																									VarExpr(
+																										P1
+																									)
+																									=
+																									VarExpr(
+																										HP1
+																									)
+																								)
+																							)
+																							StmtList(
+																								ExprStmt(
+																									BinExpr(
+																										VarExpr(
+																											P2
+																										)
+																										=
+																										VarExpr(
+																											HP2
+																										)
+																									)
+																								)
+																								StmtList(
+																									IfThenStmt(
+																										BinExpr(
+																											BinExpr(
+																												VarExpr(
+																													Q1
+																												)
+																												>
+																												BinExpr(
+																													IntLiteral(
+																														2
+																													)
+																													*
+																													VarExpr(
+																														Q2
+																													)
+																												)
+																											)
+																											&&
+																											BinExpr(
+																												VarExpr(
+																													d
+																												)
+																												>=
+																												IntLiteral(
+																													800
+																												)
+																											)
+																										)
+																										CompStmt(
+																											StmtList(
+																												ExprStmt(
+																													BinExpr(
+																														VarExpr(
+																															P1
+																														)
+																														=
+																														BinExpr(
+																															VarExpr(
+																																HP1
+																															)
+																															+
+																															BinExpr(
+																																BinExpr(
+																																	BinExpr(
+																																		VarExpr(
+																																			Q1
+																																		)
+																																		-
+																																		VarExpr(
+																																			Q2
+																																		)
+																																	)
+																																	*
+																																	VarExpr(
+																																		d
+																																	)
+																																)
+																																/
+																																BinExpr(
+																																	VarExpr(
+																																		Q1
+																																	)
+																																	+
+																																	VarExpr(
+																																		Q2
+																																	)
+																																)
+																															)
+																														)
+																													)
+																												)
+																												StmtList(
+																													ExprStmt(
+																														BinExpr(
+																															VarExpr(
+																																P2
+																															)
+																															=
+																															VarExpr(
+																																HP2
+																															)
+																														)
+																													)
+																													EmptyStmtList()
+																												)
+																											)
+																										)
+																									)
+																									StmtList(
+																										IfThenStmt(
+																											BinExpr(
+																												BinExpr(
+																													BinExpr(
+																														IntLiteral(
+																															2
+																														)
+																														*
+																														VarExpr(
+																															Q1
+																														)
+																													)
+																													<
+																													VarExpr(
+																														Q2
+																													)
+																												)
+																												&&
+																												BinExpr(
+																													VarExpr(
+																														d
+																													)
+																													<=
+																													IntLiteral(
+																														200
+																													)
+																												)
+																											)
+																											CompStmt(
+																												StmtList(
+																													ExprStmt(
+																														BinExpr(
+																															VarExpr(
+																																P1
+																															)
+																															=
+																															VarExpr(
+																																HP1
+																															)
+																														)
+																													)
+																													StmtList(
+																														ExprStmt(
+																															BinExpr(
+																																VarExpr(
+																																	P2
+																																)
+																																=
+																																BinExpr(
+																																	VarExpr(
+																																		HP2
+																																	)
+																																	+
+																																	BinExpr(
+																																		BinExpr(
+																																			BinExpr(
+																																				VarExpr(
+																																					Q2
+																																				)
+																																				-
+																																				VarExpr(
+																																					Q1
+																																				)
+																																			)
+																																			*
+																																			BinExpr(
+																																				IntLiteral(
+																																					1000
+																																				)
+																																				-
+																																				VarExpr(
+																																					d
+																																				)
+																																			)
+																																		)
+																																		/
+																																		BinExpr(
+																																			VarExpr(
+																																				Q1
+																																			)
+																																			+
+																																			VarExpr(
+																																				Q2
+																																			)
+																																		)
+																																	)
+																																)
+																															)
+																														)
+																														EmptyStmtList()
+																													)
+																												)
+																											)
+																										)
+																										StmtList(
+																											ExprStmt(
+																												BinExpr(
+																													VarExpr(
+																														h
+																													)
+																													=
+																													BinExpr(
+																														BinExpr(
+																															VarExpr(
+																																HP1
+																															)
+																															+
+																															VarExpr(
+																																HP2
+																															)
+																														)
+																														%
+																														IntLiteral(
+																															100
+																														)
+																													)
+																												)
+																											)
+																											StmtList(
+																												ExprStmt(
+																													BinExpr(
+																														VarExpr(
+																															fOut
+																														)
+																														=
+																														BinExpr(
+																															BinExpr(
+																																BinExpr(
+																																	BinExpr(
+																																		VarExpr(
+																																			P1
+																																		)
+																																		+
+																																		VarExpr(
+																																			h
+																																		)
+																																	)
+																																	-
+																																	VarExpr(
+																																		P2
+																																	)
+																																)
+																																+
+																																IntLiteral(
+																																	1000
+																																)
+																															)
+																															/
+																															IntLiteral(
+																																2000
+																															)
+																														)
+																													)
+																												)
+																												EmptyStmtList()
+																											)
+																										)
+																									)
+																								)
+																							)
+																						)
+																					)
+																				)
+																			)
+																			StmtList(
+																				IfThenStmt(
+																					BinExpr(
+																						BinExpr(
+																							VarExpr(
+																								HP1
+																							)
+																							==
+																							IntLiteral(
+																								999
+																							)
+																						)
+																						&&
+																						BinExpr(
+																							VarExpr(
+																								HP2
+																							)
+																							==
+																							IntLiteral(
+																								888
+																							)
+																						)
+																					)
+																					ExprStmt(
+																						BinExpr(
+																							VarExpr(
+																								fOut
+																							)
+																							=
+																							IntLiteral(
+																								1
+																							)
+																						)
+																					)
+																				)
+																				StmtList(
+																					IfThenStmt(
+																						BinExpr(
+																							VarExpr(
+																								d
+																							)
+																							==
+																							IntLiteral(
+																								1000
+																							)
+																						)
+																						IfThenStmt(
+																							BinExpr(
+																								VarExpr(
+																									h1
+																								)
+																								!=
+																								IntLiteral(
+																									99
+																								)
+																							)
+																							IfThenStmt(
+																								BinExpr(
+																									VarExpr(
+																										HP1
+																									)
+																									!=
+																									IntLiteral(
+																										999
+																									)
+																								)
+																								ExprStmt(
+																									BinExpr(
+																										VarExpr(
+																											fOut
+																										)
+																										=
+																										IntLiteral(
+																											0
+																										)
+																									)
+																								)
+																							)
+																						)
+																					)
+																					StmtList(
+																						RetStmt(
+																							VarExpr(
+																								fOut
+																							)
+																						)
+																						EmptyStmtList()
+																					)
 																				)
 																			)
 																		)
 																	)
 																)
-																EmptyStmtList()
 															)
 														)
 													)
@@ -607,14 +1015,6 @@ Program(
 											)
 										)
 									)
-								)
-								StmtList(
-									RetStmt(
-										VarExpr(
-											fOut
-										)
-									)
-									EmptyStmtList()
 								)
 							)
 						)
