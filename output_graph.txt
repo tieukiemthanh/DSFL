@@ -12,61 +12,414 @@ potDep = null
 Node 1:
 StatementID = 1
 StatementTYPE = ASSIGN
-Assigned Variable = maxValue
-dataDep = 
-	{Node 0 (lineID=0),     t}
+Assigned Variable = fOut
+dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 2:
 StatementID = 2
 StatementTYPE = ASSIGN
-Assigned Variable = i
+Assigned Variable = P1
 dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 3:
 StatementID = 3
-StatementTYPE = FORLOOP
-dataDep = 
-	{Node 0 (lineID=0),     i}
-	{Node 2 (lineID=2),     i}
-	{Node 0 (lineID=0),     n}
+StatementTYPE = ASSIGN
+Assigned Variable = P2
+dataDep = null
 conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 4:
 StatementID = 4
-StatementTYPE = CONDITION
+StatementTYPE = ASSIGN
+Assigned Variable = h
 dataDep = 
-	{Node 0 (lineID=0),     t}
-	{Node 0 (lineID=0),     i}
-	{Node 2 (lineID=2),     i}
-	{Node 4 (lineID=4),     i}
-	{Node 1 (lineID=1),     maxValue}
-	{Node 5 (lineID=5),     maxValue}
-conDep = {Node 3 (lineID=3),     true}
+	{Node 0 (lineID=0),     HP1}
+	{Node 0 (lineID=0),     HP2}
+conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
 Node 5:
 StatementID = 5
-StatementTYPE = ASSIGN
-Assigned Variable = maxValue
+StatementTYPE = CONDITION
 dataDep = 
-	{Node 0 (lineID=0),     t}
-	{Node 0 (lineID=0),     i}
-	{Node 2 (lineID=2),     i}
-	{Node 4 (lineID=4),     i}
-conDep = {Node 4 (lineID=4),     true}
-potDep = 3
+	{Node 0 (lineID=0),     HP1}
+	{Node 0 (lineID=0),     Q1}
+	{Node 0 (lineID=0),     Q2}
+conDep = {Node 0 (lineID=0),     true}
+potDep = null
 
 Node 6:
 StatementID = 6
+StatementTYPE = ASSIGN
+Assigned Variable = d
+dataDep = null
+conDep = {Node 5 (lineID=5),     true}
+potDep = null
+
+Node 7:
+StatementID = 7
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     Q1}
+	{Node 0 (lineID=0),     Q2}
+	{Node 0 (lineID=0),     d}
+	{Node 6 (lineID=6),     d}
+conDep = {Node 0 (lineID=0),     true}
+potDep = 5
+
+Node 8:
+StatementID = 8
+StatementTYPE = ASSIGN
+Assigned Variable = P1
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+	{Node 0 (lineID=0),     Q1}
+	{Node 0 (lineID=0),     Q2}
+	{Node 0 (lineID=0),     d}
+	{Node 6 (lineID=6),     d}
+conDep = {Node 7 (lineID=7),     true}
+potDep = 5
+
+Node 9:
+StatementID = 9
+StatementTYPE = ASSIGN
+Assigned Variable = P2
+dataDep = 
+	{Node 0 (lineID=0),     HP2}
+conDep = {Node 7 (lineID=7),     true}
+potDep = null
+
+Node 10:
+StatementID = 10
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     Q1}
+	{Node 0 (lineID=0),     Q2}
+	{Node 0 (lineID=0),     d}
+	{Node 6 (lineID=6),     d}
+conDep = {Node 7 (lineID=7),     false}
+potDep = 5
+
+Node 11:
+StatementID = 11
+StatementTYPE = ASSIGN
+Assigned Variable = P1
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+conDep = {Node 10 (lineID=10),     true}
+potDep = null
+
+Node 12:
+StatementID = 12
+StatementTYPE = ASSIGN
+Assigned Variable = P2
+dataDep = 
+	{Node 0 (lineID=0),     HP2}
+	{Node 0 (lineID=0),     Q2}
+	{Node 0 (lineID=0),     Q1}
+	{Node 0 (lineID=0),     d}
+	{Node 6 (lineID=6),     d}
+conDep = {Node 10 (lineID=10),     true}
+potDep = 5
+
+Node 13:
+StatementID = 13
+StatementTYPE = ASSIGN
+Assigned Variable = P1
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+conDep = {Node 10 (lineID=10),     false}
+potDep = null
+
+Node 14:
+StatementID = 14
+StatementTYPE = ASSIGN
+Assigned Variable = P2
+dataDep = 
+	{Node 0 (lineID=0),     HP2}
+conDep = {Node 10 (lineID=10),     false}
+potDep = null
+
+Node 15:
+StatementID = 15
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     d}
+	{Node 6 (lineID=6),     d}
+conDep = {Node 0 (lineID=0),     true}
+potDep = 5
+
+Node 16:
+StatementID = 16
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+conDep = {Node 15 (lineID=15),     true}
+potDep = null
+
+Node 17:
+StatementID = 17
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     HP2}
+conDep = {Node 16 (lineID=16),     true}
+potDep = null
+
+Node 18:
+StatementID = 18
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = null
+conDep = {Node 17 (lineID=17),     true}
+potDep = null
+
+Node 19:
+StatementID = 19
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = 
+	{Node 2 (lineID=2),     P1}
+	{Node 8 (lineID=8),     P1}
+	{Node 11 (lineID=11),     P1}
+	{Node 13 (lineID=13),     P1}
+	{Node 4 (lineID=4),     h}
+	{Node 3 (lineID=3),     P2}
+	{Node 9 (lineID=9),     P2}
+	{Node 12 (lineID=12),     P2}
+	{Node 14 (lineID=14),     P2}
+conDep = {Node 17 (lineID=17),     false}
+potDep = 10
+
+Node 20:
+StatementID = 20
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 4 (lineID=4),     h}
+conDep = {Node 16 (lineID=16),     false}
+potDep = null
+
+Node 21:
+StatementID = 21
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = 
+	{Node 2 (lineID=2),     P1}
+	{Node 8 (lineID=8),     P1}
+	{Node 11 (lineID=11),     P1}
+	{Node 13 (lineID=13),     P1}
+	{Node 4 (lineID=4),     h}
+	{Node 3 (lineID=3),     P2}
+	{Node 9 (lineID=9),     P2}
+	{Node 12 (lineID=12),     P2}
+	{Node 14 (lineID=14),     P2}
+conDep = {Node 20 (lineID=20),     true}
+potDep = 10
+
+Node 22:
+StatementID = 22
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = null
+conDep = {Node 20 (lineID=20),     false}
+potDep = null
+
+Node 23:
+StatementID = 23
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     HP2}
+conDep = {Node 15 (lineID=15),     false}
+potDep = null
+
+Node 24:
+StatementID = 24
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+conDep = {Node 23 (lineID=23),     true}
+potDep = null
+
+Node 25:
+StatementID = 25
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = 
+	{Node 2 (lineID=2),     P1}
+	{Node 8 (lineID=8),     P1}
+	{Node 11 (lineID=11),     P1}
+	{Node 13 (lineID=13),     P1}
+	{Node 4 (lineID=4),     h}
+	{Node 3 (lineID=3),     P2}
+	{Node 9 (lineID=9),     P2}
+	{Node 12 (lineID=12),     P2}
+	{Node 14 (lineID=14),     P2}
+conDep = {Node 24 (lineID=24),     true}
+potDep = 10
+
+Node 26:
+StatementID = 26
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+conDep = {Node 24 (lineID=24),     false}
+potDep = null
+
+Node 27:
+StatementID = 27
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = null
+conDep = {Node 26 (lineID=26),     true}
+potDep = null
+
+Node 28:
+StatementID = 28
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = null
+conDep = {Node 26 (lineID=26),     false}
+potDep = null
+
+Node 29:
+StatementID = 29
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+conDep = {Node 23 (lineID=23),     false}
+potDep = null
+
+Node 30:
+StatementID = 30
+StatementTYPE = ASSIGN
+Assigned Variable = h
+dataDep = 
+	{Node 4 (lineID=4),     h}
+conDep = {Node 29 (lineID=29),     true}
+potDep = null
+
+Node 31:
+StatementID = 31
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = 
+	{Node 2 (lineID=2),     P1}
+	{Node 8 (lineID=8),     P1}
+	{Node 11 (lineID=11),     P1}
+	{Node 13 (lineID=13),     P1}
+	{Node 4 (lineID=4),     h}
+	{Node 30 (lineID=30),     h}
+	{Node 3 (lineID=3),     P2}
+	{Node 9 (lineID=9),     P2}
+	{Node 12 (lineID=12),     P2}
+	{Node 14 (lineID=14),     P2}
+conDep = {Node 29 (lineID=29),     true}
+potDep = 10
+
+Node 32:
+StatementID = 32
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     HP1}
+conDep = {Node 29 (lineID=29),     false}
+potDep = null
+
+Node 33:
+StatementID = 33
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = 
+	{Node 2 (lineID=2),     P1}
+	{Node 8 (lineID=8),     P1}
+	{Node 11 (lineID=11),     P1}
+	{Node 13 (lineID=13),     P1}
+	{Node 4 (lineID=4),     h}
+	{Node 3 (lineID=3),     P2}
+	{Node 9 (lineID=9),     P2}
+	{Node 12 (lineID=12),     P2}
+	{Node 14 (lineID=14),     P2}
+conDep = {Node 32 (lineID=32),     true}
+potDep = 10
+
+Node 34:
+StatementID = 34
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 0 (lineID=0),     Q1}
+	{Node 0 (lineID=0),     Q2}
+conDep = {Node 32 (lineID=32),     false}
+potDep = null
+
+Node 35:
+StatementID = 35
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = 
+	{Node 2 (lineID=2),     P1}
+	{Node 8 (lineID=8),     P1}
+	{Node 11 (lineID=11),     P1}
+	{Node 13 (lineID=13),     P1}
+	{Node 4 (lineID=4),     h}
+	{Node 3 (lineID=3),     P2}
+	{Node 9 (lineID=9),     P2}
+	{Node 12 (lineID=12),     P2}
+	{Node 14 (lineID=14),     P2}
+conDep = {Node 34 (lineID=34),     true}
+potDep = 10
+
+Node 36:
+StatementID = 36
+StatementTYPE = CONDITION
+dataDep = 
+	{Node 1 (lineID=1),     fOut}
+	{Node 19 (lineID=19),     fOut}
+	{Node 18 (lineID=18),     fOut}
+	{Node 21 (lineID=21),     fOut}
+	{Node 22 (lineID=22),     fOut}
+	{Node 25 (lineID=25),     fOut}
+	{Node 27 (lineID=27),     fOut}
+	{Node 28 (lineID=28),     fOut}
+	{Node 35 (lineID=35),     fOut}
+conDep = {Node 34 (lineID=34),     true}
+potDep = null
+
+Node 37:
+StatementID = 37
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = null
+conDep = {Node 36 (lineID=36),     true}
+potDep = null
+
+Node 38:
+StatementID = 38
+StatementTYPE = ASSIGN
+Assigned Variable = fOut
+dataDep = null
+conDep = {Node 34 (lineID=34),     false}
+potDep = null
+
+Node 39:
+StatementID = 39
 StatementTYPE = RETURN
 dataDep = 
-	{Node 1 (lineID=1),     maxValue}
-	{Node 5 (lineID=5),     maxValue}
+	{Node 35 (lineID=35),     fOut}
+	{Node 1 (lineID=1),     fOut}
+	{Node 33 (lineID=33),     fOut}
+	{Node 38 (lineID=38),     fOut}
+	{Node 37 (lineID=37),     fOut}
+	{Node 19 (lineID=19),     fOut}
+	{Node 18 (lineID=18),     fOut}
+	{Node 21 (lineID=21),     fOut}
+	{Node 22 (lineID=22),     fOut}
+	{Node 25 (lineID=25),     fOut}
+	{Node 27 (lineID=27),     fOut}
+	{Node 28 (lineID=28),     fOut}
+	{Node 31 (lineID=31),     fOut}
 conDep = {Node 0 (lineID=0),     true}
-potDep = 4
+potDep = 34
 
