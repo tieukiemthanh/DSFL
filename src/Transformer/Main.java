@@ -27,7 +27,7 @@ public class Main {
 	// bien bieu thi giai thuat se su dung
 	// 0 : Tarantula
 	// 1 : Slicing
-	static int iMode = 1; 
+	static int iMode = 0; 
 	
 	static int[] statement2line;
 	static final long KILOBYTE = 1024L;
@@ -523,7 +523,7 @@ public class Main {
 					nTestcase++;
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
-						//writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalPass++; // tang tong so test case pass
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
@@ -534,7 +534,7 @@ public class Main {
 					}
 					// test case fail
 					else {
-						//writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalFail++; // tang tong so test case fail
 						for (int i = 1; i < numLine; i++) {
 							if (pathArrayList.contains(i)) {
@@ -710,7 +710,7 @@ public class Main {
 					nTestcase++;
 					// test case pass
 					if (studentResult.equals(solutionResult)) {
-						//writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalPass++; // tang tong so test case pass
 						pTestcase.add(0); // test case passed
 						for (int i = 1; i < numLine; i++) {
@@ -723,7 +723,7 @@ public class Main {
 					}
 					// test case fail
 					else {
-						//writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
 						totalFail++; // tang tong so test case fail
 						pTestcase.add(1); // test case failed
 						// chi xay dung slice cho nhung test cases fail
@@ -779,7 +779,7 @@ public class Main {
 			//writerAllPaths = new PrintWriter("allpaths.txt", "UTF-8");
 			
 			//file chua tap testcases da dung
-			//writerTestCasesAndPath = new PrintWriter("testcasesandpath.txt", "UTF-8");
+			writerTestCasesAndPath = new PrintWriter("testcasesandpath.txt", "UTF-8");
 			
 			// tao cay AST cho chuong trinh can kiem tra
 			// co the lay numLine tu day
@@ -836,7 +836,8 @@ public class Main {
 				
 				writerFL.close();
 				writerFLSlice.close();
-			
+				writerTestCasesAndPath.close();
+				
 				long tSlicing = System.currentTimeMillis();
 				
 				// Get the Java runtime
@@ -868,6 +869,7 @@ public class Main {
 				}
 				writerFL.close();
 				writerFLSlice.close();
+				writerTestCasesAndPath.close();
 				
 				long tTarantula = System.currentTimeMillis();
 				
@@ -952,7 +954,6 @@ public class Main {
 			// trinhgiang-16/10/2013	
 			//writer.close();
 			//writerAllPaths.close();
-			//writerTestCasesAndPath.close();
 			//writerStatistic.close();
 			/*
 			for (int i = 1; i < 2; i++) {
