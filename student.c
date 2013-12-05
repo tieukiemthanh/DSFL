@@ -18,31 +18,32 @@ float foo(int baseHP1, int wp1, int baseHP2, int wp2, int ground)
 			else if (p1 == 1 && p2 == 1) // ca 2 la paladin
 			{
 				if (baseHP1 > baseHP2)
-					fOut = 0.99;
-				else if (baseHP1 < baseHP2)
-					fOut = 0.01;
+					return  0.99;
+				if (baseHP1 < baseHP2)
+					return 0.02;
 				else
-					fOut = 0.5;
+					return 0.5;
 			} else {
 				// tinh realHP
 				float realHP1 = baseHP1;
 				float realHP2 = baseHP2;
 				if(wp1 == 0) realHP1 = baseHP1 / 10; // chi tinh phan nguyen
 				if(wp2 == 0) realHP2 = baseHP2 / 10; // chi tinh phan nguyen
-				if(ground == baseHP1) realHP1 = realHP1*1.1;
-				if(ground == baseHP2) realHP2 = realHP2*1.1;
-				if(realHP1 > 999) realHP1 = 999;
-				if(realHP2 > 999) realHP2 = 999;
+				//if(ground == baseHP1) realHP1 = realHP1*1.1;
+				//if(ground == baseHP2) realHP2 = realHP2*1.1;
+				//if(realHP1 > 999) realHP1 = 999;
+				//if(realHP2 > 999) realHP2 = 999;
 				
 				if (wp1 == 3) {
-					realHP1 = realHP1 * 2;
+					realHP1 = realHP1 * 2; 
+					// CAU LENH LOI
 					if(realHP1 > 999) realHP1 = 999;
 				}
 				else if (wp1 == 2 || wp2 == 2) {
 					if(wp1 == 2 && wp2 == 2) return 0.5;
 					else if(wp1 == 2 && realHP1 < realHP2)
 						return 0.5;
-					else if(realHP2 < realHP1) // CAU LENH LOI
+					else if(wp2 == 2 && realHP2 < realHP1)
 						return 0.5;
 				}
 				fOut = (realHP1 - realHP2 + 999) / 2000;

@@ -23,7 +23,7 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 41;
+	static int failLine = 16;
 	// bien bieu thi giai thuat se su dung
 	// 0 : Tarantula
 	// 1 : Slicing
