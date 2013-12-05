@@ -1,39 +1,52 @@
-float main(int HP1, int HP2, int Q1, int Q2, int d)
+float foo(int baseHP1, int wp1, int baseHP2, int wp2, int ground)
 {
 	float fOut = 0.0;
-	float P1 = HP1;
-	float P2 = HP2;
-	
-	int h = (HP1 + HP2) % 100;
-	if((d==1000) && ( h!=99 )&&( HP1!=999 ))
-		fOut= 0.00;
-	else {
-		if((HP1==777) && (Q1 < Q2) && (HP2!=888))	//Aramis tham chien
-			d = 201;
-			
-		if ((Q1 > 2*Q2) && (d>=800)) {
-			P1 = HP1 + (Q1 - Q2) * d * 1.0 / (Q1 + Q2);
-		}
-		else if(2*Q1 < Q2 && d <= 200) {
-			P2 = HP2 + (Q2 - Q1)*(1000 - d) * 1.0 / (Q1 + Q2); // phep chia so thuc
-		}
-		
-		if ((HP1 == 888) && (HP2 != 888))	//Porthos tham chien
-			h = 10 * h;
-			
-		fOut=(P1+h-P2+1000)/2000.0; // phep chia so thuc
-		
-		if (HP2==888)	//de Jussac tham chien
+	if (baseHP1 == 999) // vua Arthur ra tran
+		fOut = 1.0;
+	else
+	{
+		if (baseHP2 == 888) // Cerdic ra tran
+			fOut = 0.0;
+		else
 		{
-			if(HP1==999)	//d'Artagnan tham chien
-				fOut = 1.00;
-			else if((HP1!=777) && (HP1!=888) && (HP1!=900))
+			int p1 = isPrime(baseHP1);
+			int p2 = isPrime(baseHP2);
+			if (p1 == 1 && p2 == 0) // hiep si ban tron la paladin
+				fOut = 0.99;
+			else if (p1 == 0 && p2 == 1) // saxon = paladin
 				fOut = 0.01;
+			else if (p1 == 1 && p2 == 1) // ca 2 la paladin
+			{
+				if (baseHP1 > baseHP2)
+					fOut = 0.99;
+				else if (baseHP1 < baseHP2)
+					fOut = 0.01;
+				else
+					fOut = 0.5;
+			} else {
+				// tinh realHP
+				float realHP1 = baseHP1;
+				float realHP2 = baseHP2;
+				if(wp1 == 0) realHP1 = baseHP1 / 10; // chi tinh phan nguyen
+				if(wp2 == 0) realHP2 = baseHP2 / 10; // chi tinh phan nguyen
+				if(ground == baseHP1) realHP1 = realHP1*1.1;
+				if(ground == baseHP2) realHP2 = realHP2*1.1;
+				if(realHP1 > 999) realHP1 = 999;
+				if(realHP2 > 999) realHP2 = 999;
+				
+				if (wp1 == 3) {
+					realHP1 = realHP1 * 2;
+					if(realHP1 > 999) realHP1 = 999;
+				}
+				else if (wp1 == 2 || wp2 == 2) {
+					if(wp1 == 2 && wp2 == 2) return 0.5;
+					else if(wp1 == 2 && realHP1 < realHP2)
+						return 0.5;
+					else if(wp2 == 2 && realHP2 < realHP1) return 0.5;
+				}
+				fOut = (realHP1 - realHP2 + 999) / 2000;
+			}
 		}
-		
-		if ((HP1==900)&&(HP2!=888))	//Athos tham chien
-			if((Q1>Q2)||(fOut<0.5))
-				fOut=0.50;
 	}
 	return fOut;
 }
