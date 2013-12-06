@@ -23,11 +23,12 @@ public class Main {
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	//static int failLine = 6;
-	static int failLine = 16;
+	static int failLine = 10;
 	// bien bieu thi giai thuat se su dung
 	// 0 : Tarantula
 	// 1 : Slicing
-	static int iMode = 0; 
+	static int iMode = 1;
+	static int debug = 0;
 	
 	static int[] statement2line;
 	static final long KILOBYTE = 1024L;
@@ -787,6 +788,8 @@ public class Main {
 			AST labelTree = getLabelTree(getTree(args[0]));
 			AST solutionTree = getTree("solution.c");
 			long t2 = System.currentTimeMillis();
+
+			if(debug == 1) return;
 			
 			//trinhgiang-21/10/2013
 			//Standardize source

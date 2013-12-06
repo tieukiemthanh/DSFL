@@ -1,0 +1,5 @@
+Begin test cases.
+4;1!2!3!4
+2;5!2
+3;1!4!3
+End test cases.

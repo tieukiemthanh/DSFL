@@ -27,7 +27,8 @@ class Var {
 	public Var(String name, String type, String value, String arrayEleType) {
 		this.name = name;
 		this.type = type;
-		if(value.contains(".")) {
+
+		if(value.contains(".") && !type.contains("array")) {
 			this.value = String.format("%.9f", (new Float(value)).floatValue());
 		}
 		else { 
@@ -45,7 +46,7 @@ class Var {
 	}
 	
 	public String getValue() {
-		if(value.contains(".")) {
+		if(value.contains(".") && !this.type.contains("array")) {
 			return String.format("%.9f", (new Float(value)).floatValue());
 		}
 		else { 
@@ -59,7 +60,7 @@ class Var {
 	
 	public void setValue(String value) {
 		
-		if(value.contains(".")) {
+		if(value.contains(".") && !this.type.contains("array")) {
 			this.value = String.format("%.9f", (new Float(value)).floatValue());
 		}
 		else { 
