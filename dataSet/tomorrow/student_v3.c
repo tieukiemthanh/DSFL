@@ -40,7 +40,7 @@ void nextDate(int day, int date, int month, int year)
 		else if(date == 30 && (month == 4 ||month == 6 ||month == 9 ||month ==11))
 		{
 			//next_date = 1;
-			next_date = date; // CAU LENH LOI
+			next_date = date; // CAU LENH LOI 25
 			next_month = month++;
 		}
 		else

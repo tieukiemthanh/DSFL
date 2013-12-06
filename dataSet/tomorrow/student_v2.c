@@ -19,7 +19,7 @@ void nextDate(int day, int date, int month, int year)
 		}
 		else if(date == 28 && month == 2)
 		{
-			if((year % 4 == 0) && (year % 400 == 0)) // CAU LENH LOI
+			if((year % 4 == 0) && (year % 400 == 0)) // CAU LENH LOI 14
 				next_date = 29;
 			else
 			{

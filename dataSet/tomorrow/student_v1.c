@@ -13,7 +13,7 @@ void nextDate(int day, int date, int month, int year)
 			next_day = day++;
 		if(month == 12 && date == 31)
 		{
-			next_date = 0; // CAU LENH LOI
+			next_date = 0; // CAU LENH LOI 10
 			next_month = 1;
 			next_year = year + 1;
 		}

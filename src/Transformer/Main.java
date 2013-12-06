@@ -22,12 +22,13 @@ public class Main {
 	static int numLine = 0;
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
-	//static int failLine = 6;
-	static int failLine = 10;
 	// bien bieu thi giai thuat se su dung
 	// 0 : Tarantula
 	// 1 : Slicing
 	static int iMode = 1;
+	static int failLine = 25;
+	static int version = 3;
+	static int nFail = 1;
 	static int debug = 0;
 	
 	static int[] statement2line;
@@ -856,7 +857,7 @@ public class Main {
 				String astTime = (t2 - t1) + "";
 				String memoryConsum = memory + ""; // don vi kbytes
 				String sliceSt = (tSlicing - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
-				out.write(iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + sliceSt +"\n");
+				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + sliceSt +"\n");
 				out.close();
 				
 				System.out.println("Relevant slice");
@@ -889,7 +890,7 @@ public class Main {
 				String astTime = (t2 - t1) + "";
 				String memoryConsum = memory + "";
 				String tarantulaSt = (tTarantula - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
-				out.write(iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt +"\n");
+				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt +"\n");
 				out.close();
 			}		
 		

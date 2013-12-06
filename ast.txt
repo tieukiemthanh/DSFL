@@ -1,9 +1,9 @@
 Program(
 	FuncDecl(
-		sort
+		nextDate
 		ParaList(
 			Para(
-				n
+				day
 				TypeList(
 					Int
 					EmptyTypeList()
@@ -11,38 +11,49 @@ Program(
 			)
 			ParaList(
 				Para(
-					a
-					ArrayType(
+					date
+					TypeList(
+						Int
+						EmptyTypeList()
+					)
+				)
+				ParaList(
+					Para(
+						month
 						TypeList(
 							Int
 							EmptyTypeList()
 						)
-						ExprList(
-							Null(
+					)
+					ParaList(
+						Para(
+							year
+							TypeList(
+								Int
+								EmptyTypeList()
 							)
-							EmptyExprList()
 						)
+						EmptyParaList()
 					)
 				)
-				EmptyParaList()
 			)
 		)
 		TypeList(
-			Int
+			Void
 			EmptyTypeList()
 		)
 		CompStmt(
 			StmtList(
 				DeclarationStmt(
 					VarDecl(
-						swapped
+						next_day
 						TypeList(
 							Int
 							EmptyTypeList()
 						)
 						VarInitializer(
-							IntLiteral(
-								1
+							VarExpr(
+								day
 							)
 						)
 					)
@@ -51,186 +62,310 @@ Program(
 				StmtList(
 					DeclarationStmt(
 						VarDecl(
-							i
+							next_date
 							TypeList(
 								Int
 								EmptyTypeList()
 							)
 							VarInitializer(
-								BinExpr(
-									VarExpr(
-										n
-									)
-									-
-									IntLiteral(
-										1
-									)
+								VarExpr(
+									date
 								)
 							)
 						)
 						EmptyDeclarationList()
 					)
 					StmtList(
-						WhileStmt(
-							BinExpr(
-								VarExpr(
-									i
+						DeclarationStmt(
+							VarDecl(
+								next_month
+								TypeList(
+									Int
+									EmptyTypeList()
 								)
-								>
-								IntLiteral(
-									0
+								VarInitializer(
+									VarExpr(
+										month
+									)
 								)
 							)
-							CompStmt(
-								StmtList(
-									DeclarationStmt(
-										VarDecl(
-											j
-											TypeList(
-												Int
-												EmptyTypeList()
-											)
-											VarInitializer(
-												IntLiteral(
-													0
-												)
-											)
-										)
-										EmptyDeclarationList()
+							EmptyDeclarationList()
+						)
+						StmtList(
+							DeclarationStmt(
+								VarDecl(
+									next_year
+									TypeList(
+										Int
+										EmptyTypeList()
 									)
-									StmtList(
-										ExprStmt(
-											BinExpr(
-												VarExpr(
-													swapped
-												)
-												=
-												IntLiteral(
-													0
-												)
-											)
+									VarInitializer(
+										VarExpr(
+											year
 										)
-										StmtList(
-											WhileStmt(
+									)
+								)
+								EmptyDeclarationList()
+							)
+							StmtList(
+								IfThenElseStmt(
+									BinExpr(
+										BinExpr(
+											BinExpr(
+												BinExpr(
+													BinExpr(
+														BinExpr(
+															VarExpr(
+																day
+															)
+															>=
+															IntLiteral(
+																2
+															)
+														)
+														&&
+														BinExpr(
+															VarExpr(
+																day
+															)
+															<=
+															IntLiteral(
+																8
+															)
+														)
+													)
+													&&
+													BinExpr(
+														VarExpr(
+															date
+														)
+														>=
+														IntLiteral(
+															1
+														)
+													)
+												)
+												&&
 												BinExpr(
 													VarExpr(
-														j
+														date
 													)
-													<
-													VarExpr(
-														i
+													<=
+													IntLiteral(
+														31
 													)
 												)
-												CompStmt(
-													StmtList(
-														IfThenStmt(
-															BinExpr(
-																EleExpr(
-																	a
-																	ExprList(
-																		VarExpr(
-																			j
-																		)
-																		EmptyExprList()
+											)
+											&&
+											BinExpr(
+												VarExpr(
+													month
+												)
+												>=
+												IntLiteral(
+													1
+												)
+											)
+										)
+										&&
+										BinExpr(
+											VarExpr(
+												month
+											)
+											<=
+											IntLiteral(
+												12
+											)
+										)
+									)
+									CompStmt(
+										StmtList(
+											IfThenElseStmt(
+												BinExpr(
+													VarExpr(
+														day
+													)
+													==
+													IntLiteral(
+														8
+													)
+												)
+												ExprStmt(
+													BinExpr(
+														VarExpr(
+															next_day
+														)
+														=
+														IntLiteral(
+															2
+														)
+													)
+												)
+												ExprStmt(
+													BinExpr(
+														VarExpr(
+															next_day
+														)
+														=
+														UnaryExpr(
+															++
+															VarExpr(
+																day
+															)
+														)
+													)
+												)
+											)
+											StmtList(
+												IfThenElseStmt(
+													BinExpr(
+														BinExpr(
+															VarExpr(
+																month
+															)
+															==
+															IntLiteral(
+																12
+															)
+														)
+														&&
+														BinExpr(
+															VarExpr(
+																date
+															)
+															==
+															IntLiteral(
+																31
+															)
+														)
+													)
+													CompStmt(
+														StmtList(
+															ExprStmt(
+																BinExpr(
+																	VarExpr(
+																		next_date
 																	)
-																)
-																>
-																EleExpr(
-																	a
-																	ExprList(
-																		BinExpr(
-																			VarExpr(
-																				j
-																			)
-																			+
-																			IntLiteral(
-																				1
-																			)
-																		)
-																		EmptyExprList()
+																	=
+																	IntLiteral(
+																		1
 																	)
 																)
 															)
-															CompStmt(
-																StmtList(
-																	DeclarationStmt(
-																		VarDecl(
-																			temp
-																			TypeList(
-																				Int
-																				EmptyTypeList()
-																			)
-																			VarInitializer(
-																				EleExpr(
-																					a
-																					ExprList(
-																						VarExpr(
-																							j
-																						)
-																						EmptyExprList()
-																					)
-																				)
-																			)
+															StmtList(
+																ExprStmt(
+																	BinExpr(
+																		VarExpr(
+																			next_month
 																		)
-																		EmptyDeclarationList()
+																		=
+																		IntLiteral(
+																			1
+																		)
 																	)
-																	StmtList(
-																		ExprStmt(
+																)
+																StmtList(
+																	ExprStmt(
+																		BinExpr(
+																			VarExpr(
+																				next_year
+																			)
+																			=
 																			BinExpr(
-																				EleExpr(
-																					a
-																					ExprList(
-																						VarExpr(
-																							j
-																						)
-																						EmptyExprList()
-																					)
+																				VarExpr(
+																					year
 																				)
-																				=
-																				EleExpr(
-																					a
-																					ExprList(
-																						BinExpr(
-																							VarExpr(
-																								j
-																							)
-																							+
-																							IntLiteral(
-																								1
-																							)
-																						)
-																						EmptyExprList()
-																					)
+																				+
+																				IntLiteral(
+																					1
 																				)
 																			)
 																		)
+																	)
+																	EmptyStmtList()
+																)
+															)
+														)
+													)
+													IfThenElseStmt(
+														BinExpr(
+															BinExpr(
+																VarExpr(
+																	date
+																)
+																==
+																IntLiteral(
+																	28
+																)
+															)
+															&&
+															BinExpr(
+																VarExpr(
+																	month
+																)
+																==
+																IntLiteral(
+																	2
+																)
+															)
+														)
+														CompStmt(
+															StmtList(
+																IfThenElseStmt(
+																	BinExpr(
+																		BinExpr(
+																			BinExpr(
+																				VarExpr(
+																					year
+																				)
+																				%
+																				IntLiteral(
+																					4
+																				)
+																			)
+																			==
+																			IntLiteral(
+																				0
+																			)
+																		)
+																		||
+																		BinExpr(
+																			BinExpr(
+																				VarExpr(
+																					year
+																				)
+																				%
+																				IntLiteral(
+																					400
+																				)
+																			)
+																			==
+																			IntLiteral(
+																				0
+																			)
+																		)
+																	)
+																	ExprStmt(
+																		BinExpr(
+																			VarExpr(
+																				next_date
+																			)
+																			=
+																			IntLiteral(
+																				29
+																			)
+																		)
+																	)
+																	CompStmt(
 																		StmtList(
 																			ExprStmt(
 																				BinExpr(
-																					EleExpr(
-																						a
-																						ExprList(
-																							BinExpr(
-																								VarExpr(
-																									j
-																								)
-																								+
-																								IntLiteral(
-																									1
-																								)
-																							)
-																							EmptyExprList()
-																						)
+																					VarExpr(
+																						next_date
 																					)
 																					=
-																					BinExpr(
-																						VarExpr(
-																							temp
-																						)
-																						+
-																						IntLiteral(
-																							1
-																						)
+																					IntLiteral(
+																						1
 																					)
 																				)
 																			)
@@ -238,11 +373,14 @@ Program(
 																				ExprStmt(
 																					BinExpr(
 																						VarExpr(
-																							swapped
+																							next_month
 																						)
 																						=
-																						IntLiteral(
-																							1
+																						UnaryExpr(
+																							++
+																							VarExpr(
+																								month
+																							)
 																						)
 																					)
 																				)
@@ -251,77 +389,307 @@ Program(
 																		)
 																	)
 																)
+																EmptyStmtList()
 															)
 														)
-														StmtList(
-															ExprStmt(
+														IfThenElseStmt(
+															BinExpr(
 																BinExpr(
 																	VarExpr(
-																		j
+																		date
 																	)
-																	=
+																	==
+																	IntLiteral(
+																		31
+																	)
+																)
+																&&
+																BinExpr(
+																	BinExpr(
+																		BinExpr(
+																			BinExpr(
+																				BinExpr(
+																					BinExpr(
+																						VarExpr(
+																							month
+																						)
+																						==
+																						IntLiteral(
+																							1
+																						)
+																					)
+																					||
+																					BinExpr(
+																						VarExpr(
+																							month
+																						)
+																						==
+																						IntLiteral(
+																							3
+																						)
+																					)
+																				)
+																				||
+																				BinExpr(
+																					VarExpr(
+																						month
+																					)
+																					==
+																					IntLiteral(
+																						5
+																					)
+																				)
+																			)
+																			||
+																			BinExpr(
+																				VarExpr(
+																					month
+																				)
+																				==
+																				IntLiteral(
+																					7
+																				)
+																			)
+																		)
+																		||
+																		BinExpr(
+																			VarExpr(
+																				month
+																			)
+																			==
+																			IntLiteral(
+																				8
+																			)
+																		)
+																	)
+																	||
 																	BinExpr(
 																		VarExpr(
-																			j
+																			month
 																		)
-																		+
+																		==
 																		IntLiteral(
-																			1
+																			10
 																		)
 																	)
 																)
 															)
-															EmptyStmtList()
-														)
-													)
-												)
-											)
-											StmtList(
-												ExprStmt(
-													BinExpr(
-														VarExpr(
-															i
-														)
-														=
-														BinExpr(
-															VarExpr(
-																i
+															CompStmt(
+																StmtList(
+																	ExprStmt(
+																		BinExpr(
+																			VarExpr(
+																				next_date
+																			)
+																			=
+																			IntLiteral(
+																				1
+																			)
+																		)
+																	)
+																	StmtList(
+																		ExprStmt(
+																			BinExpr(
+																				VarExpr(
+																					next_month
+																				)
+																				=
+																				UnaryExpr(
+																					++
+																					VarExpr(
+																						month
+																					)
+																				)
+																			)
+																		)
+																		EmptyStmtList()
+																	)
+																)
 															)
-															-
-															IntLiteral(
-																1
+															IfThenElseStmt(
+																BinExpr(
+																	BinExpr(
+																		VarExpr(
+																			date
+																		)
+																		==
+																		IntLiteral(
+																			29
+																		)
+																	)
+																	&&
+																	BinExpr(
+																		VarExpr(
+																			month
+																		)
+																		==
+																		IntLiteral(
+																			2
+																		)
+																	)
+																)
+																CompStmt(
+																	StmtList(
+																		ExprStmt(
+																			BinExpr(
+																				VarExpr(
+																					next_date
+																				)
+																				=
+																				IntLiteral(
+																					1
+																				)
+																			)
+																		)
+																		StmtList(
+																			ExprStmt(
+																				BinExpr(
+																					VarExpr(
+																						next_month
+																					)
+																					=
+																					UnaryExpr(
+																						++
+																						VarExpr(
+																							month
+																						)
+																					)
+																				)
+																			)
+																			EmptyStmtList()
+																		)
+																	)
+																)
+																IfThenElseStmt(
+																	BinExpr(
+																		BinExpr(
+																			VarExpr(
+																				date
+																			)
+																			==
+																			IntLiteral(
+																				30
+																			)
+																		)
+																		&&
+																		BinExpr(
+																			BinExpr(
+																				BinExpr(
+																					BinExpr(
+																						VarExpr(
+																							month
+																						)
+																						==
+																						IntLiteral(
+																							4
+																						)
+																					)
+																					||
+																					BinExpr(
+																						VarExpr(
+																							month
+																						)
+																						==
+																						IntLiteral(
+																							6
+																						)
+																					)
+																				)
+																				||
+																				BinExpr(
+																					VarExpr(
+																						month
+																					)
+																					==
+																					IntLiteral(
+																						9
+																					)
+																				)
+																			)
+																			||
+																			BinExpr(
+																				VarExpr(
+																					month
+																				)
+																				==
+																				IntLiteral(
+																					11
+																				)
+																			)
+																		)
+																	)
+																	CompStmt(
+																		StmtList(
+																			ExprStmt(
+																				BinExpr(
+																					VarExpr(
+																						next_date
+																					)
+																					=
+																					VarExpr(
+																						date
+																					)
+																				)
+																			)
+																			StmtList(
+																				ExprStmt(
+																					BinExpr(
+																						VarExpr(
+																							next_month
+																						)
+																						=
+																						UnaryExpr(
+																							++
+																							VarExpr(
+																								month
+																							)
+																						)
+																					)
+																				)
+																				EmptyStmtList()
+																			)
+																		)
+																	)
+																	ExprStmt(
+																		UnaryExpr(
+																			++
+																			VarExpr(
+																				next_date
+																			)
+																		)
+																	)
+																)
 															)
 														)
 													)
 												)
 												StmtList(
-													IfThenStmt(
-														BinExpr(
-															VarExpr(
-																swapped
-															)
-															==
-															IntLiteral(
-																0
-															)
+													RetStmt(
+														VarExpr(
+															next_date
 														)
-														BreakStmt()
 													)
 													EmptyStmtList()
 												)
 											)
 										)
 									)
+									CompStmt(
+										StmtList(
+											RetStmt(
+												UnaryExpr(
+													-
+													IntLiteral(
+														1
+													)
+												)
+											)
+											EmptyStmtList()
+										)
+									)
 								)
+								EmptyStmtList()
 							)
-						)
-						StmtList(
-							RetStmt(
-								VarExpr(
-									a
-								)
-							)
-							EmptyStmtList()
 						)
 					)
 				)
