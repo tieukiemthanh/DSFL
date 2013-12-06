@@ -16,7 +16,7 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 	{
 		if (((2*Q1)<Q2)&&(d<=200))
 		{
-			P1 = HP1;
+			P1 = HP2; //P1 = HP1 // CAU LENH SAI 11
 			P2 = (HP2+(((Q2-Q1)*(1000-d) * 1.0)/(Q1+Q2)));
 		}
 		else
@@ -25,8 +25,8 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 			P2=HP2;
 		}
 	}
-	
-	if (d==1000)
+
+	if (d == 1000)
 	{
 		if (HP1==999)
 		{
@@ -59,14 +59,14 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 		}
 		else
 		{
-			if (HP1==888) // CAU LENH SAI 28
+			if (HP1==888)
 			{
 				h=(10*h);
 				fOut=((P1+h-P2+1000)/2000);
 			}
 			else
 			{
-				if (HP1!=900)
+				if (HP1 != 900)
 					fOut=((P1+h-P2+1000)/2000);
 				else
 				{

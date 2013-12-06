@@ -59,7 +59,7 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 		}
 		else
 		{
-			if (HP1==888) // CAU LENH SAI 28
+			if (HP1!=888) // CAU LENH SAI 28
 			{
 				h=(10*h);
 				fOut=((P1+h-P2+1000)/2000);
