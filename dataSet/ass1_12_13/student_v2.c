@@ -54,7 +54,7 @@ float getPR(int hp, int d, int s) {
 	}
 	if(d>200 && d <300) 
 	{
-		float e = (d+P1+P2)/1000; // CAU LENH SAI
+		float e = (d+P1+P2)/1000; // CAU LENH SAI 42
 		if(e > 0.8) 
 			pR = 0;
 	}

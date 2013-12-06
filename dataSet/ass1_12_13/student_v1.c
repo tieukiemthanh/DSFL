@@ -12,7 +12,7 @@ float getPR(int hp, int d, int s) {
 	int xet = isFibonaci(d+s);
 	if(songuyento == 0) {
 		P1 = hp;
-		P2 = (hp + d)%200; // CAU LENH SAI
+		P2 = (hp + d)%200; // CAU LENH SAI 15
 	}
 	else {
 		P1 = 1000;

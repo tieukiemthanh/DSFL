@@ -39,7 +39,7 @@ float getPR(int hp, int d, int s) {
 			gs = 0 - (s%30)*(s%30) + 3*s;
 		if(s%6==4) 
 			gs = 0 - s;
-		if(s%6==6) // CAU LENH LOI  
+		if(s%6==6) // CAU LENH LOI 33
 		{
 			int c = (s%5) + 5;
 			gs = 0 - c*(c+1)/2.0;

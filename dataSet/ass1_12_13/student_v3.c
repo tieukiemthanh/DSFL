@@ -47,14 +47,14 @@ float getPR(int hp, int d, int s) {
 		fds = 40 - ((abs(d-500)))/20.0 + gs;
 		pR = (P1 + P2*fds)/(1000.0 + abs(P2*fds)) ;
 	}
-	if(d>800)
+	if(d <= 800) // CAU LENH SAI 38
 	{
 		fds = 0 - (d*s)/1000.0;
 		pR = (P1 + P2*fds)/(1000.0 + abs(P2*fds)) ;
 	}
 	if(d>200 && d <300) 
 	{
-		float e = (d+P1+P2)/1000; // CAU LENH SAI
+		float e = (d+P1+P2)/1000;
 		if(e > 0.8) 
 			pR = 0;
 	}

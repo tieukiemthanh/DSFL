@@ -34,7 +34,7 @@ float getPR(int hp, int d, int s) {
 		if(s%6==1) 
 			gs = 2*s;
 		if(s%6==2) 
-			gs = 0 - (s%9)*(s%9)*(s%9)/5; // CAU LENH SAI
+			gs = 0 - (s%9)*(s%9)*(s%9)/5; // CAU LENH SAI 28
 		if(s%6==3)
 			gs = 0 - (s%30)*(s%30) + 3*s;
 		if(s%6==4) 

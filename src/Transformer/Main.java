@@ -26,8 +26,8 @@ public class Main {
 	// 0 : Tarantula
 	// 1 : Slicing
 	static int iMode = 1;
-	static int failLine = 25;
-	static int version = 3;
+	static int failLine = 36;
+	static int version = 8;
 	static int nFail = 1;
 	static int debug = 0;
 	
