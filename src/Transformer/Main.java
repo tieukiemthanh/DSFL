@@ -25,9 +25,9 @@ public class Main {
 	// bien bieu thi giai thuat se su dung
 	// 0 : Tarantula
 	// 1 : Slicing
-	static int iMode = 1;
-	static int failLine = 11;
-	static int version = 6;
+	static int iMode = 3;
+	static int failLine = 7;
+	static int version = 1;
 	static int nFail = 1;
 	static int debug = 0;
 	
@@ -36,11 +36,11 @@ public class Main {
 	
 	static Slice sliceProg = new Slice();
 	
-	static float mintPercent = 1.0f; // min % cua pp tarantula
-	static float mintPercentSlice = 1.0f; // min % cua pp tarantula with dynamic slicing
+	static float mintPercent = 1.0f; // min % cua pp spectrum-based
+	static float mintPercentSlice = 1.0f; // min % cua pp spectrum-based with dynamic slicing
 
-	static float maxtPercent = 1.0f; // max % cua pp tarantuala
-	static float maxtPercentSlice = 1.0f; // max % cua pp tarantuala with dynamic slicing
+	static float maxtPercent = 1.0f; // max % cua pp spectrum-based
+	static float maxtPercentSlice = 1.0f; // max % cua pp spectrum-based with dynamic slicing
 			
 	static String standardSourceFile = "standard_output_student.txt";
 	static String mappingTableFile = "mapping_statement2line.txt";
@@ -48,6 +48,8 @@ public class Main {
 	// bien dung de ghi ket qua phan tich ra file
 	static PrintWriter writer;
 	static PrintWriter writerFL;
+	static PrintWriter writerFLOchiai;
+	static PrintWriter writerFLJaccard;
 	static PrintWriter writerFLSlice;
 	static PrintWriter writerAllPaths;
 	static PrintWriter writerTestCasesAndPath;
@@ -265,6 +267,23 @@ public class Main {
 		return scores;
 	}
 	
+	//phuong phap ochiai
+	//lay ve bang score
+	public static float[] ochiaiSlice(float[] pass, float[] fail, int totalPass, int totalFail) {
+		float[] scores = new float[numLine];
+		scores[0] = -1;
+
+		for (int i = 1; i < numLine; i++) {
+			if (fail[i] == 0) {
+				scores[i] = 0;
+			} else {
+				scores[i] = fail[i] / (float)Math.sqrt(totalFail * (pass[i] + fail[i]));
+			}
+		}
+		
+		return scores;
+	}
+	
 	// phuong phap ochiai
 	public static Percent ochiai(int[] pass, int[] fail, int totalPass, int totalFail) {
 		float[] scores = new float[numLine];
@@ -445,7 +464,7 @@ public class Main {
 	// de lay thong tin ve dung sai cua chuong trinh
 	// chuong trinh mau chi ton tai de giup viec so sanh ket qua output
 	// duoc de dang, khong co vai tro gi trong thi nghiem
-	public static void readTestCasesTarantula(int index, AST labelTree, AST solutionTree) {
+	public static void readTestCasesSpectrum(int index, AST labelTree, AST solutionTree, int mode) {
 		try {
 			float[] tarantulaScores = new float[numLine];
 			//float[] tarantulaScoresSlice = new float[numLine];
@@ -481,8 +500,14 @@ public class Main {
 				}
 				// ket thuc test case, danh gia chat luong cua bo test case nay
 				else if (testcase.contains("End test cases.")) {
-					// tarantula technique computation
-					tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
+					if(mode == 0) {
+						// tarantula technique computation
+						tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
+					} else if(mode == 1) {
+						tarantulaScores = ochiaiPrint(pass, fail, totalPass, totalFail);
+					} else if(mode == 2) {
+						tarantulaScores = jaccardPrint(pass, fail, totalPass, totalFail);
+					}
 					//tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
 					
 					// tarantula technique evaluation
@@ -551,8 +576,19 @@ public class Main {
 	
 			//tam thoi in ket qua FL cua tarantula
 			//writerFL.println("Tarantula technique");
-			for(int j = 1; j < numLine; j++)
-				writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
+			if(mode == 0) {
+				// tarantula
+				for(int j = 1; j < numLine; j++)
+					writerFL.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
+			} else if(mode == 1) {
+				// ochiai
+				for(int j = 1; j < numLine; j++)
+					writerFLOchiai.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
+			} else if(mode == 1) {
+				// jaccard
+				for(int j = 1; j < numLine; j++)
+					writerFLJaccard.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -664,7 +700,8 @@ public class Main {
 					}
 					
 					// PSS-SFL
-					tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
+					//tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
+					tarantulaScoresSlice = ochiaiSlice(newPass, newFail, totalPass, totalFail);
 					
 					// tarantula technique evaluation
 					//Percent tPercent = getPercent(tarantulaScores);
@@ -774,7 +811,8 @@ public class Main {
 			
 			//file chua ket qua fault localization
 			writerFL = new PrintWriter("FL.txt", "UTF-8");
-			
+			writerFLOchiai = new PrintWriter("FLOchiai.txt", "UTF-8");
+			writerFLJaccard = new PrintWriter("FLJaccard.txt", "UTF-8");
 			writerFLSlice = new PrintWriter("FLSlice.txt", "UTF-8");
 			
 			//file chua tat ca cac paths cua chuong trinh
@@ -820,7 +858,7 @@ public class Main {
 			//System.out.println(mapTable.toString());
 			writeToFile(mappingTableFile, mapTable.toString());
 		
-			if(iMode == 1) // Dynamic Slicing
+			if(iMode == 3) // Dynamic Slicing
 			{
 				//in ra program dependence graph
 				String PDGFilename = "output_graph.txt";
@@ -833,6 +871,7 @@ public class Main {
 			
 				// concolic test cases
 				for (int i = 5; i < 6; i++) {
+					// su dung cong thuc cua ochiai
 					readTestCasesSlicing(i, labelTree, solutionTree, graph);
 					//writer.println("***********************");
 					//writerFL.println("***********************");
@@ -841,6 +880,8 @@ public class Main {
 				writerFL.close();
 				writerFLSlice.close();
 				writerTestCasesAndPath.close();
+				writerFLJaccard.close();
+				writerFLOchiai.close();
 				
 				long tSlicing = System.currentTimeMillis();
 				
@@ -867,13 +908,15 @@ public class Main {
 			{
 				// concolic test cases
 				for (int i = 5; i < 6; i++) {
-					readTestCasesTarantula(i, labelTree, solutionTree);
+					readTestCasesSpectrum(i, labelTree, solutionTree, iMode);
 					//writer.println("***********************");
 					//writerFL.println("***********************");
 				}
 				writerFL.close();
 				writerFLSlice.close();
 				writerTestCasesAndPath.close();
+				writerFLJaccard.close();
+				writerFLOchiai.close();
 				
 				long tTarantula = System.currentTimeMillis();
 				
