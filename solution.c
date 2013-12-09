@@ -1,39 +1,63 @@
-float main(int HP1, int HP2, int Q1, int Q2, int d)
-{
-	float fOut = 0.0;
-	float P1 = HP1;
-	float P2 = HP2;
+float getPR(int hp, int d, int s) {
+	int P1 = 0;
+	int P2 = 0;
+	float pR = -1;
 	
-	int h = (HP1 + HP2) % 100;
-	if((d==1000) && ( h!=99 )&&( HP1!=999 ))
-		fOut= 0.00;
-	else {
-		if((HP1==777) && (Q1 < Q2) && (HP2!=888))	//Aramis tham chien
-			d = 201;
-			
-		if ((Q1 > 2*Q2) && (d>=800)) {
-			P1 = HP1 + (Q1 - Q2) * d * 1.0 / (Q1 + Q2);
-		}
-		else if(2*Q1 < Q2 && d <= 200) {
-			P2 = HP2 + (Q2 - Q1)*(1000 - d) * 1.0 / (Q1 + Q2); // phep chia so thuc
-		}
-		
-		if ((HP1 == 888) && (HP2 != 888))	//Porthos tham chien
-			h = 10 * h;
-			
-		fOut=(P1+h-P2+1000)/2000.0; // phep chia so thuc
-		
-		if (HP2==888)	//de Jussac tham chien
-		{
-			if(HP1==999)	//d'Artagnan tham chien
-				fOut = 1.00;
-			else if((HP1!=777) && (HP1!=888) && (HP1!=900))
-				fOut = 0.01;
-		}
-		
-		if ((HP1==900)&&(HP2!=888))	//Athos tham chien
-			if((Q1>Q2)||(fOut<0.5))
-				fOut=0.50;
+	if (hp < 1 || hp > 999) return pR;
+	if (d < 1 || d > 1000) return pR;
+	if (s < 1 || s > 100) return pR;
+	
+	int songuyento = isPrime(hp);
+	int fibonaci = isFibonaci(d+s);
+	
+	if (songuyento == 1) {
+		P1 = 1000;
+		P2 = (hp + s) % 1000;
 	}
-	return fOut;
+	else {
+		P1 = hp;
+		P2 = (hp + d) % 100;
+	}
+	//-----------xac dinh g(d,s)
+	float ham_g = 0;
+	int n = 0;
+	if (s % 6 == 0) ham_g = s / 2.0;
+	else if (s % 6 == 1) ham_g = 2 * s;
+	else if (s % 6 == 2) ham_g = - (s % 9) * (s % 9) * (s % 9) / 5.0;
+	else if (s % 6 == 3) ham_g = - (s % 30)*(s % 30) + 3.0 * s;
+	else if (s % 6 == 4) ham_g = -s + 0.0;
+	else {
+		n = s % 5 + 5;
+		ham_g = - (n + 1) * n / 2.0;
+	}
+    //---------------------------------
+	//--------------xac dinh f(d,s)
+	float ham_f = 0;
+	if (d > 800) ham_f = -d * s / 1000.0;
+	else if (d >= 200 && d <= 800) {
+		if (d - 500 > 0) ham_f = 40 - (d -500) / 20.0 + ham_g ;
+		else ham_f = 40 - (500 - d) / 20.0 + ham_g;
+	}
+	else {
+		if (fibonaci == 0) ham_f = 0;
+		else {
+			if (d - 500 > 0) ham_f = 40 - (d - 500) / 20.0 + ham_g ;
+			else ham_f = 40 - (500 - d) / 20.0 + ham_g;
+		}
+	}	
+	//---------------------------------
+	//----------------xac dinh pR
+	float rancat = 0;
+	rancat = (d + P1 + P2) / 1000.0;
+	if (rancat > 0.8 && d <300 && d > 200)
+		pR = 0;
+	else if (ham_f >= 0) pR = (P1 + P2 * ham_f) / (1000.0 + P2 * ham_f);
+	else pR = (P1 + P2 * ham_f) / (1000.0 - P2 * ham_f);
+	//---------------------------------
+	//==============================================
+	if(pR<0) 
+		pR = 0;
+	if(pR>1) 
+		pR = 1;	
+	return pR;
 }

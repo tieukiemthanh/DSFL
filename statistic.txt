@@ -1,5 +1,1 @@
 Ver 	Mode	NumSt	Memory(kbytes)	Parser Time(msec)    Caculate Time(msec)	           Min		   Max
-1		0		24			459					1481					121					0.1667		0.3750
-1		1		24			460					1606					82					0.0417		0.2500
-1		2		24			459					1516					156					0.0417		0.2500
-1		3		24			473					1518					142					0.0417		0.2083

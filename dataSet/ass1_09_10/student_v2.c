@@ -10,6 +10,7 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 	else {
 		// CAU LENH LOI 7
 		if((HP1==777) || (Q1 < Q2) && (HP2!=888))	//Aramis tham chien
+		//if((HP1==777) && (Q1 < Q2) && (HP2!=888))	//Aramis tham chien
 			d = 201;
 			
 		if ((Q1 > 2*Q2) && (d>=800)) {

@@ -28,7 +28,7 @@ public class Main {
 	// 2 : Jaccard
 	// 3 : Slicing
 	static int iMode = 3;
-	static int failLine = 16;
+	static int failLine = 15;
 	static int version = 1;
 	static int nFail = 1;
 	static int debug = 0;

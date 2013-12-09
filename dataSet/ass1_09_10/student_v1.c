@@ -22,8 +22,9 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 			h = 10 * h;
 			
 		fOut=(P1+h-P2+1000)/2000.0;
-		// CAU LENH LOI
+		// CAU LENH LOI 16
 		if (HP2!=888)	//de Jussac tham chien
+		//if (HP2==888)
 		{
 			if(HP1==999)	//d'Artagnan tham chien
 				fOut = 1.00;
