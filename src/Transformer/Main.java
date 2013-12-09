@@ -24,9 +24,11 @@ public class Main {
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	// bien bieu thi giai thuat se su dung
 	// 0 : Tarantula
-	// 1 : Slicing
+	// 1 : Ochiai
+	// 2 : Jaccard
+	// 3 : Slicing
 	static int iMode = 3;
-	static int failLine = 7;
+	static int failLine = 16;
 	static int version = 1;
 	static int nFail = 1;
 	static int debug = 0;
@@ -254,13 +256,14 @@ public class Main {
 		
 		// tinh diem cho tung cau lenh theo cong thuc
 		for (int i = 1; i < numLine; i++) {
+			//System.out.println(newFail[i] + "---" + newPass[i]);
 			if (newFail[i] == 0) {
 				scores[i] = 0;
 			} else if (newPass[i] == 0) {
 				scores[i] = 1;
 			} else {
 				//cong thuc cua tarantula
-				scores[i] = ((float)newFail[i] / totalFail) / ((float)newPass[i] / totalPass + (float)newFail[i] / totalFail);
+				scores[i] = (newFail[i]) / (newPass[i] + newFail[i]);
 			}
 		}
 			
@@ -274,10 +277,15 @@ public class Main {
 		scores[0] = -1;
 
 		for (int i = 1; i < numLine; i++) {
+			//System.out.println(fail[i] + "---" + pass[i]);
 			if (fail[i] == 0) {
 				scores[i] = 0;
-			} else {
-				scores[i] = fail[i] / (float)Math.sqrt(totalFail * (pass[i] + fail[i]));
+			} else if(pass[i] == 0) {
+				scores[i] = 1;
+			}
+			else {
+				// chinh lai dung cong thuc
+				scores[i] = (fail[i]*totalFail) / (float)Math.sqrt(totalFail * (pass[i]*totalPass + fail[i]*totalFail));
 			}
 		}
 		
@@ -307,6 +315,7 @@ public class Main {
 		scores[0] = -1;
 
 		for (int i = 1; i < numLine; i++) {
+			//System.out.println(fail[i] + "---" + pass[i]);
 			if (fail[i] == 0) {
 				scores[i] = 0;
 			} else {
@@ -584,7 +593,7 @@ public class Main {
 				// ochiai
 				for(int j = 1; j < numLine; j++)
 					writerFLOchiai.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
-			} else if(mode == 1) {
+			} else if(mode == 2) {
 				// jaccard
 				for(int j = 1; j < numLine; j++)
 					writerFLJaccard.printf("%d:%.3f\n", statement2line[j], tarantulaScores[j]);
@@ -701,6 +710,7 @@ public class Main {
 					
 					// PSS-SFL
 					//tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
+					// su dung ky thuat Ochiai
 					tarantulaScoresSlice = ochiaiSlice(newPass, newFail, totalPass, totalFail);
 					
 					// tarantula technique evaluation

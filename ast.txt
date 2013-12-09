@@ -179,16 +179,16 @@ Program(
 											IfThenStmt(
 												BinExpr(
 													BinExpr(
-														VarExpr(
-															HP1
+														BinExpr(
+															VarExpr(
+																HP1
+															)
+															==
+															IntLiteral(
+																777
+															)
 														)
-														==
-														IntLiteral(
-															777
-														)
-													)
-													||
-													BinExpr(
+														&&
 														BinExpr(
 															VarExpr(
 																Q1
@@ -198,15 +198,15 @@ Program(
 																Q2
 															)
 														)
-														&&
-														BinExpr(
-															VarExpr(
-																HP2
-															)
-															!=
-															IntLiteral(
-																888
-															)
+													)
+													&&
+													BinExpr(
+														VarExpr(
+															HP2
+														)
+														!=
+														IntLiteral(
+															888
 														)
 													)
 												)
@@ -474,7 +474,7 @@ Program(
 																	VarExpr(
 																		HP2
 																	)
-																	==
+																	!=
 																	IntLiteral(
 																		888
 																	)
