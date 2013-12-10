@@ -6,7 +6,7 @@ int sort(int n, int a[])
 		int j = 0;
 		swapped = 0;
 		while(j < i) {
-			if(a[j] > a[j+1] * 2) { // CAU LENH LOI
+			if(a[j] > a[j+1] * 2) { // CAU LENH LOI 7
 				int temp = a[j];
 				a[j] = a[j+1];
 				a[j+1] = temp;

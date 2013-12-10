@@ -20,6 +20,7 @@ public class Main {
 	//hien thuc ham lay numLine tu dong
 	//static int numLine = 9 + 1;
 	static int numLine = 0;
+	static int nTest = 0;
 	// dong lenh sai
 	// duoc set tinh, chi co tac dung de so sanh ket qua thong ke
 	// bien bieu thi giai thuat se su dung
@@ -28,8 +29,8 @@ public class Main {
 	// 2 : Jaccard
 	// 3 : Slicing
 	static int iMode = 3;
-	static int failLine = 15;
-	static int version = 1;
+	static int failLine = 28;
+	static int version = 5;
 	static int nFail = 1;
 	static int debug = 0;
 	
@@ -509,6 +510,7 @@ public class Main {
 				}
 				// ket thuc test case, danh gia chat luong cua bo test case nay
 				else if (testcase.contains("End test cases.")) {
+					nTest = nTestcase;
 					if(mode == 0) {
 						// tarantula technique computation
 						tarantulaScores = tarantulaPrint(pass, fail, totalPass, totalFail);
@@ -654,7 +656,7 @@ public class Main {
 					//for(int k = 0; k < nTestcase; k++) {
 						//sumFreq[k] = 0;
 					//}
-					
+					nTest = nTestcase;
 					// tinh tan suat cua moi cau lenh
 					float[][] freqSlice = new float[numLine][nTestcase];
 					for(int j = 0; j < nTestcase; j++) {
@@ -908,7 +910,7 @@ public class Main {
 				String astTime = (t2 - t1) + "";
 				String memoryConsum = memory + ""; // don vi kbytes
 				String sliceSt = (tSlicing - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
-				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + sliceSt +"\n");
+				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t" + nTest + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + sliceSt +"\n");
 				out.close();
 				
 				System.out.println("Relevant slice");
@@ -943,7 +945,7 @@ public class Main {
 				String astTime = (t2 - t1) + "";
 				String memoryConsum = memory + "";
 				String tarantulaSt = (tTarantula - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
-				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt +"\n");
+				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t" + nTest + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt +"\n");
 				out.close();
 			}		
 		

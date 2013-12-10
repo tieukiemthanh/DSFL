@@ -21,8 +21,7 @@ float foo(int baseHP1, int wp1, int baseHP2, int wp2, int ground)
 				if (baseHP1 > baseHP2)
 					return  0.99;
 				//if (baseHP1 < baseHP2)
-				// CAU LENH SAI 15
-				if (baseHP1 >= baseHP2)
+				if (baseHP1 < baseHP2)
 					return 0.01;
 				if(baseHP1 == baseHP2)
 					return 0.5;
@@ -42,10 +41,14 @@ float foo(int baseHP1, int wp1, int baseHP2, int wp2, int ground)
 					if(realHP1 > 999) realHP1 = 999;
 				}
 				else if (wp1 == 2 || wp2 == 2) {
-					if(wp1 == 2 && wp2 == 2) return 0.5;
-					else if(wp1 == 2 && realHP1 < realHP2)
+				//else if (wp1 == 2 && wp2 == 2) {
+					if(wp1 == 2 && wp2 == 2) 
 						return 0.5;
-					else if(wp2 == 2 && realHP2 < realHP1)
+					//if(wp1 == 2 && realHP1 < realHP2)
+					// CAU LENH SAI 32
+					if(wp1 == 2 && realHP1 >= realHP2)
+						return 0.5;
+					if(wp2 == 2 && realHP2 < realHP1)
 						return 0.5;
 				}
 				fOut = (realHP1 - realHP2 + 999) / 2000;

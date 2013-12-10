@@ -9,7 +9,7 @@ int sort(int n, int a[])
 			if(a[j] > a[j+1]) {
 				int temp = a[j];
 				a[j] = a[j+1];
-				a[j+1] = temp + 1; // CAU LENH LOI
+				a[j+1] = temp + 1; // CAU LENH LOI 10
 				swapped = 1;
 			}
 			j = j + 1;
