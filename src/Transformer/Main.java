@@ -29,8 +29,8 @@ public class Main {
 	// 2 : Jaccard
 	// 3 : Slicing
 	static int iMode = 3;
-	static int failLine = 28;
-	static int version = 5;
+	static int failLine = 9;
+	static int version = 7;
 	static int nFail = 1;
 	static int debug = 0;
 	
@@ -281,9 +281,9 @@ public class Main {
 			//System.out.println(fail[i] + "---" + pass[i]);
 			if (fail[i] == 0) {
 				scores[i] = 0;
-			} else if(pass[i] == 0) {
-				scores[i] = 1;
-			}
+			} //else if(pass[i] == 0) {
+				//scores[i] = 1;
+			//}
 			else {
 				// chinh lai dung cong thuc
 				scores[i] = (fail[i]*totalFail) / (float)Math.sqrt(totalFail * (pass[i]*totalPass + fail[i]*totalFail));

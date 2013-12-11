@@ -240,7 +240,7 @@ Program(
 																)
 															)
 														)
-														&&
+														||
 														BinExpr(
 															VarExpr(
 																d
@@ -700,7 +700,7 @@ Program(
 																								VarExpr(
 																									Q1
 																								)
-																								>
+																								<=
 																								VarExpr(
 																									Q2
 																								)

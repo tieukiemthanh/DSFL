@@ -11,9 +11,7 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 	{
 		if((HP1==777) && (Q1 < Q2) && (HP2!=888))
 			d = 201;
-		//if ((Q1>(2*Q2))&&(d>=800))
-		// CAU LENH LOI 9
-		if ((Q1>(2*Q2))||(d>=800))
+		if ((Q1>(2*Q2))&&(d>=800))
 		{
 			P1 = ((HP1+((Q1-Q2)*d * 1.0)/(Q1+Q2)));
 			P2 = HP2;
@@ -31,8 +29,9 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 				P2=HP2;
 			}
 		}
-	
-		if (HP2==888)
+		//if (HP2==888)
+		// CAU LENH LOI 17
+		if (HP2>888)
 		{
 			if ((HP1==777)||(HP1==900)||(HP1==888))
 				fOut = ((P1+h-P2+1000)/2000);
@@ -47,8 +46,6 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 		else
 		{
 			if (HP1 == 888) 
-			// CAU LENH LOI 23
-			//if (HP1 > 888) 
 			{
 				h=(10*h);
 				fOut=((P1+h-P2+1000)/2000);
@@ -56,8 +53,6 @@ float main(int HP1, int HP2, int Q1, int Q2, int d)
 			else
 			{
 				if (HP1!=900)
-				// CAU LENH LOI 26
-				//if (HP1>900)
 					fOut=((P1+h-P2+1000)/2000);
 				else
 				{
