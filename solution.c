@@ -1,9 +1,7 @@
-int fact(int n) {
-	int r = 1;
-	int i = 1;
-	while (i <= n) {
-		r = r * i;
-		i = i + 1;
+int abs(int n) {
+	if (n >= 0) {
+		return n;
+	} else {
+		return -n;
 	}
-	return r;
 }

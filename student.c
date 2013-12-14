@@ -1,8 +1,7 @@
-int fact(int n) {
-	int r = 0;
-	while (n > 3) {
-		r = r * n;
-		n = n - 1;
+int abs(int n) {
+	if (n < 0) {
+		return n;
+	} else {
+		return -n;
 	}
-	return r;
 }

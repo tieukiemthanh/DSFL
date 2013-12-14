@@ -1,6 +1,6 @@
 Program(
 	FuncDecl(
-		fact
+		abs
 		ParaList(
 			Para(
 				n
@@ -17,83 +17,41 @@ Program(
 		)
 		CompStmt(
 			StmtList(
-				DeclarationStmt(
-					VarDecl(
-						r
-						TypeList(
-							Int
-							EmptyTypeList()
+				IfThenElseStmt(
+					BinExpr(
+						VarExpr(
+							n
 						)
-						VarInitializer(
-							IntLiteral(
-								0
-							)
+						<
+						IntLiteral(
+							0
 						)
 					)
-					EmptyDeclarationList()
-				)
-				StmtList(
-					WhileStmt(
-						BinExpr(
-							VarExpr(
-								n
-							)
-							>
-							IntLiteral(
-								3
-							)
-						)
-						CompStmt(
-							StmtList(
-								ExprStmt(
-									BinExpr(
-										VarExpr(
-											r
-										)
-										=
-										BinExpr(
-											VarExpr(
-												r
-											)
-											*
-											VarExpr(
-												n
-											)
-										)
-									)
-								)
-								StmtList(
-									ExprStmt(
-										BinExpr(
-											VarExpr(
-												n
-											)
-											=
-											BinExpr(
-												VarExpr(
-													n
-												)
-												-
-												IntLiteral(
-													1
-												)
-											)
-										)
-									)
-									EmptyStmtList()
+					CompStmt(
+						StmtList(
+							RetStmt(
+								VarExpr(
+									n
 								)
 							)
+							EmptyStmtList()
 						)
 					)
-					StmtList(
-						RetStmt(
-							VarExpr(
-								r
+					CompStmt(
+						StmtList(
+							RetStmt(
+								UnaryExpr(
+									-
+									VarExpr(
+										n
+									)
+								)
 							)
+							EmptyStmtList()
 						)
-						EmptyStmtList()
 					)
 				)
+				EmptyStmtList()
 			)
 		)
 	)
