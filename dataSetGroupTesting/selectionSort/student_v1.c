@@ -5,7 +5,8 @@ int sort(int n, int a[])
     int min = i;
     int j = i + 1;
     while (j < n) {
-      if (a[j] > a[min]) {
+	  // if (a[j] < a[min])
+      if (a[j] > a[min]) { // CAU LENH LOI 6
         min = j;
       }
       j = j + 1;

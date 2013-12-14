@@ -1,7 +1,10 @@
 int max(int a, int b) {
+	int ret = 0;
 	if (a >= b) {
-		return a;
+		ret = a;
 	} else {
-		return a;
+		ret = a; // CAU LENH LOI 4
+		a = a + 1;
 	}
+	return ret;
 }

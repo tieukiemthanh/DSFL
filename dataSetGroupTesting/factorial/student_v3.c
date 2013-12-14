@@ -5,5 +5,5 @@ int fact(int n) {
 		r = r * i;
 		i = i + 1;
 	}
-	return r + 1;
+	return r + 1; // CAU LENH LOI 6
 }
