@@ -4,7 +4,6 @@ int max(int a, int b) {
 		ret = b; // CAU LENH LOI 3
 	} else {
 		ret = b;
-		b = b + 1;
 	}
 	return ret;
 }
