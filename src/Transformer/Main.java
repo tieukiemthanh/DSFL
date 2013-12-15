@@ -28,8 +28,8 @@ public class Main {
 	// 1 : Ochiai
 	// 2 : Jaccard
 	// 3 : Slicing
-	static int iMode = 3;
-	static int failLine = 1;
+	static int iMode = 4;
+	static int failLine = 3;
 	static int version = 1;
 	static int nFail = 1;
 	static int debug = 0;
@@ -53,7 +53,8 @@ public class Main {
 	static PrintWriter writerFL;
 	static PrintWriter writerFLOchiai;
 	static PrintWriter writerFLJaccard;
-	static PrintWriter writerFLSlice;
+	static PrintWriter writerFLSliceTarantula;
+	static PrintWriter writerFLSliceOchiai;
 	static PrintWriter writerAllPaths;
 	static PrintWriter writerTestCasesAndPath;
 	//static PrintWriter writerStatistic;
@@ -797,9 +798,14 @@ public class Main {
 			}
 	
 			//writerFL.println("Tarantula technique with dynamic slicing");
-			for(int j = 1; j < numLine; j++)
-				writerFLSlice.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
-			
+			if(mode == 3) {
+				for(int j = 1; j < numLine; j++)
+					writerFLSliceTarantula.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
+			}
+			else {
+				for(int j = 1; j < numLine; j++)
+					writerFLSliceOchiai.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
+			}
 			//writeToFile("evaluation.txt", eval);
 			
 		} catch (Exception e) {
@@ -827,7 +833,8 @@ public class Main {
 			writerFL = new PrintWriter("FL.txt", "UTF-8");
 			writerFLOchiai = new PrintWriter("FLOchiai.txt", "UTF-8");
 			writerFLJaccard = new PrintWriter("FLJaccard.txt", "UTF-8");
-			writerFLSlice = new PrintWriter("FLSlice.txt", "UTF-8");
+			writerFLSliceTarantula = new PrintWriter("FLSliceTarantula.txt", "UTF-8");
+			writerFLSliceOchiai = new PrintWriter("FLSliceOchiai.txt", "UTF-8");
 			
 			//file chua tat ca cac paths cua chuong trinh
 			//writerAllPaths = new PrintWriter("allpaths.txt", "UTF-8");
@@ -892,7 +899,8 @@ public class Main {
 				}
 				
 				writerFL.close();
-				writerFLSlice.close();
+				writerFLSliceTarantula.close();
+				writerFLSliceOchiai.close();
 				writerTestCasesAndPath.close();
 				writerFLJaccard.close();
 				writerFLOchiai.close();
@@ -927,7 +935,8 @@ public class Main {
 					//writerFL.println("***********************");
 				}
 				writerFL.close();
-				writerFLSlice.close();
+				writerFLSliceTarantula.close();
+				writerFLSliceOchiai.close();
 				writerTestCasesAndPath.close();
 				writerFLJaccard.close();
 				writerFLOchiai.close();

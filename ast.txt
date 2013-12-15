@@ -22,7 +22,7 @@ Program(
 						VarExpr(
 							n
 						)
-						<
+						>=
 						IntLiteral(
 							0
 						)
@@ -40,11 +40,8 @@ Program(
 					CompStmt(
 						StmtList(
 							RetStmt(
-								UnaryExpr(
-									-
-									VarExpr(
-										n
-									)
+								VarExpr(
+									n
 								)
 							)
 							EmptyStmtList()
