@@ -609,7 +609,7 @@ public class Main {
 	// de lay thong tin ve dung sai cua chuong trinh
 	// chuong trinh mau chi ton tai de giup viec so sanh ket qua output
 	// duoc de dang, khong co vai tro gi trong thi nghiem
-	public static void readTestCasesSlicing(int index, AST labelTree, AST solutionTree, PDG graph) {
+	public static void readTestCasesSlicing(int index, AST labelTree, AST solutionTree, PDG graph, int mode) {
 		try {
 			//float[] tarantulaScores = new float[numLine];
 			float[] tarantulaScoresSlice = new float[numLine];
@@ -711,9 +711,11 @@ public class Main {
 					}
 					
 					// PSS-SFL
-					//tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
+					if(mode == 3)
+						tarantulaScoresSlice = tarantulaSlice(newPass, newFail, totalPass, totalFail);
 					// su dung ky thuat Ochiai
-					tarantulaScoresSlice = ochiaiSlice(newPass, newFail, totalPass, totalFail);
+					else
+						tarantulaScoresSlice = ochiaiSlice(newPass, newFail, totalPass, totalFail);
 					
 					// tarantula technique evaluation
 					//Percent tPercent = getPercent(tarantulaScores);
@@ -870,7 +872,7 @@ public class Main {
 			//System.out.println(mapTable.toString());
 			writeToFile(mappingTableFile, mapTable.toString());
 		
-			if(iMode == 3) // Dynamic Slicing
+			if(iMode == 3 || iMode == 4) // Dynamic Slicing
 			{
 				//in ra program dependence graph
 				String PDGFilename = "output_graph.txt";
@@ -884,7 +886,7 @@ public class Main {
 				// concolic test cases
 				for (int i = 5; i < 6; i++) {
 					// su dung cong thuc cua ochiai
-					readTestCasesSlicing(i, labelTree, solutionTree, graph);
+					readTestCasesSlicing(i, labelTree, solutionTree, graph, iMode);
 					//writer.println("***********************");
 					//writerFL.println("***********************");
 				}
