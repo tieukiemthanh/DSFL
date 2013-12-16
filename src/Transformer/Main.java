@@ -33,6 +33,7 @@ public class Main {
 	static int version = 1;
 	static int nFail = 1;
 	static int debug = 0;
+	static int numChecked = 0;
 	
 	static int[] statement2line;
 	static final long KILOBYTE = 1024L;
@@ -77,6 +78,7 @@ public class Main {
 	public static void getSliceOfTestcase(PDG graph, ArrayList<Integer> path, int stmt) {
 		//Slice s = new Slice();
 		if(stmt == 0) return;
+   		//if(stmt == 0 || !path.contains(stmt)) return;
 		if(path.contains(stmt) && !sliceProg.contains(stmt)) {
 			sliceProg.addLine(stmt);
 		}
@@ -200,6 +202,8 @@ public class Main {
 				maxCheckLine++;
 			}
 		}
+		
+		numChecked = maxCheckLine + 1;
 		//System.out.println("Da get percent " + (float)minCheckLine / (numLine - 1) + "--" + (float)maxCheckLine / (numLine - 1));
 		// tra ve ket qua la mot doi tuong percent
 		// nho la numLine phai tru 1
@@ -928,7 +932,8 @@ public class Main {
 				BufferedWriter out = new BufferedWriter(fstream);
 				String astTime = (t2 - t1) + "";
 				String memoryConsum = memory + ""; // don vi kbytes
-				String sliceSt = (tSlicing - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
+				//String sliceSt = (tSlicing - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercentSlice) + "\t\t" + String.format("%.4f",maxtPercentSlice);
+				String sliceSt = (tSlicing - t2) + "\t\t\t\t\t" + numChecked;
 				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t" + nTest + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + sliceSt +"\n");
 				out.close();
 				
@@ -964,7 +969,8 @@ public class Main {
 				BufferedWriter out = new BufferedWriter(fstream);
 				String astTime = (t2 - t1) + "";
 				String memoryConsum = memory + "";
-				String tarantulaSt = (tTarantula - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
+				//String tarantulaSt = (tTarantula - t2) + "\t\t\t\t\t" + String.format("%.4f",mintPercent) + "\t\t" + String.format("%.4f",maxtPercent);
+				String tarantulaSt = (tTarantula - t2) + "\t\t\t\t\t" + numChecked;
 				out.write(version + "\t\t" + iMode + "\t\t" + (numLine - 1) + "\t\t" + nTest + "\t\t\t" + memoryConsum + "\t\t\t\t\t" + astTime + "\t\t\t\t\t" + tarantulaSt +"\n");
 				out.close();
 			}		

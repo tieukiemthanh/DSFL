@@ -1,7 +1,7 @@
-int abs(int n) {
-	if (n >= 0) {
-		return n;
+int max(int a, int b) {
+	if (a >= b + 5) { // CAU LENH LOI 1
+		return a;
 	} else {
-		return n;
+		return b;
 	}
 }

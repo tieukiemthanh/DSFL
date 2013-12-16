@@ -1,5 +1,7 @@
 Begin test cases.
--10
-2
--1
+0;0;
+0;-5;
+0;1;
+1;0;
+5;0;
 End test cases.

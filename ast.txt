@@ -1,15 +1,24 @@
 Program(
 	FuncDecl(
-		abs
+		max
 		ParaList(
 			Para(
-				n
+				a
 				TypeList(
 					Int
 					EmptyTypeList()
 				)
 			)
-			EmptyParaList()
+			ParaList(
+				Para(
+					b
+					TypeList(
+						Int
+						EmptyTypeList()
+					)
+				)
+				EmptyParaList()
+			)
 		)
 		TypeList(
 			Int
@@ -20,18 +29,24 @@ Program(
 				IfThenElseStmt(
 					BinExpr(
 						VarExpr(
-							n
+							a
 						)
 						>=
-						IntLiteral(
-							0
+						BinExpr(
+							VarExpr(
+								b
+							)
+							+
+							IntLiteral(
+								5
+							)
 						)
 					)
 					CompStmt(
 						StmtList(
 							RetStmt(
 								VarExpr(
-									n
+									a
 								)
 							)
 							EmptyStmtList()
@@ -41,7 +56,7 @@ Program(
 						StmtList(
 							RetStmt(
 								VarExpr(
-									n
+									b
 								)
 							)
 							EmptyStmtList()

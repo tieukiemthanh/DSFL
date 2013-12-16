@@ -1,11 +1,11 @@
-int abs(int n)
+int max(int a, int b)
 {
-	if ((n >= 0))
+	if ((a >= (b + 5)))
 	{
-		return n;
+		return a;
 	}
 	else
 	{
-		return n;
+		return b;
 	}
 }

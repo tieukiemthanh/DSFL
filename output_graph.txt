@@ -13,7 +13,8 @@ Node 1:
 StatementID = 1
 StatementTYPE = CONDITION
 dataDep = 
-	{Node 0 (lineID=0),     n}
+	{Node 0 (lineID=0),     a}
+	{Node 0 (lineID=0),     b}
 conDep = {Node 0 (lineID=0),     true}
 potDep = null
 
@@ -21,7 +22,7 @@ Node 2:
 StatementID = 2
 StatementTYPE = RETURN
 dataDep = 
-	{Node 0 (lineID=0),     n}
+	{Node 0 (lineID=0),     a}
 conDep = {Node 1 (lineID=1),     true}
 potDep = null
 
@@ -29,7 +30,7 @@ Node 3:
 StatementID = 3
 StatementTYPE = RETURN
 dataDep = 
-	{Node 0 (lineID=0),     n}
+	{Node 0 (lineID=0),     b}
 conDep = {Node 1 (lineID=1),     false}
 potDep = null
 
