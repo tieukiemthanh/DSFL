@@ -1,4 +1,6 @@
 #!/bin/bash
-
-java -cp ./lib_antlr/antlr.jar:bin/ Transformer.Main student.c
+for (( c=0; c <= 4; c++ ))
+do
+	java -cp ./lib_antlr/antlr.jar:bin/ Transformer.Main student.c 1 1 $c 
+done
 exit 0

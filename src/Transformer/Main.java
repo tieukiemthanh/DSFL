@@ -28,8 +28,8 @@ public class Main {
 	// 1 : Ochiai
 	// 2 : Jaccard
 	// 3 : Slicing
-	static int iMode = 4;
-	static int failLine = 3;
+	static int iMode = 0;
+	static int failLine = 1;
 	static int version = 1;
 	static int nFail = 1;
 	static int debug = 0;
@@ -826,6 +826,15 @@ public class Main {
 	
 	public static void main(String[] args) {		
 		try {
+			// lay thong tin chay
+			// args[0] = student.c 
+			// args[1] = version
+			version = args[1];
+			// args[2] = failLine
+			failLine = args[2];
+			// args[3] = mode
+			iMode = args[3];
+			
 			// file ket qua
 			//writer = new PrintWriter("result.txt", "UTF-8");
 			
