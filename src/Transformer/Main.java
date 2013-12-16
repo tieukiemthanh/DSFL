@@ -829,11 +829,11 @@ public class Main {
 			// lay thong tin chay
 			// args[0] = student.c 
 			// args[1] = version
-			version = args[1];
+			version = Integer.parseInt(args[1]);
 			// args[2] = failLine
-			failLine = args[2];
+			failLine = Integer.parseInt(args[2]);
 			// args[3] = mode
-			iMode = args[3];
+			iMode = Integer.parseInt(args[3]);
 			
 			// file ket qua
 			//writer = new PrintWriter("result.txt", "UTF-8");
