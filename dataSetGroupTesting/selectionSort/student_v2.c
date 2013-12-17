@@ -12,7 +12,7 @@ int sort(int n, int a[])
     }
     int temp = a[i];
     a[i] = a[min];
-    a[min] = temp + 1; // CAU LENH LOI 11
+    a[min] = temp + 1; // CAU LENH SAI 11
     i = i + 1;
   }
   return a;
