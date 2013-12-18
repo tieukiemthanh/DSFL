@@ -673,7 +673,16 @@ public class Main {
 								//}
 								ArrayList<Integer> temp = testCasePath.get(j);
 								int tempSize = temp.size();
-								int k = Collections.frequency(temp, i); // chu y tinh dung dan
+								// chay thi nghiem cho luan van
+								//int k = Collections.frequency(temp, i); // chu y tinh dung dan
+								// chay thi nghiem cua a Long
+								int k = 0;
+								if(temp.contains(i)) {
+									k = 1;
+								}
+								else {
+									k = 0;
+								}
 								freqSlice[i][j] = (float)k /tempSize;
 							}
 							else {

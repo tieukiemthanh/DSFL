@@ -1,1 +1,2 @@
 Ver 	Mode	NumSt	nTest  Memory(kbytes)	  Parser Time(msec)   Caculate Time(msec)	 numChecked
+1		4		6		9			517					122					66					2
