@@ -1,6 +1,6 @@
 Program(
 	FuncDecl(
-		sort
+		fact
 		ParaList(
 			Para(
 				n
@@ -9,23 +9,7 @@ Program(
 					EmptyTypeList()
 				)
 			)
-			ParaList(
-				Para(
-					a
-					ArrayType(
-						TypeList(
-							Int
-							EmptyTypeList()
-						)
-						ExprList(
-							Null(
-							)
-							EmptyExprList()
-						)
-					)
-				)
-				EmptyParaList()
-			)
+			EmptyParaList()
 		)
 		TypeList(
 			Int
@@ -35,7 +19,7 @@ Program(
 			StmtList(
 				DeclarationStmt(
 					VarDecl(
-						swapped
+						r
 						TypeList(
 							Int
 							EmptyTypeList()
@@ -57,14 +41,8 @@ Program(
 								EmptyTypeList()
 							)
 							VarInitializer(
-								BinExpr(
-									VarExpr(
-										n
-									)
-									-
-									IntLiteral(
-										1
-									)
+								IntLiteral(
+									1
 								)
 							)
 						)
@@ -73,242 +51,58 @@ Program(
 					StmtList(
 						WhileStmt(
 							BinExpr(
-								BinExpr(
-									VarExpr(
-										i
-									)
-									>
-									IntLiteral(
-										0
-									)
+								VarExpr(
+									i
 								)
-								&&
+								<=
 								BinExpr(
 									VarExpr(
-										swapped
+										n
 									)
-									==
+									+
 									IntLiteral(
-										1
+										2
 									)
 								)
 							)
 							CompStmt(
 								StmtList(
-									DeclarationStmt(
-										VarDecl(
-											j
-											TypeList(
-												Int
-												EmptyTypeList()
+									ExprStmt(
+										BinExpr(
+											VarExpr(
+												r
 											)
-											VarInitializer(
-												IntLiteral(
-													0
+											=
+											BinExpr(
+												VarExpr(
+													r
+												)
+												*
+												VarExpr(
+													i
 												)
 											)
 										)
-										EmptyDeclarationList()
 									)
 									StmtList(
 										ExprStmt(
 											BinExpr(
 												VarExpr(
-													swapped
+													i
 												)
 												=
-												IntLiteral(
-													0
-												)
-											)
-										)
-										StmtList(
-											WhileStmt(
 												BinExpr(
-													VarExpr(
-														j
-													)
-													<
 													VarExpr(
 														i
 													)
-												)
-												CompStmt(
-													StmtList(
-														IfThenStmt(
-															BinExpr(
-																EleExpr(
-																	a
-																	ExprList(
-																		VarExpr(
-																			j
-																		)
-																		EmptyExprList()
-																	)
-																)
-																>
-																BinExpr(
-																	EleExpr(
-																		a
-																		ExprList(
-																			BinExpr(
-																				VarExpr(
-																					j
-																				)
-																				+
-																				IntLiteral(
-																					1
-																				)
-																			)
-																			EmptyExprList()
-																		)
-																	)
-																	*
-																	IntLiteral(
-																		2
-																	)
-																)
-															)
-															CompStmt(
-																StmtList(
-																	DeclarationStmt(
-																		VarDecl(
-																			temp
-																			TypeList(
-																				Int
-																				EmptyTypeList()
-																			)
-																			VarInitializer(
-																				EleExpr(
-																					a
-																					ExprList(
-																						VarExpr(
-																							j
-																						)
-																						EmptyExprList()
-																					)
-																				)
-																			)
-																		)
-																		EmptyDeclarationList()
-																	)
-																	StmtList(
-																		ExprStmt(
-																			BinExpr(
-																				EleExpr(
-																					a
-																					ExprList(
-																						VarExpr(
-																							j
-																						)
-																						EmptyExprList()
-																					)
-																				)
-																				=
-																				EleExpr(
-																					a
-																					ExprList(
-																						BinExpr(
-																							VarExpr(
-																								j
-																							)
-																							+
-																							IntLiteral(
-																								1
-																							)
-																						)
-																						EmptyExprList()
-																					)
-																				)
-																			)
-																		)
-																		StmtList(
-																			ExprStmt(
-																				BinExpr(
-																					EleExpr(
-																						a
-																						ExprList(
-																							BinExpr(
-																								VarExpr(
-																									j
-																								)
-																								+
-																								IntLiteral(
-																									1
-																								)
-																							)
-																							EmptyExprList()
-																						)
-																					)
-																					=
-																					VarExpr(
-																						temp
-																					)
-																				)
-																			)
-																			StmtList(
-																				ExprStmt(
-																					BinExpr(
-																						VarExpr(
-																							swapped
-																						)
-																						=
-																						IntLiteral(
-																							1
-																						)
-																					)
-																				)
-																				EmptyStmtList()
-																			)
-																		)
-																	)
-																)
-															)
-														)
-														StmtList(
-															ExprStmt(
-																BinExpr(
-																	VarExpr(
-																		j
-																	)
-																	=
-																	BinExpr(
-																		VarExpr(
-																			j
-																		)
-																		+
-																		IntLiteral(
-																			1
-																		)
-																	)
-																)
-															)
-															EmptyStmtList()
-														)
+													+
+													IntLiteral(
+														1
 													)
 												)
-											)
-											StmtList(
-												ExprStmt(
-													BinExpr(
-														VarExpr(
-															i
-														)
-														=
-														BinExpr(
-															VarExpr(
-																i
-															)
-															-
-															IntLiteral(
-																1
-															)
-														)
-													)
-												)
-												EmptyStmtList()
 											)
 										)
+										EmptyStmtList()
 									)
 								)
 							)
@@ -316,7 +110,7 @@ Program(
 						StmtList(
 							RetStmt(
 								VarExpr(
-									a
+									r
 								)
 							)
 							EmptyStmtList()

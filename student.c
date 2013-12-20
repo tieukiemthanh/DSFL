@@ -1,20 +1,9 @@
-int sort(int n, int a[]) 
-{
-	int swapped = 1;
-	int i = n - 1;
-	while(i > 0 && swapped == 1) {
-		int j = 0;
-		swapped = 0;
-		while(j < i) {
-			if(a[j] > a[j+1] * 2) { // 	CAU LENH LOI 7
-				int temp = a[j];
-				a[j] = a[j+1];
-				a[j+1] = temp;
-				swapped = 1;
-			}
-			j = j + 1;
-		}
-		i = i - 1;
+int fact(int n) {
+	int r = 1;
+	int i = 1;
+	while (i <= n + 2) { // CAU LENH LOI 3
+		r = r * i;
+		i = i + 1;
 	}
-	return a;
+	return r;
 }
