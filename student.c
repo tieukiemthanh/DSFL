@@ -1,9 +1,20 @@
-int fact(int n) {
-	int r = 1;
-	int i = 1;
-	while (i <= n) {
-		r = r + i; // CAU LENH LOI 4
-		i = i + 1;
+int sort(int n, int a[]) 
+{
+	int swapped = 1;
+	int i = n - 1;
+	while(i > 0 && swapped == 1) {
+		int j = 0;
+		swapped = 0;
+		while(j < i) {
+			if(a[j] > a[j+1] * 2) { // 	CAU LENH LOI 7
+				int temp = a[j];
+				a[j] = a[j+1];
+				a[j+1] = temp;
+				swapped = 1;
+			}
+			j = j + 1;
+		}
+		i = i - 1;
 	}
-	return r;
+	return a;
 }
