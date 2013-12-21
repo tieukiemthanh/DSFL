@@ -284,7 +284,8 @@ public class Main {
 	public static float[] ochiaiSlice(float[] pass, float[] fail, int totalPass, int totalFail) {
 		float[] scores = new float[numLine];
 		scores[0] = -1;
-
+		System.out.println("p(e) = " + pass[7] + "\n" + "f(e) = " + fail[7]);
+		System.out.println("p(e) = " + pass[8] + "\n" + "f(e) = " + fail[8]);
 		for (int i = 1; i < numLine; i++) {
 			//System.out.println(fail[i] + "---" + pass[i]);
 			if (fail[i] == 0) {
@@ -322,7 +323,7 @@ public class Main {
 	public static float[] ochiaiPrint(int[] pass, int[] fail, int totalPass, int totalFail) {
 		float[] scores = new float[numLine];
 		scores[0] = -1;
-
+		System.out.println("p(e) = " + pass[8] + "\n" + "f(e) = " + fail[8]);
 		for (int i = 1; i < numLine; i++) {
 			//System.out.println(fail[i] + "---" + pass[i]);
 			if (fail[i] == 0) {
