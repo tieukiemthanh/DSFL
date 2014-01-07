@@ -60,6 +60,8 @@ public class Main {
 	static PrintWriter writerAllPaths;
 	static PrintWriter writerTestCasesAndPath;
 	//static PrintWriter writerStatistic;
+
+	
 	
 	// class cho biet % cau lenh can phan tich cho den
 	// khi gap cau lenh sai
@@ -284,8 +286,8 @@ public class Main {
 	public static float[] ochiaiSlice(float[] pass, float[] fail, int totalPass, int totalFail) {
 		float[] scores = new float[numLine];
 		scores[0] = -1;
-		System.out.println("p(e) = " + pass[7] + "\n" + "f(e) = " + fail[7]);
-		System.out.println("p(e) = " + pass[8] + "\n" + "f(e) = " + fail[8]);
+		//System.out.println("p(e) = " + pass[7] + "\n" + "f(e) = " + fail[7]);
+		//System.out.println("p(e) = " + pass[8] + "\n" + "f(e) = " + fail[8]);
 		for (int i = 1; i < numLine; i++) {
 			//System.out.println(fail[i] + "---" + pass[i]);
 			if (fail[i] == 0) {
@@ -323,7 +325,7 @@ public class Main {
 	public static float[] ochiaiPrint(int[] pass, int[] fail, int totalPass, int totalFail) {
 		float[] scores = new float[numLine];
 		scores[0] = -1;
-		System.out.println("p(e) = " + pass[8] + "\n" + "f(e) = " + fail[8]);
+		//System.out.println("p(e) = " + pass[8] + "\n" + "f(e) = " + fail[8]);
 		for (int i = 1; i < numLine; i++) {
 			//System.out.println(fail[i] + "---" + pass[i]);
 			if (fail[i] == 0) {
@@ -829,6 +831,152 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	// code theo giai thuat trong paper
+	public static void readTestCasesSlicingGT(int index, AST labelTree, AST solutionTree, PDG graph, int mode) {
+		try {
+			//float[] tarantulaScores = new float[numLine];
+			float[] tarantulaScoresSlice = new float[numLine];
+			//float[] ochiaiScores = new float[numLine];
+			//float[] jaccardScores = new float[numLine];
+			
+			int totalPass = 0; // tong so test case dung
+			int totalFail = 0; // tong so test case sai
+
+			int step = 0;
+			
+			// tinh toan lai pass and fail
+			int[] newPass = new int[numLine];
+			int[] newFail = new int[numLine];
+					
+			// thong ke moi path execution cua moi test case
+			//ArrayList<ArrayList<Integer>> testCasePath = new ArrayList<ArrayList<Integer>>();
+			
+			// xac dinh tinh dung sai cua 1 test case
+			//ArrayList<Integer> pTestcase = new ArrayList<Integer>();
+			
+			Visitor walker1 = new GetPathVisitor("", false);
+			Visitor walker2 = new RunSimulatorVisitor("", false);
+				
+		   // lay tap testcase ung voi tung option
+			BufferedReader br = getReader(index);
+
+			String testcase = br.readLine();
+			int nTestcase = 0;
+			
+			while (testcase != null) {
+				// khoi tao khi vao 1 bo test case moi
+				if (testcase.contains("Begin test cases.")) {
+					totalPass = totalFail = 0;
+					for (int i = 1; i < numLine; i++) {
+						newPass[i] = newFail[i] = 0;
+					}
+					//System.out.println(step++);
+				}
+				// ket thuc test case, danh gia chat luong cua bo test case nay
+				else if (testcase.contains("End test cases.")) {
+					nTest = nTestcase;
+					
+					// PSS-SFL
+					if(mode == 3)
+						tarantulaScoresSlice = tarantulaPrint(newPass, newFail, totalPass, totalFail);
+					// su dung ky thuat Ochiai
+					else
+						tarantulaScoresSlice = ochiaiPrint(newPass, newFail, totalPass, totalFail);
+					
+					// tarantula technique evaluation
+					//Percent tPercent = getPercent(tarantulaScores);
+					Percent tPercentSlice = getPercent(tarantulaScoresSlice);
+					//mintPercent = tPercent.min;
+				    //maxtPercent = tPercent.max;
+					mintPercentSlice = tPercentSlice.min;
+					maxtPercentSlice = tPercentSlice.max;
+					
+					step++;
+				}
+				// so sanh ket qua cua chuong trinh can kiem tra va chuong trinh mau
+				// chi de kiem tra viec dung sai
+				else {
+					//duong thuc thi cua 1 testcase cu the
+					//se duoc dung trong dynamic slicing
+					String path = (String) labelTree.visit(walker1, testcase);
+					//System.out.println(path);
+					// tao array list chua path execution
+					ArrayList<Integer> pathArrayList = new ArrayList<Integer>();
+					String[] arrPath = path.split(";");
+					for(String p : arrPath) {
+						pathArrayList.add(Integer.parseInt(p));
+					}
+					
+					// cap nhap vao path execution cua test case
+					//testCasePath.add(pathArrayList);
+					
+					//simulator ket qua cua sinh vien
+					String studentResult = (String) labelTree.visit(walker2, testcase);
+					//simulator ket qua cua solution
+					String solutionResult = (String) solutionTree.visit(walker2, testcase);
+					
+					//in testcase va path thuc thi tuong ung ra file testcaseandpath.txt
+					//writerTestCasesAndPath.println(testcase);
+					//mapping statement to line code
+					String stmt2line = "";
+					String[] pathArray = path.split(";");
+					for(String pathUnit : pathArray)
+					{
+						stmt2line += statement2line[Integer.parseInt(pathUnit)] + ";";
+					} 
+					//writerTestCasesAndPath.println(studentResult + ":" + stmt2line);
+				
+					nTestcase++;
+					// test case pass
+					if (studentResult.equals(solutionResult)) {
+						writerTestCasesAndPath.println("1:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						totalPass++; // tang tong so test case pass
+						// tinh toan slice cho test case
+						getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
+						for (int i = 1; i < numLine; i++) {
+							if (sliceProg.contains(i) && pathArrayList.contains(i)) {
+								newPass[i]++;
+							}
+						}
+						// cap nhap lai slice
+						sliceProg = new Slice();
+					}
+					// test case fail
+					else {
+						writerTestCasesAndPath.println("0:" + solutionResult + ":" + studentResult + ":" + stmt2line);
+						totalFail++; // tang tong so test case fail
+						// tinh toan slice cho test case
+						getSliceOfTestcase(graph, pathArrayList, pathArrayList.get(pathArrayList.size()-1));
+						
+						for (int i = 1; i < numLine; i++) {
+							if (sliceProg.contains(i) && pathArrayList.contains(i)) {
+								newFail[i]++;
+							}
+						}
+						// cap nhap lai slice
+						sliceProg = new Slice();
+					}
+				}
+				testcase = br.readLine();
+			}
+	
+			//writerFL.println("Tarantula technique with dynamic slicing");
+			if(mode == 3) {
+				for(int j = 1; j < numLine; j++)
+					writerFLSliceTarantula.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
+			}
+			else {
+				for(int j = 1; j < numLine; j++)
+					writerFLSliceOchiai.printf("%d:%.3f\n", statement2line[j], tarantulaScoresSlice[j]);
+			}
+			//writeToFile("evaluation.txt", eval);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	//trinhgiang-21/10/2013
 	//in content ra file
@@ -856,11 +1004,6 @@ public class Main {
 			//writer = new PrintWriter("result.txt", "UTF-8");
 			
 			//file chua ket qua fault localization
-			writerFL = new PrintWriter("FL.txt", "UTF-8");
-			writerFLOchiai = new PrintWriter("FLOchiai.txt", "UTF-8");
-			writerFLJaccard = new PrintWriter("FLJaccard.txt", "UTF-8");
-			writerFLSliceTarantula = new PrintWriter("FLSliceTarantula.txt", "UTF-8");
-			writerFLSliceOchiai = new PrintWriter("FLSliceOchiai.txt", "UTF-8");
 			
 			//file chua tat ca cac paths cua chuong trinh
 			//writerAllPaths = new PrintWriter("allpaths.txt", "UTF-8");
@@ -908,6 +1051,13 @@ public class Main {
 			if(iMode == 3 || iMode == 4) // Dynamic Slicing
 			{
 				//in ra program dependence graph
+				if(iMode == 3) {
+					writerFLSliceTarantula = new PrintWriter("FLSliceTarantula.txt", "UTF-8");
+				}
+				else { 
+					writerFLSliceOchiai = new PrintWriter("FLSliceOchiai.txt", "UTF-8");
+				}
+					
 				String PDGFilename = "output_graph.txt";
 				Ast2GraphVisitor ast2PDG = new Ast2GraphVisitor();
 				labelTree.visit(ast2PDG, "");
@@ -919,17 +1069,17 @@ public class Main {
 				// concolic test cases
 				for (int i = 5; i < 6; i++) {
 					// su dung cong thuc cua ochiai
-					readTestCasesSlicing(i, labelTree, solutionTree, graph, iMode);
+					readTestCasesSlicingGT(i, labelTree, solutionTree, graph, iMode);
 					//writer.println("***********************");
 					//writerFL.println("***********************");
 				}
+				if(iMode == 3) {
+					writerFLSliceTarantula.close();
+				} else {
+					writerFLSliceOchiai.close();
+				}
 				
-				writerFL.close();
-				writerFLSliceTarantula.close();
-				writerFLSliceOchiai.close();
 				writerTestCasesAndPath.close();
-				writerFLJaccard.close();
-				writerFLOchiai.close();
 				
 				long tSlicing = System.currentTimeMillis();
 				
@@ -951,23 +1101,33 @@ public class Main {
 				out.write(version + "\t" + iMode + "\t" + (numLine - 1) + "\t" + nTest + "\t" + numMin + "\t" + numChecked + "\n");
 				out.close();
 				
-				System.out.println("Relevant slice");
-				System.out.println(sliceProg.toString());
+				//System.out.println("Relevant slice");
+				//System.out.println(sliceProg.toString());
 			}
 			else // Tarantula
 			{
+				if(iMode == 0) {
+					writerFL = new PrintWriter("FL.txt", "UTF-8");
+				} else if(iMode == 1) {
+					writerFLOchiai = new PrintWriter("FLOchiai.txt", "UTF-8");
+				} else {
+					writerFLJaccard = new PrintWriter("FLJaccard.txt", "UTF-8");
+				}
 				// concolic test cases
 				for (int i = 5; i < 6; i++) {
 					readTestCasesSpectrum(i, labelTree, solutionTree, iMode);
 					//writer.println("***********************");
 					//writerFL.println("***********************");
 				}
-				writerFL.close();
-				writerFLSliceTarantula.close();
-				writerFLSliceOchiai.close();
+				
+				if(iMode == 0) {
+					writerFL.close();
+				} else if(iMode == 1) {
+					writerFLOchiai.close();
+				} else {
+					writerFLJaccard.close();
+				}
 				writerTestCasesAndPath.close();
-				writerFLJaccard.close();
-				writerFLOchiai.close();
 				
 				long tTarantula = System.currentTimeMillis();
 				
